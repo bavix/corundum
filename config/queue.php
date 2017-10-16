@@ -57,6 +57,18 @@ return [
             'region' => 'us-east-1',
         ],
 
+        'gearman' => [
+            'driver' => 'gearman',
+            'hosts'   => [
+                [
+                    'host' => '127.0.0.1',
+                    'port' => 4730,
+                ]
+            ],
+            'queue'  => 'default',
+            'timeout' => 1000
+        ],
+
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
