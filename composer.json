@@ -16,17 +16,18 @@
     "bavix/laravel-worker-command": "^1.0",
     "laravel-admin-ext/config": "^1.0",
     "laravel-admin-ext/helpers": "^1.0",
-    "encore/laravel-admin": "^1.5",
+    "bavix/laravel-helpers": "^1.0",
     "fideloper/proxy": "~3.3",
     "laravel/framework": "5.5.*",
     "laravel/passport": "^4.0",
     "laravel/tinker": "~1.0"
   },
   "require-dev": {
+    "bavix/tests": "~1.0",
     "filp/whoops": "~2.0",
     "fzaninotto/faker": "~1.4",
     "mockery/mockery": "0.9.*",
-    "bavix/tests": "~1.0"
+    "nesbot/carbon": "^1.22"
   },
   "autoload": {
     "classmap": [

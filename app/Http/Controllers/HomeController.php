@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Bavix\Gearman\Client;
-use Illuminate\Http\Request;
+use Bavix\App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class HomeController extends Controller
 {
+
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -22,8 +21,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): Response
     {
         return view('home');
     }
+
 }
