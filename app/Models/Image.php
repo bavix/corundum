@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 class Image extends Model
 {
 
+    public $timestamps = false;
+
     /**
      * @param string $user
      * @param string $name

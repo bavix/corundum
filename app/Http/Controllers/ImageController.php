@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
-use Bavix\Helpers\JSON;
-use Bavix\Helpers\Str;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Bavix\App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -15,15 +12,14 @@ class ImageController extends Controller
 
     /**
      * @param Request $request
+     * @param string  $name
      *
      * @return Image
      */
-    protected function model(Request $request): Image
+    protected function model(Request $request, $name): Image
     {
         $user = $request->user();
-        $name = $request->input('name');
-
-        \abort_if(!$name, 400, 'The `name` parameter isn\'t found');
+        \abort_if(empty($name), 400, 'The `name` parameter isn\'t found');
 
         $model = Image::findByName($user->login, $name);
         \abort_if(!$model, 404, 'Image not found');
@@ -31,7 +27,12 @@ class ImageController extends Controller
         return $model;
     }
 
-    public function upload(Request $request)
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function upload(Request $request): Response
     {
         /**
          * @var $file \Illuminate\Http\UploadedFile
@@ -63,22 +64,25 @@ class ImageController extends Controller
 
     /**
      * @param Request $request
+     * @param string  $name
      *
-     * @return $this
+     * @return mixed
      */
-    public function update(Request $request)
+    public function update(Request $request, $name)
     {
-        return $this->model($request)->regenerate();
+        return $this->model($request, $name)
+            ->regenerate();
     }
 
     /**
      * @param Request $request
+     * @param string  $name
      *
      * @throws \Exception
      */
-    public function delete(Request $request)
+    public function delete(Request $request, $name)
     {
-        $model = $this->model($request);
+        $model = $this->model($request, $name);
         \abort_if($model->delete(), 204);
         \abort(500);
     }

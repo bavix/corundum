@@ -34,10 +34,10 @@ Route::middleware('auth:api')
     ->post('/image', 'ImageController@upload');
 
 Route::middleware('auth:api')
-    ->put('/image', 'ImageController@update');
+    ->post('/image/{name}', 'ImageController@update');
 
 Route::middleware('auth:api')
-    ->delete('/image', 'ImageController@delete');
+    ->delete('/image/{name}', 'ImageController@delete');
 
 //Client ID: 1
 //Client secret: ZijIDIY00Dl36ewlCGI76UgN4bvfcq7uCC38ljPc
