@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Console\Commands\ServiceCommand;
+use Bavix\Extra\Gearman;
+use Bavix\Helpers\JSON;
 use Bavix\Helpers\Str;
 use Bavix\SDK\PathBuilder;
 use Illuminate\Database\Eloquent\Model;
@@ -55,10 +58,8 @@ class Image extends Model
         $hash = PathBuilder::sharedInstance()
             ->hash($name);
 
-        $path = $user . '/' . $hash . '/' . $name;
-
-        return Storage::disk('public')
-            ->path('image/' . $type . '/' . $path);
+        return Storage::disk(config('gearman.services.image.disk'))
+            ->path('image/' . $user . '/' . $type . '/' . $hash . '/' . $name);
     }
 
     public function thumbnails()
@@ -71,6 +72,15 @@ class Image extends Model
         // todo
 
         return $this;
+    }
+
+    public function doBackground()
+    {
+        Gearman::client()
+            ->doBackground(
+                ServiceCommand::PROP_HANDLE,
+                JSON::encode($this)
+            );
     }
 
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Bavix\App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
 
 class HomeController extends Controller
 {
@@ -19,9 +18,9 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
-    public function index(): Response
+    public function index()
     {
         return view('home');
     }

@@ -3,6 +3,7 @@
 namespace App\Observes;
 
 use App\Models\Image;
+use Bavix\Extra\Gearman;
 
 class ImageObserver
 {
@@ -14,7 +15,7 @@ class ImageObserver
      */
     public function created(Image $image)
     {
-        //
+        $image->doBackground();
     }
 
     /**
