@@ -38,4 +38,12 @@ class User extends Authenticatable
         return $this->hasMany(Config::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
+    }
+
 }

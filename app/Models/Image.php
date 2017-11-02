@@ -4,11 +4,10 @@ namespace App\Models;
 
 use App\Console\Commands\ServiceCommand;
 use Bavix\Extra\Gearman;
-use Bavix\Helpers\JSON;
 use Bavix\Helpers\Str;
 use Bavix\SDK\PathBuilder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
@@ -19,7 +18,7 @@ class Image extends Model
     /**
      * @var bool
      */
-    protected $regenerate = false;
+    protected $checkExists = false;
 
     /**
      * @param string $user
@@ -68,17 +67,43 @@ class Image extends Model
             ->path('image/' . $user . '/' . $type . '/' . $hash . '/' . $name);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Model|Config|null
+     */
+    public function thumbnail(string $name)
+    {
+        return Config::query()
+            ->where('name', $name)
+            ->where('user_id', $this->user_id)
+            ->first();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|Config[]
+     */
     public function thumbnails()
     {
-        // return array
+        return Config::query()
+            ->where('user_id', $this->user_id)
+            ->get();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**
      * @return bool
      */
-    public function getRegenerate(): bool
+    public function getCheckExists(): bool
     {
-        return $this->regenerate;
+        return $this->checkExists;
     }
 
     /**
@@ -88,7 +113,7 @@ class Image extends Model
      */
     public function doRegenerate($checkExists = false): self
     {
-        $this->regenerate = !$checkExists;
+        $this->checkExists = $checkExists;
         return $this->doBackground();
     }
 
@@ -99,7 +124,21 @@ class Image extends Model
     {
         Gearman::client()
             ->doBackground(
-                ServiceCommand::PROP_HANDLE,
+                ServiceCommand::PROP_SERVICE,
+                \serialize($this)
+            );
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function doDeleted(): self
+    {
+        Gearman::client()
+            ->doBackground(
+                ServiceCommand::PROP_DELETED,
                 \serialize($this)
             );
 

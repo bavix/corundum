@@ -3,7 +3,6 @@
 namespace App\Observes;
 
 use App\Models\Image;
-use Bavix\Extra\Gearman;
 
 class ImageObserver
 {
@@ -25,7 +24,7 @@ class ImageObserver
      */
     public function deleting(Image $image)
     {
-        //
+        $image->doDeleted();
     }
 
 }

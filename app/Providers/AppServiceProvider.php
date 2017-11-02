@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Config;
 use App\Models\Image;
+use App\Observes\ConfigObserver;
 use App\Observes\ImageObserver;
-use Encore\Admin\Config\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,9 +19,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Image::observe(ImageObserver::class);
+        Config::observe(ConfigObserver::class);
 
         try {
-            Config::load();
+            \Encore\Admin\Config\Config::load();
         } catch (\Throwable $throwable) {
 
         }

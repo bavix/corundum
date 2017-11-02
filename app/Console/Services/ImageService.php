@@ -127,7 +127,7 @@ class ImageService
             $this->command,
 
             // to include check on existence of the file
-            !$model->getRegenerate()
+            $model->getCheckExists()
         );
 
         // set information
@@ -135,6 +135,7 @@ class ImageService
             Image::realPath($model->user, $model->name)
         );
 
+        $model->status = 1; // status 1 -- gearman is complete
         $model->width  = $image->getWidth();
         $model->height = $image->getHeight();
         $model->size   = $image->filesize();
