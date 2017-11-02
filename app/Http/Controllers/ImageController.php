@@ -71,7 +71,9 @@ class ImageController extends Controller
     public function update(Request $request, $name)
     {
         return $this->model($request, $name)
-            ->regenerate();
+            ->doRegenerate(
+                $request->input('checkExists', false)
+            );
     }
 
     /**

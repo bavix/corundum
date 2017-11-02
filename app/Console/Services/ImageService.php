@@ -3,14 +3,15 @@
 namespace App\Console\Services;
 
 use App\Console\Commands\ServiceCommand;
+use App\Models\Image;
 use App\Models\User;
 use Bavix\Exceptions\Invalid;
 use Bavix\Helpers\Arr;
 use Bavix\Helpers\Corundum\Corundum;
 use Bavix\Helpers\Corundum\Runner;
 use Bavix\Helpers\JSON;
-use Bavix\SDK\PathBuilder;
 use Bavix\Slice\Slice;
+use Intervention\Image\ImageManager;
 
 class ImageService
 {
@@ -105,19 +106,39 @@ class ImageService
     public function handle(\GearmanJob $job)
     {
         /**
-         * @var array $model
+         * @var Image $model
          */
-        $model = JSON::decode($job->workload());
+        $model = \unserialize($job->workload(), []);
         $this->command->info(
-            'The user `' . $model['user'] . '` has started regeneration of the image: ' .
-            $model['name']);
+            'The user `' . $model->user . '` has started regeneration of the image: ' .
+            $model->name);
 
         // update config
         \config([
-            'corundum' => $this->config($model['user_id'])
+            'corundum' => $this->config($model->user_id)
         ]);
 
-        $this->runner($model['user'])->apply($model['name']);
+        $this->runner($model->user)->apply(
+
+            // image->name
+            $model->name,
+
+            // command logger
+            $this->command,
+
+            // to include check on existence of the file
+            !$model->getRegenerate()
+        );
+
+        // set information
+        $image = (new ImageManager(['driver' => 'imagick']))->make(
+            Image::realPath($model->user, $model->name)
+        );
+
+        $model->width  = $image->getWidth();
+        $model->height = $image->getHeight();
+        $model->size   = $image->filesize();
+        $model->save();
     }
 
 }

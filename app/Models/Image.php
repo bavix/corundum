@@ -8,12 +8,18 @@ use Bavix\Helpers\JSON;
 use Bavix\Helpers\Str;
 use Bavix\SDK\PathBuilder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
 
     public $timestamps = false;
+
+    /**
+     * @var bool
+     */
+    protected $regenerate = false;
 
     /**
      * @param string $user
@@ -67,20 +73,37 @@ class Image extends Model
         // return array
     }
 
-    public function regenerate()
+    /**
+     * @return bool
+     */
+    public function getRegenerate(): bool
     {
-        // todo
-
-        return $this;
+        return $this->regenerate;
     }
 
-    public function doBackground()
+    /**
+     * @param bool $checkExists
+     *
+     * @return $this
+     */
+    public function doRegenerate($checkExists = false): self
+    {
+        $this->regenerate = !$checkExists;
+        return $this->doBackground();
+    }
+
+    /**
+     * @return $this
+     */
+    public function doBackground(): self
     {
         Gearman::client()
             ->doBackground(
                 ServiceCommand::PROP_HANDLE,
-                JSON::encode($this)
+                \serialize($this)
             );
+
+        return $this;
     }
 
 }
