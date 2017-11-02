@@ -1,0 +1,50 @@
+@import 'animation/ball-chasing';
+@import 'animation/ball-pulse';
+@import 'animation/ball-pulse-double';
+@import 'animation/wave';
+@import 'animation/wave-spread';
+@import 'animation/circle-pulse';
+@import 'animation/circle-pulse-multiple';
+@import 'animation/arc-rotate-double';
+@import 'animation/arc-rotate';
+@import 'animation/square-split';
+@import 'animation/arc-scale';
+@import 'animation/clock';
+@import 'animation/arc-rotate2';
+@import 'animation/square-rotate-3d';
+
+%clearfix {
+    &::before, &::after {
+        content: "";
+        display: table;
+    }
+    &::after {
+        clear: both;
+        overflow: hidden;
+    }
+}
+%middle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#loaders {
+    margin: 0 auto;
+    @extend %clearfix;
+}
+.loader-container {
+    position: relative;
+    height: 50px;
+
+    .loader {
+        @extend %middle;
+    }
+}
