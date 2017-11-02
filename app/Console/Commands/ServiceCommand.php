@@ -150,7 +150,7 @@ class ServiceCommand extends WorkerCommand
      */
     protected function imageDeleted(Image $image)
     {
-        $this->warn('There is a removal of the image `' .
+        $this->info('There is a removal of the image `' .
             $image->name . '` of the user `' . $image->user . '`');
 
         /**
@@ -166,17 +166,17 @@ class ServiceCommand extends WorkerCommand
 
             if (File::isFile($path))
             {
-                $this->error('The thumbnail `' . $thumbnail->name . '` is removed');
+                $this->warn('The thumbnail `' . $thumbnail->name . '` is removed');
 
                 File::remove($path);
             }
         }
 
-        $path = Image::realPath($image->name, $image->user);
+        $path = Image::realPath($image->user, $image->name);
 
         if (File::isFile($path))
         {
-            $this->error('The original image is removed');
+            $this->warn('The original image is removed');
 
             File::remove($path);
         }

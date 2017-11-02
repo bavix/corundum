@@ -9,6 +9,7 @@ use Bavix\Exceptions\Invalid;
 use Bavix\Helpers\Arr;
 use Bavix\Helpers\Corundum\Corundum;
 use Bavix\Helpers\Corundum\Runner;
+use Bavix\Helpers\File;
 use Bavix\Helpers\JSON;
 use Bavix\Slice\Slice;
 use Intervention\Image\ImageManager;
@@ -117,6 +118,14 @@ class ImageService
         \config([
             'corundum' => $this->config($model->user_id)
         ]);
+
+        if (!File::isFile(Image::realPath($model->user, $model->name)))
+        {
+            $this->command->error('The file `' . $model->name . '` of the user `' .
+                $model->user . '` isn\'t found');
+
+            return;
+        }
 
         $this->runner($model->user)->apply(
 

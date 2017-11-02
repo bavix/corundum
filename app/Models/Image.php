@@ -63,6 +63,11 @@ class Image extends Model
         $hash = PathBuilder::sharedInstance()
             ->hash($name);
 
+        if ($type !== 'original')
+        {
+            $type = 'thumbs/' . $type;
+        }
+
         return Storage::disk(config('gearman.services.image.disk'))
             ->path('image/' . $user . '/' . $type . '/' . $hash . '/' . $name);
     }

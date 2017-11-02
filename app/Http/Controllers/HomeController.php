@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\Image;
 use Bavix\App\Http\Controllers\Controller;
 use Bavix\Helpers\Str;
 use Illuminate\Http\Request;
@@ -25,22 +26,33 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-//        $config = new Config();
-//
-//        $config->name = Str::random(3);
-//        $config->user_id = $request->user()->id;
-//        $config->type = 'contain';
-//        $config->width = 600;
-//        $config->height = 300;
-//
-//        $config->save();
 
-//        $config = Config::query()->first();
-//
-//        if ($config)
+//        foreach (range(1, 5) as $item)
 //        {
-//            $config->delete();
+//            $config = new Config();
+//
+//            $config->name = Str::random(3);
+//            $config->user_id = $request->user()->id;
+//            $config->type = random_int(0, 1) ? 'cover' : 'fit';
+//            $config->width = random_int(200, 900);
+//            $config->height = random_int(200, 900);
+//
+//            $config->save();
 //        }
+
+//        $config = Config::all();
+//
+//        foreach ($config as $item)
+//        {
+//            $item->delete();
+//        }
+
+        $images = Image::all();
+
+        foreach ($images as $item)
+        {
+            $item->delete();
+        }
 
         return view('home');
     }

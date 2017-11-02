@@ -37,7 +37,7 @@ class Config extends Model
     public function doUpdated()
     {
         Gearman::client()
-            ->doBackground(
+            ->doLowBackground(
                 ServiceCommand::PROP_UPDATED,
                 \serialize($this)
             );
@@ -48,7 +48,7 @@ class Config extends Model
     public function doDeleted()
     {
         Gearman::client()
-            ->doBackground(
+            ->doHighBackground(
                 ServiceCommand::PROP_DELETED,
                 \serialize($this)
             );
