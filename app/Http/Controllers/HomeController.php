@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Config;
-use App\Models\Image;
 use Bavix\App\Http\Controllers\Controller;
-use Bavix\Helpers\Str;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -47,12 +44,12 @@ class HomeController extends Controller
 //            $item->delete();
 //        }
 
-        $images = Image::all();
-
-        foreach ($images as $item)
-        {
-            $item->delete();
-        }
+//        $images = Image::all();
+//
+//        foreach ($images as $item)
+//        {
+//            $item->delete();
+//        }
 
         return view('home');
     }
