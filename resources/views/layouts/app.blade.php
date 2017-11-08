@@ -31,7 +31,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand" href="{{ route('home') }}">
+            <a class="navbar-brand" href="{{ route('cfg.index') }}">
                 <img src="https://ds.bavix.ru/svg/logo.svg" height="32" alt="Bavix" />
             </a>
             
@@ -39,7 +39,7 @@
                 
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('home') }}">Home</a>
+                        <a class="nav-link" href="{{ route('cfg.index') }}">Home</a>
                     </li>
                 </ul>
 

@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <a href="" class="btn btn-success btn-sm float-right">+</a>
+            <a href="#" class="btn btn-success btn-sm float-right">+</a>
             <h1>Configs</h1>
 
             <table class="table table-striped">
@@ -29,7 +29,7 @@
                             <td>{{ $config->height }}</td>
                             <td>
                                 @if ($config->color)
-                                    <div class="badge" style="background: {{ $config->color }}">{{ $config->color }}</div>
+                                    <div class="badge" style="background: {{ $config->color }}">C</div>
                                 @else
                                     null
                                 @endif
@@ -42,8 +42,8 @@
                                 @endif
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-primary" href="">edit</a>
-                                <a class="btn btn-sm btn-danger" href="">delete</a>
+                                <a class="btn btn-sm btn-primary" href="{{ route('cfg.edit', [$config->id]) }}">edit</a>
+                                <a class="btn btn-sm btn-danger" href>delete</a>
                             </td>
                         </tr>
                     @endforeach

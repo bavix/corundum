@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Bavix\App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class ConfigController extends Controller
 {
 
     /**
@@ -53,7 +53,7 @@ class HomeController extends Controller
 //            $item->delete();
 //        }
 
-        return view('home', [
+        return view('cfg', [
             'user' => $request->user()
         ]);
     }
