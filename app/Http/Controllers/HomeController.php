@@ -19,6 +19,8 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param Request $request
+     *
      * @return mixed
      */
     public function index(Request $request)
@@ -51,7 +53,9 @@ class HomeController extends Controller
 //            $item->delete();
 //        }
 
-        return view('home');
+        return view('home', [
+            'user' => $request->user()
+        ]);
     }
 
 }

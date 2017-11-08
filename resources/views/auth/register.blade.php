@@ -44,12 +44,6 @@
                     <strong>{{ $errors->first('password') }}</strong>
                 </span>
             @endif
-
-            <small class="form-text text-muted">
-                <a href="{{ route('password.request') }}">
-                    Forgot Your Password?
-                </a>
-            </small>
         </div>
 
         <button type="submit" class="btn btn-block btn-danger">Register</button>
