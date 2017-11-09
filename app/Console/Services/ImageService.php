@@ -140,8 +140,12 @@ class ImageService
             $model->getCheckExists()
         );
 
+        $options = [
+            'driver' => \config('gearman.services.image.driver')
+        ];
+
         // set information
-        $image = (new ImageManager(['driver' => 'imagick']))->make(
+        $image = (new ImageManager($options))->make(
             Image::realPath($model->user, $model->name)
         );
 

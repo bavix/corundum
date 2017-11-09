@@ -9,7 +9,8 @@ return [
     ],
     'services' => [
         'image' => [
-            'disk' => 'public'
+            'disk' => 'public',
+            'driver' => 'imagick'
         ]
     ]
 ];
