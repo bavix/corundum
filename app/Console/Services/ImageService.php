@@ -6,6 +6,7 @@ use App\Console\Commands\ServiceCommand;
 use App\Models\Image;
 use App\Models\User;
 use Bavix\Exceptions\Invalid;
+use Bavix\Extra\Gearman;
 use Bavix\Helpers\Arr;
 use Bavix\Helpers\Corundum\Corundum;
 use Bavix\Helpers\Corundum\Runner;
@@ -149,6 +150,20 @@ class ImageService
         $model->height = $image->getHeight();
         $model->size   = $image->filesize();
         $model->save();
+
+        /**
+         * @var array $configure
+         */
+        $configure = \config('corundum');
+
+        foreach ($configure as $key => $props)
+        {
+            Gearman::client()
+                ->doLowBackground(
+                    ServiceCommand::PROP_OPTIMIZE,
+                    Image::realPath($model->user, $model->name, $key)
+                );
+        }
     }
 
 }

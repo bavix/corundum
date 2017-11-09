@@ -10,14 +10,16 @@ use Bavix\Commands\WorkerCommand;
 use Bavix\Extra\Gearman;
 use Bavix\Helpers\Closure;
 use Bavix\Helpers\File;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class ServiceCommand extends WorkerCommand
 {
 
-    const PROP_SERVICE = 'handle';
-    const PROP_CREATED = 'created';
-    const PROP_UPDATED = 'updated';
-    const PROP_DELETED = 'deleted';
+    const PROP_SERVICE  = 'handle';
+    const PROP_CREATED  = 'created';
+    const PROP_UPDATED  = 'updated';
+    const PROP_DELETED  = 'deleted';
+    const PROP_OPTIMIZE = 'optimize';
 
     /**
      * @var string
@@ -48,7 +50,11 @@ class ServiceCommand extends WorkerCommand
 
             self::PROP_DELETED => Closure::fromCallable([
                 $this, 'deleted'
-            ])
+            ]),
+
+            self::PROP_OPTIMIZE => Closure::fromCallable([
+                $this, 'optimize'
+            ]),
         ];
     }
 
@@ -107,6 +113,16 @@ class ServiceCommand extends WorkerCommand
         {
             $this->imageDeleted($model);
         }
+    }
+
+    /**
+     * @param \GearmanJob $job
+     */
+    public function optimize(\GearmanJob $job)
+    {
+        $this->info('optimize: ' . $job->workload());
+        OptimizerChainFactory::create()
+            ->optimize($job->workload());
     }
 
     /**

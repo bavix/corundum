@@ -21,7 +21,8 @@
     "laravel-admin-ext/helpers": "^1.0",
     "laravel/framework": "5.5.*",
     "laravel/passport": "^4.0",
-    "laravel/tinker": "~1.0"
+    "laravel/tinker": "~1.0",
+    "spatie/image-optimizer": "^1.0"
   },
   "require-dev": {
     "bavix/tests": "~1.0",
