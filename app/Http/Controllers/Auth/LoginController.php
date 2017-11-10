@@ -33,7 +33,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->redirectTo = route('cfg.index');
+        $this->redirectTo = route('ux.config.index');
         $this->middleware('guest')->except('logout');
     }
 

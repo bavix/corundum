@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome');
 
 
 //Route::get('/redirect', function () {
@@ -50,4 +48,4 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('/cfg', 'ConfigController');
+Route::resource('/config', 'ConfigController', ['as' => 'ux']);

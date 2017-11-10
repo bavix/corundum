@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Config;
 use Bavix\App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -16,45 +17,70 @@ class ConfigController extends Controller
         $this->middleware('auth');
     }
 
+    public function store(Request $request)
+    {
+        $id = $request->input('id');
+
+        if ($id)
+        {
+            $config = Config::query()->find($id);
+        }
+
+        $object = $config ?? new Config();
+        $user   = $request->user();
+
+        $object->user_id = $user->id;
+        $object->name    = $request->input('name');
+        $object->type    = $request->input('type');
+        $object->width   = $request->input('width');
+        $object->height  = $request->input('height');
+        $object->color   = $request->input('color');
+        $object->quality = $request->input('quality');
+
+        $object->save();
+
+        return redirect(route('ux.config.index'));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create(Request $request)
+    {
+        return view('config.index', [
+            'user' => $request->user(),
+            'item' => null
+        ]);
+    }
+
     /**
      * Show the application dashboard.
      *
      * @param Request $request
      *
-     * @return mixed
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
-
-//        foreach (range(1, 5) as $item)
-//        {
-//            $config = new Config();
-//
-//            $config->name = Str::random(3);
-//            $config->user_id = $request->user()->id;
-//            $config->type = random_int(0, 1) ? 'cover' : 'fit';
-//            $config->width = random_int(200, 900);
-//            $config->height = random_int(200, 900);
-//
-//            $config->save();
-//        }
-
-//        $config = Config::all();
-//
-//        foreach ($config as $item)
-//        {
-//            $item->delete();
-//        }
-
-//        $images = Image::all();
-//
-//        foreach ($images as $item)
-//        {
-//            $item->delete();
-//        }
-
-        return view('cfg', [
+        return view('config.index', [
             'user' => $request->user()
+        ]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit(Request $request, $id)
+    {
+        return view('config.index', [
+            'user' => $request->user(),
+            'item' => Config::query()->find($id)
         ]);
     }
 

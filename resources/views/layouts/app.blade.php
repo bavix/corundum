@@ -7,8 +7,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
-          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdn.bavix.ru/bootstrap/next/dist/css/bootstrap.min.css" />
 
     <style>
         .bg-corundum {
@@ -31,7 +30,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand" href="{{ route('cfg.index') }}">
+            <a class="navbar-brand" href="{{ route('ux.config.index') }}">
                 <img src="https://ds.bavix.ru/svg/logo.svg" height="32" alt="Bavix" />
             </a>
             
@@ -39,7 +38,7 @@
                 
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('cfg.index') }}">Home</a>
+                        <a class="nav-link" href="{{ route('ux.config.index') }}">Home</a>
                     </li>
                 </ul>
 
@@ -65,14 +64,8 @@
         @yield('content')
     </main>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
-            integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
-            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.bavix.ru/jquery/latest/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.bavix.ru/popper.js/1.12.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.bavix.ru/bootstrap/next/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

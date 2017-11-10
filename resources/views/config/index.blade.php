@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <a href="#" class="btn btn-success btn-sm float-right">+</a>
+
+        <div class="col-8">
+            <a href="{{ route('ux.config.create') }}" class="btn btn-success btn-sm float-right">+</a>
             <h1>Configs</h1>
 
             <table class="table table-striped">
@@ -42,13 +43,18 @@
                                 @endif
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-primary" href="{{ route('cfg.edit', [$config->id]) }}">edit</a>
-                                <a class="btn btn-sm btn-danger" href>delete</a>
+                                <a class="btn btn-sm btn-primary" href="{{ route('ux.config.edit', [$config->id]) }}">edit</a>
+                                <a class="btn btn-sm btn-danger" href="#" data-destroy="{{ route('ux.config.destroy', [$config->id]) }}">delete</a>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
+
+        <div class="col-4">
+            @include('config.edit')
+        </div>
+
     </div>
 @endsection
