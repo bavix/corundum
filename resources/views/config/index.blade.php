@@ -57,7 +57,7 @@
         </div>
 
     </div>
-    
+
     <script async defer>
         window.onload = function () {
             $('.bx-destroy').click(function () {
