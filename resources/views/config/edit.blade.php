@@ -14,11 +14,12 @@
     <div class="form-group">
         <label for="type">Type</label>
         <select class="form-control" name="type" id="type">
-            <option name="fit">fit</option>
-            <option name="none">none</option>
-            <option name="cover">cover</option>
-            <option name="contain">contain</option>
-            <option name="resize">resize</option>
+            @php($type = old('type', $item->type ?? null))
+            <option name="fit" @if($type === 'fit')selected @endif>fit</option>
+            <option name="none" @if($type === 'none')selected @endif>none</option>
+            <option name="cover" @if($type === 'cover')selected @endif>cover</option>
+            <option name="contain" @if($type === 'contain')selected @endif>contain</option>
+            <option name="resize" @if($type === 'resize')selected @endif>resize</option>
         </select>
     </div>
 
