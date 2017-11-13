@@ -54,7 +54,16 @@ class ImageController extends Controller
         $image->user    = $user->login;
         $image->name    = $basename;
         $image->mime    = $mime;
-        $image->size    = $file->getSize() ?: $file->getClientSize();
+        
+        try
+        {
+            $image->size = $file->getSize();
+        }
+        catch (\Throwable $throwable)
+        {
+            $image->size = $file->getClientSize();
+        }
+
         $image->user_id = $user->id;
 
         \abort_if(!$image->save(), 500, 'It wasn\'t succeeded to keep model');
