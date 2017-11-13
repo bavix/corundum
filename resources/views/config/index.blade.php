@@ -57,37 +57,38 @@
         </div>
 
     </div>
+    
+    <script async defer>
+        window.onload = function () {
+            $('.bx-destroy').click(function () {
+
+                var $self = $(this);
+                var $uri = $self.data('destroy');
+
+                swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then(function () {
+                    fetch($uri + '?_token={{ csrf_token() }}', {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
+
+                    $self.parents('tr').remove();
+
+                    swal(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                })
+            });
+        }
+    </script>
+
 @endsection
-
-<script async defer>
-    window.onload = function () {
-        $('.bx-destroy').click(function () {
-
-            var $self = $(this);
-            var $uri = $self.data('destroy');
-
-            swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then(function () {
-                fetch($uri + '?_token={{ csrf_token() }}', {
-                    method: 'DELETE',
-                    credentials: 'include'
-                });
-
-                $self.parents('tr').remove();
-
-                swal(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
-            })
-        });
-    }
-</script>
