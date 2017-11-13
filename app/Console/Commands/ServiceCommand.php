@@ -33,8 +33,12 @@ class ServiceCommand extends WorkerCommand
     {
         parent::__construct();
 
-        $this->loadQueue();
-
+        try {
+            $this->loadQueue();
+        } catch (\Throwable $throwable) {
+            
+        }
+        
         $this->map = [
             self::PROP_SERVICE => Closure::fromCallable([
                 new ImageService($this), 'handle'
