@@ -1,9 +1,17 @@
 {
-  "name": "laravel/laravel",
-  "description": "The Laravel Framework.",
+  "name": "bavix/corundum",
+  "description": "Bavix Corundum (CDN).",
   "keywords": [
-    "framework",
-    "laravel"
+    "project",
+    "imaginarium",
+    "image",
+    "php",
+    "resize",
+    "crop",
+    "contain",
+    "fill",
+    "gd",
+    "imagick"
   ],
   "license": "MIT",
   "type": "project",
