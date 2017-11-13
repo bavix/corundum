@@ -17,6 +17,24 @@ class ConfigController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * @param Request $request
+     * @param         $id
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        $config = Config::query()->find($id);
+        abort_if(!$config, 404);
+
+        if ($config->delete()) {
+            return response('', 204);
+        }
+
+        return abort(500);
+    }
+
     public function store(Request $request)
     {
         $id = $request->input('id');

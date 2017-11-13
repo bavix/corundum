@@ -64,8 +64,11 @@
         @yield('content')
     </main>
 
+    <link rel="stylesheet" href="https://cdn.bavix.ru/sweetalert2/latest/dist/sweetalert2.min.css" />
+
     <script src="https://cdn.bavix.ru/jquery/latest/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.bavix.ru/popper.js/1.12.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.bavix.ru/bootstrap/next/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bavix.ru/sweetalert2/latest/dist/sweetalert2.min.js"></script>
 </body>
 </html>
