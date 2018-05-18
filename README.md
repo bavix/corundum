@@ -13,3 +13,8 @@ example
 ```bash
 sudo su nobody -s /bin/sh -c "php artisan bx:service -vvv"
 ```
+
+---
+Supported by
+
+[![Supported by JetBrains](https://cdn.rawgit.com/bavix/development-through/46475b4b/jetbrains.svg)](https://www.jetbrains.com/)
