@@ -1,7 +1,7 @@
 <?php
 
-use Bavix\Illuminate\Support\Facades\Schema;
-use Bavix\Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateImagesTable extends Migration
@@ -22,11 +22,7 @@ class CreateImagesTable extends Migration
             $table->integer('user_id');
 
             $table->string('mime')->nullable();
-
-            $table->boolean('status')
-                ->comment('exists thumbnail: 0 -- no, 1 -- yes')
-                ->default(0);
-
+            $table->boolean('processed')->default(0);
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
             $table->integer('size')->nullable();

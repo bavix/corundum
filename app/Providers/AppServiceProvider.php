@@ -20,12 +20,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Image::observe(ImageObserver::class);
         Config::observe(ConfigObserver::class);
-
-        try {
-            \Encore\Admin\Config\Config::load();
-        } catch (\Throwable $throwable) {
-
-        }
     }
 
     /**

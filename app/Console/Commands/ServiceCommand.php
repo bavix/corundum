@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Services\ImageService;
+use App\Jobs\ImageJob;
 use App\Models\Config;
 use App\Models\Image;
 use App\Models\User;
@@ -10,9 +11,10 @@ use Bavix\Commands\WorkerCommand;
 use Bavix\Extra\Gearman;
 use Bavix\Helpers\Closure;
 use Bavix\Helpers\File;
+use Illuminate\Console\Command;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
-class ServiceCommand extends WorkerCommand
+class ServiceCommand extends Command // extends WorkerCommand
 {
 
     const PROP_SERVICE  = 'handle';
@@ -31,14 +33,16 @@ class ServiceCommand extends WorkerCommand
      */
     public function __construct()
     {
+        ImageJob::dispatch(new Image());
+        die;
         parent::__construct();
 
         try {
             $this->loadQueue();
         } catch (\Throwable $throwable) {
-            
+
         }
-        
+
         $this->map = [
             self::PROP_SERVICE => Closure::fromCallable([
                 new ImageService($this), 'handle'
