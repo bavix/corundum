@@ -1,0 +1,81 @@
+version: '3.6'
+services:
+
+  memcached:
+    image: memcached
+    networks:
+      static:
+        ipv4_address: 172.16.241.2
+
+  redis:
+    image: redis
+    networks:
+      static:
+        ipv4_address: 172.16.241.3
+
+  nginx:
+    build:
+      context: ./environment/nginx
+    depends_on:
+      - php
+    volumes:
+      - ./:/var/www/html
+    networks:
+      static:
+        ipv4_address: 172.16.241.4
+
+  php_build:
+    image: composer
+    volumes:
+      - ./composer.json:/app/composer.json
+      - ./composer.lock:/app/composer.lock
+      - ./vendor:/app/vendor
+    command: composer install --ignore-platform-reqs
+    networks:
+      static:
+        ipv4_address: 172.16.241.240
+
+  php:
+    depends_on:
+      - php_build
+      - mysql
+    build:
+      context: ./environment/php
+    volumes:
+      - ./:/var/www/html
+    networks:
+      static:
+        ipv4_address: 172.16.241.5
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./environment/mysql/sql:/docker-entrypoint-initdb.d
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      static:
+        ipv4_address: 172.16.241.6
+
+  rabbitmq:
+    image: rabbitmq:3.7-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${DB_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${DB_PASSWORD}
+    networks:
+      static:
+        ipv4_address: 172.16.241.7
+
+volumes:
+  dbdata:
+
+networks:
+  static:
+    ipam:
+      config:
+      -
+        subnet: 172.16.241.0/24
