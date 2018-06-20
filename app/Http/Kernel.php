@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use Bavix\Middleware\IfIndex;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -15,8 +14,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Bavix\Middleware\IfIndex::class,
-        \Bavix\Middleware\HttpsProtocol::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
