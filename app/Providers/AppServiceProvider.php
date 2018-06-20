@@ -18,8 +18,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Image::observe(ImageObserver::class);
-        Config::observe(ConfigObserver::class);
+//        Image::observe(ImageObserver::class);
+//        Config::observe(ConfigObserver::class);
     }
 
     /**

@@ -14,7 +14,7 @@ use Bavix\Helpers\File;
 use Illuminate\Console\Command;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
-class ServiceCommand extends Command // extends WorkerCommand
+class ServiceCommand // extends Command // extends WorkerCommand
 {
 
     const PROP_SERVICE  = 'handle';
@@ -33,8 +33,7 @@ class ServiceCommand extends Command // extends WorkerCommand
      */
     public function __construct()
     {
-        ImageJob::dispatch(new Image());
-        die;
+//        ImageJob::dispatch(new Image());
         parent::__construct();
 
         try {

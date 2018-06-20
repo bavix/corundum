@@ -36,9 +36,9 @@ class ImageJob implements ShouldQueue
      */
     public function handle(): void
     {
-        var_dump([$this->attempts(), func_get_args()]);
-        sleep(2);
-        die;
+        var_dump($this->image, [$this->attempts(), \func_get_args()]);
+//        sleep(2);
+//        die;
     }
 
 }

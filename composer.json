@@ -17,13 +17,12 @@
   "type": "project",
   "require": {
     "php": ">=7.1",
-    "bavix/config": "^1.0",
-    "bavix/laravel-helpers": "^1.0",
-    "fideloper/proxy": "~3.3",
+    "bavix/laravel-helpers": "^1.2",
     "intervention/image": "^2.4",
-    "laravel/framework": "5.5.*",
+    "laravel/framework": "5.6.*",
     "laravel/passport": "^4.0",
-    "spatie/image-optimizer": "^1.0"
+    "spatie/image-optimizer": "^1.0",
+    "vladimir-yuldashev/laravel-queue-rabbitmq": "^7.0"
   },
   "require-dev": {
     "bavix/tests": "~1.0",
