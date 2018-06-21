@@ -38,14 +38,3 @@ Route::middleware('auth:api')
 
 Route::middleware('auth:api')
     ->delete('/image/{name}', 'ImageController@delete');
-
-//Client ID: 1
-//Client secret: ZijIDIY00Dl36ewlCGI76UgN4bvfcq7uCC38ljPc
-
-//Personal access client created successfully.
-//Client ID: 2
-//Client Secret: GawrQnSFtIXJmZb3m49opxWueZbsbxu32lyOA5nU
-//
-//Password grant client created successfully.
-//Client ID: 3
-//Client Secret: S3O39tPlD3IWSDd8AcwWj1gzZ6lKzR1QLnJvwcgF

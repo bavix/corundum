@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class ImageJob implements ShouldQueue
+class ImageOptimization implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -36,9 +36,7 @@ class ImageJob implements ShouldQueue
      */
     public function handle(): void
     {
-        var_dump($this->image, [$this->attempts(), \func_get_args()]);
-//        sleep(2);
-//        die;
+        //
     }
 
 }

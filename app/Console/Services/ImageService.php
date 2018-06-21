@@ -4,14 +4,11 @@ namespace App\Console\Services;
 
 use App\Console\Commands\ServiceCommand;
 use App\Models\Image;
-use App\Models\User;
 use Bavix\Exceptions\Invalid;
-use Bavix\Extra\Gearman;
 use Bavix\Helpers\Arr;
 use Bavix\Helpers\Corundum\Corundum;
 use Bavix\Helpers\Corundum\Runner;
 use Bavix\Helpers\File;
-use Bavix\Helpers\JSON;
 use Bavix\Slice\Slice;
 use Intervention\Image\ImageManager;
 
@@ -40,7 +37,8 @@ class ImageService
      */
     public function __construct(ServiceCommand $command)
     {
-        $this->slice   = new Slice(config('gearman.services.image'));
+        $config = config('corundum');
+        $this->slice   = new Slice($config);
         $this->command = $command;
     }
 
@@ -64,40 +62,6 @@ class ImageService
         }
 
         return $this->runners[$user];
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return array
-     */
-    protected function config($userId): array
-    {
-        if (\config('reload.corundum'))
-        {
-            \config([
-                'reload.corundum' => false
-            ]);
-
-            $this->configs = [];
-        }
-
-        if (!isset($this->configs[$userId]))
-        {
-            $this->configs[$userId] = [];
-
-            $configs = User::with('configs')
-                ->find($userId)
-                ->configs
-                ->toArray();
-
-            foreach ($configs as $config)
-            {
-                $this->configs[$userId][$config['name']] = $config;
-            }
-        }
-
-        return $this->configs[$userId];
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Console\Commands\ServiceCommand;
-use Bavix\Extra\Gearman;
 use Bavix\Helpers\Str;
 use Bavix\SDK\PathBuilder;
 use Illuminate\Database\Eloquent\Model;
@@ -12,8 +11,6 @@ use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
-
-    public $timestamps = false;
 
     /**
      * @var bool
@@ -42,8 +39,7 @@ class Image extends Model
      */
     public static function generateName(string $user, string $ext): string
     {
-        do
-        {
+        do {
             $name = Str::random(6) . '.' . $ext;
         }
         while (static::findByName($user, $name));
@@ -68,7 +64,7 @@ class Image extends Model
             $type = 'thumbs/' . $type;
         }
 
-        return Storage::disk(config('gearman.services.image.disk'))
+        return Storage::disk(config('corundum.disk'))
             ->path('image/' . $user . '/' . $type . '/' . $hash . '/' . $name);
     }
 

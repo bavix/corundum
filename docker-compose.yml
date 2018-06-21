@@ -27,10 +27,8 @@ services:
   php_build:
     image: composer
     volumes:
-      - ./composer.json:/app/composer.json
-      - ./composer.lock:/app/composer.lock
-      - ./vendor:/app/vendor
-    command: composer install --ignore-platform-reqs
+      - ./:/app
+    command: composer update --ignore-platform-reqs
     networks:
       static:
         ipv4_address: 172.16.241.240
