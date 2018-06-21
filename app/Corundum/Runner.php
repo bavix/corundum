@@ -27,16 +27,16 @@ class Runner
 
     /**
      * @param string $name
-     * @param Command $command
+     * @param array $configs
      * @param bool $checkExists
      *
      * @throws Invalid
      */
-    public function apply(string $name, $checkExists = false)
+    public function apply(string $name, array $configs, $checkExists = false): void
     {
-        foreach ($this->config() as $key => $config) {
+        foreach ($configs as $key => $config) {
             $slice = new Slice($config);
-            $type = $this->type($slice);
+            $type = $slice->getRequired('type');
             $thumb = $this->thumbnail(
                 $this->corundum->imagePath($name),
                 $key
@@ -54,33 +54,7 @@ class Runner
                     $thumb,
                     $slice->getData('quality')
                 );
-
-            if ($command) {
-                if ($updated) {
-                    $command->warn('Thumbnail `' . $key . '` of the file `' . $name . '` is updated!');
-                } else {
-                    $command->info('Thumbnail `' . $key . '` of the file `' . $name . '` is created!');
-                }
-            }
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function config(): array
-    {
-        return \config('corundum');
-    }
-
-    /**
-     * @param Slice $slice
-     *
-     * @return string
-     */
-    protected function type(Slice $slice): string
-    {
-        return $slice->getRequired('type');
     }
 
     /**
@@ -99,7 +73,6 @@ class Runner
         );
 
         Dir::make(\dirname($fullPath));
-
         return $fullPath;
     }
 
