@@ -90,19 +90,6 @@ class Corundum
     }
 
     /**
-     * @param string $path
-     *
-     * @return DriverInterface
-     */
-    public function contain(string $path): DriverInterface
-    {
-        return new Adapters\Contain(
-            $this,
-            $this->imagePath($path)
-        );
-    }
-
-    /**
      * @param string $basename
      *
      * @return mixed
@@ -112,8 +99,7 @@ class Corundum
         $path = 'image/' . PathBuilder::sharedInstance()
                 ->generate($this->user(), $this->type(), $basename);
 
-        return Storage::disk($this->disk)
-            ->path($path);
+        return Storage::disk($this->disk)->path($path);
     }
 
     /**
@@ -137,12 +123,22 @@ class Corundum
      *
      * @return DriverInterface
      */
-    public function cover(string $path): DriverInterface
+    public function contain(string $path): DriverInterface
     {
-        return new Adapters\Cover(
+        return new Adapters\Contain(
             $this,
             $this->imagePath($path)
         );
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return DriverInterface
+     */
+    public function cover(string $path): DriverInterface
+    {
+        return new Adapters\Cover($this, $this->imagePath($path));
     }
 
     /**
@@ -152,10 +148,7 @@ class Corundum
      */
     public function fit(string $path): DriverInterface
     {
-        return new Adapters\Fit(
-            $this,
-            $this->imagePath($path)
-        );
+        return new Adapters\Fit($this, $this->imagePath($path));
     }
 
     /**
@@ -165,10 +158,7 @@ class Corundum
      */
     public function resize(string $path): DriverInterface
     {
-        return new Adapters\Resize(
-            $this,
-            $this->imagePath($path)
-        );
+        return new Adapters\Resize($this, $this->imagePath($path));
     }
 
     /**
@@ -178,10 +168,7 @@ class Corundum
      */
     public function none(string $path): DriverInterface
     {
-        return new Adapters\None(
-            $this,
-            $this->imagePath($path)
-        );
+        return new Adapters\None($this, $this->imagePath($path));
     }
 
     /**
