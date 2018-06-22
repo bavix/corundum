@@ -7,7 +7,8 @@
 https://tools.ietf.org/html/rfc4122
 
 URL `/{bucket}(/{thumbs})/{uuid4}.{format}`
-PATH `/{bucket}/{thumbs|original}/{uuid4}.{format}`
+
+PATH `/{bucket}/{thumbs|original}/{uuid4:2}/{uuid4:2,2}//{uuid4}.{format}`
 
 Нужно добавить запрет на создание конфига с именем original  
 
@@ -19,11 +20,17 @@ sudo npm install -g svgo
 sudo apt-get install gifsicle
 ```
 
-example
+Example
+--
 
 ```bash
 sudo su nobody -s /bin/sh -c "php artisan bx:service -vvv"
 ```
+
+RabbitMQ
+--
+
+Management RabbitMQ [http://172.16.241.7:15672](http://172.16.241.7:15672)
 
 ---
 Supported by

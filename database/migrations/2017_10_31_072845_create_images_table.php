@@ -15,14 +15,13 @@ class CreateImagesTable extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
-
             $table->string('name');
             $table->integer('bucket_id');
             $table->integer('user_id');
+            $table->boolean('processed')->default(0);
 
             // todo to eav (props)
             $table->string('mime')->nullable();
-            $table->boolean('processed')->default(0);
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
             $table->integer('size')->nullable();

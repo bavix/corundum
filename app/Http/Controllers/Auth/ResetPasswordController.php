@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Bavix\App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Routing\Controller as BaseController;
 
-class ResetPasswordController extends Controller
+class ResetPasswordController extends BaseController
 {
 
     /*

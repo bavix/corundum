@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use Bavix\App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Routing\Controller as BaseController;
 
-class RegisterController extends Controller
+class RegisterController extends BaseController
 {
 
     /*
@@ -49,8 +49,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'login'    => 'required|string|max:255|unique:users',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'login' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
         ]);
     }
@@ -65,8 +65,8 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'login'    => $data['login'],
-            'email'    => $data['email'],
+            'login' => $data['login'],
+            'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
     }

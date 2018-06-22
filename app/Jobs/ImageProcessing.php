@@ -2,18 +2,18 @@
 
 namespace App\Jobs;
 
+use App\Corundum\Corundum;
+use App\Corundum\Runner;
 use App\Enums\QueueEnum;
 use App\Models\Image;
 use Bavix\Helpers\Arr;
-use App\Corundum\Corundum;
-use App\Corundum\Runner;
 use Bavix\Helpers\File;
 use Bavix\Slice\Slice;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
 
@@ -45,30 +45,8 @@ class ImageProcessing implements ShouldQueue
     public function __construct(Image $image)
     {
         $config = config('corundum');
-        $this->slice   = new Slice($config);
+        $this->slice = new Slice($config);
         $this->image = $image;
-    }
-
-    /**
-     * @param string $user
-     *
-     * @return Runner
-     */
-    protected function runner(string $user): Runner
-    {
-        if (!isset($this->runners[$user]))
-        {
-            $corundum = new Corundum($this->slice->make(Arr::merge(
-                $this->slice->asArray(),
-                [
-                    'user' => $user
-                ]
-            )));
-
-            $this->runners[$user] = new Runner($corundum);
-        }
-
-        return $this->runners[$user];
     }
 
     /**
@@ -79,8 +57,7 @@ class ImageProcessing implements ShouldQueue
     public function handle(): void
     {
 
-        if (!File::isFile(Image::realPath($this->image->user, $this->image->name)))
-        {
+        if (!File::isFile(Image::realPath($this->image->user, $this->image->name))) {
             Log::error('The file `' . $this->image->name . '` of the user `' .
                 $this->image->user . '` isn\'t found');
             return;
@@ -113,11 +90,31 @@ class ImageProcessing implements ShouldQueue
         /**
          * отправляем на оптимизацию
          */
-        foreach ($thumbnails as $thumbnail)
-        {
+        foreach ($thumbnails as $thumbnail) {
             ImageOptimization::dispatch($image, $thumbnail)
                 ->onQueue(QueueEnum::LOW);
         }
+    }
+
+    /**
+     * @param string $user
+     *
+     * @return Runner
+     */
+    protected function runner(string $user): Runner
+    {
+        if (!isset($this->runners[$user])) {
+            $corundum = new Corundum($this->slice->make(Arr::merge(
+                $this->slice->asArray(),
+                [
+                    'user' => $user
+                ]
+            )));
+
+            $this->runners[$user] = new Runner($corundum);
+        }
+
+        return $this->runners[$user];
     }
 
 }

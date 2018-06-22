@@ -96,6 +96,7 @@ class Corundum
      */
     public function imagePath(string $basename): string
     {
+        // fixme: remove method, use Image:realPath
         $path = 'image/' . PathBuilder::sharedInstance()
                 ->generate($this->bucket(), $this->type(), $basename);
 
@@ -125,10 +126,7 @@ class Corundum
      */
     public function contain(string $path): DriverInterface
     {
-        return new Adapters\Contain(
-            $this,
-            $this->imagePath($path)
-        );
+        return new Adapters\Contain($this, $this->imagePath($path));
     }
 
     /**

@@ -4,28 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
-use Bavix\App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controller as BaseController;
 
-class ImageController extends Controller
+class ImageController extends BaseController
 {
-
-    /**
-     * @param Request $request
-     * @param string  $name
-     *
-     * @return Image
-     */
-    protected function model(Request $request, $name): Image
-    {
-        $user = $request->user();
-        \abort_if(empty($name), 400, 'The `name` parameter isn\'t found');
-
-        $model = Image::findByName($user->login, $name);
-        \abort_if(!$model, 404, 'Image not found');
-
-        return $model;
-    }
 
     /**
      * @param Request $request
@@ -42,7 +25,7 @@ class ImageController extends Controller
         \abort_if(!$file, 400, 'The file parameter is empty');
 
         $mime = $file->getMimeType();
-        $ext  = $file->extension() ?: $file->clientExtension();
+        $ext = $file->extension() ?: $file->clientExtension();
         \abort_if(0 !== strpos($mime, 'image/'), 400, 'Unknown mime-type');
 
         $basename = Image::generateName($user->login, $ext);
@@ -50,17 +33,14 @@ class ImageController extends Controller
 
         $file->move(dirname($fullPath), $basename);
 
-        $image          = new Image();
-        $image->user    = $user->login;
-        $image->name    = $basename;
-        $image->mime    = $mime;
-        
-        try
-        {
+        $image = new Image();
+        $image->user = $user->login;
+        $image->name = $basename;
+        $image->mime = $mime;
+
+        try {
             $image->size = $file->getSize();
-        }
-        catch (\Throwable $throwable)
-        {
+        } catch (\Throwable $throwable) {
             $image->size = $file->getClientSize();
         }
 
@@ -73,7 +53,7 @@ class ImageController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $name
+     * @param string $name
      *
      * @return mixed
      */
@@ -87,7 +67,24 @@ class ImageController extends Controller
 
     /**
      * @param Request $request
-     * @param string  $name
+     * @param string $name
+     *
+     * @return Image
+     */
+    protected function model(Request $request, $name): Image
+    {
+        $user = $request->user();
+        \abort_if(empty($name), 400, 'The `name` parameter isn\'t found');
+
+        $model = Image::findByName($user->login, $name);
+        \abort_if(!$model, 404, 'Image not found');
+
+        return $model;
+    }
+
+    /**
+     * @param Request $request
+     * @param string $name
      *
      * @throws \Exception
      */

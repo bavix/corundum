@@ -2,8 +2,8 @@
 
 namespace App\Observes;
 
-use Bavix\Extra\Gearman;
 use App\Models\Config;
+use Bavix\Extra\Gearman;
 
 class ConfigObserver
 {

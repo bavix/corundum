@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use App\Console\Commands\ServiceCommand;
-use Bavix\Helpers\Str;
-use Bavix\SDK\PathBuilder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+use Bavix\SDK\PathBuilder;
+use Ramsey\Uuid\Uuid;
 
 class Image extends Model
 {
+
+    public const TYPE_ORIGINAL = 'original';
 
     /**
      * @var bool
@@ -18,54 +20,47 @@ class Image extends Model
     protected $checkExists = false;
 
     /**
-     * @param string $user
-     * @param string $name
-     *
-     * @return Model|null|static
-     */
-    public static function findByName(string $user, string $name)
-    {
-        return static::query()
-            ->where('user', $user)
-            ->where('name', $name)
-            ->first();
-    }
-
-    /**
-     * @param string $user
+     * @param string $bucket
      * @param string $ext
      *
      * @return string
      */
-    public static function generateName(string $user, string $ext): string
+    public static function generateName(string $bucket, string $ext): string
     {
         do {
-            $name = Str::random(6) . '.' . $ext;
-        }
-        while (static::findByName($user, $name));
+            $name = Uuid::uuid4()->toString() . '.' . $ext;
+        } while (static::findByName($bucket, $name));
 
         return $name;
     }
 
     /**
-     * @param string $user
+     * @param int $bucketId
+     * @param string $name
+     *
+     * @return Model|null|static
+     */
+    public static function findByName(int $bucketId, string $name)
+    {
+        return static::query()
+            ->where('bucket_id', $bucketId)
+            ->where('name', $name)
+            ->first();
+    }
+
+    /**
+     * @param string $bucket
      * @param string $name
      * @param string $type
      *
      * @return string
      */
-    public static function realPath(string $user, string $name, $type = 'original'): string
+    public static function realPath(string $bucket, string $name, $type = self::TYPE_ORIGINAL): string
     {
-        $hash = PathBuilder::sharedInstance()
-            ->hash($name);
-
-        if ($type !== 'original')
-        {
-            $type = 'thumbs/' . $type;
-        }
-
-        return Storage::disk(config('corundum.disk'))
-            ->path('image/' . $user . '/' . $type . '/' . $hash . '/' . $name);
+        $storage = Storage::disk(config('corundum.disk'));
+        $hash = PathBuilder::sharedInstance()->hash($name);
+        $paths = [$bucket, $type, $hash, $name];
+        return $storage->path(\implode('/', $paths));
     }
 
     /**
@@ -75,6 +70,7 @@ class Image extends Model
      */
     public function thumbnail(string $name)
     {
+
         return Config::query()
             ->where('name', $name)
             ->where('user_id', $this->user_id)
@@ -82,14 +78,11 @@ class Image extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|Config[]
+     * @return HasMany
      */
-    public function thumbnails()
+    public function thumbnails(): HasMany
     {
-        return Config::query()
-            ->where('user_id', $this->user_id)
-            ->limit(100)
-            ->get();
+        return $this->hasMany(Config::class, 'user_id', 'user_id');
     }
 
     /**
@@ -106,45 +99,6 @@ class Image extends Model
     public function getCheckExists(): bool
     {
         return $this->checkExists;
-    }
-
-    /**
-     * @param bool $checkExists
-     *
-     * @return $this
-     */
-    public function doRegenerate($checkExists = false): self
-    {
-        $this->checkExists = $checkExists;
-        return $this->doBackground();
-    }
-
-    /**
-     * @return $this
-     */
-    public function doBackground(): self
-    {
-        Gearman::client()
-            ->doBackground(
-                ServiceCommand::PROP_SERVICE,
-                \serialize($this)
-            );
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function doDeleted(): self
-    {
-        Gearman::client()
-            ->doBackground(
-                ServiceCommand::PROP_DELETED,
-                \serialize($this)
-            );
-
-        return $this;
     }
 
 }

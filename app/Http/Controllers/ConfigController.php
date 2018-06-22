@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Config;
-use Bavix\App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
-class ConfigController extends Controller
+class ConfigController extends BaseController
 {
 
     /**
@@ -35,24 +35,27 @@ class ConfigController extends Controller
         return abort(500);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function store(Request $request)
     {
         $id = $request->input('id');
 
-        if ($id)
-        {
+        if ($id) {
             $config = Config::query()->find($id);
         }
 
         $object = $config ?? new Config();
-        $user   = $request->user();
+        $user = $request->user();
 
         $object->user_id = $user->id;
-        $object->name    = $request->input('name');
-        $object->type    = $request->input('type');
-        $object->width   = $request->input('width');
-        $object->height  = $request->input('height');
-        $object->color   = $request->input('color');
+        $object->name = $request->input('name');
+        $object->type = $request->input('type');
+        $object->width = $request->input('width');
+        $object->height = $request->input('height');
+        $object->color = $request->input('color');
         $object->quality = $request->input('quality');
 
         $object->save();
