@@ -28,11 +28,6 @@ class ImageProcessing implements ShouldQueue
     protected $image;
 
     /**
-     * @var Slice
-     */
-    protected $slice;
-
-    /**
      * @var Runner[]
      */
     protected $runners;
@@ -44,8 +39,6 @@ class ImageProcessing implements ShouldQueue
      */
     public function __construct(Image $image)
     {
-        $config = config('corundum');
-        $this->slice = new Slice($config);
         $this->image = $image;
     }
 
@@ -104,13 +97,12 @@ class ImageProcessing implements ShouldQueue
     protected function runner(string $user): Runner
     {
         if (!isset($this->runners[$user])) {
-            $corundum = new Corundum($this->slice->make(Arr::merge(
-                $this->slice->asArray(),
-                [
-                    'user' => $user
-                ]
-            )));
+            $array = \array_merge(
+                \config('corundum'),
+                \compact('user')
+            );
 
+            $corundum = new Corundum($array);
             $this->runners[$user] = new Runner($corundum);
         }
 
