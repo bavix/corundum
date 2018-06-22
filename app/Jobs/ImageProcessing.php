@@ -56,11 +56,10 @@ class ImageProcessing implements ShouldQueue
             return;
         }
 
-        $thumbnails = $this->image->thumbnails();
 
         $this->runner($this->image->user)->apply(
             $this->image->name,
-            $thumbnails,
+            $this->image->thumbnails,
             // to include check on existence of the file
             $this->image->getCheckExists()
         );
@@ -83,7 +82,7 @@ class ImageProcessing implements ShouldQueue
         /**
          * отправляем на оптимизацию
          */
-        foreach ($thumbnails as $thumbnail) {
+        foreach ($this->image->thumbnails as $thumbnail) {
             ImageOptimization::dispatch($image, $thumbnail)
                 ->onQueue(QueueEnum::LOW);
         }
