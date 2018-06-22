@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\ImageJob;
 use App\Models\Image;
 use Illuminate\Console\Command;
+use Ramsey\Uuid\Uuid;
 
 class TestCommand extends Command
 {
@@ -13,14 +14,14 @@ class TestCommand extends Command
 
     public function handle(): void
     {
-        $image = new Image();
-        $image->user = 'test';
-        $image->name = \str_random(6);
-        $image->user_id = 1;
-        $image->save();
-
-        ImageJob::dispatch($image)
-            ->onQueue('low');
+//        $image = new Image();
+//        $image->user = 'test';
+//        $image->name = \str_random(6);
+//        $image->user_id = 1;
+//        $image->save();
+//
+//        ImageJob::dispatch($image)
+//            ->onQueue('low');
     }
 
 }

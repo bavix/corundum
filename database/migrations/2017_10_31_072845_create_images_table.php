@@ -16,11 +16,11 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('user');
             $table->string('name');
-
+            $table->integer('bucket_id');
             $table->integer('user_id');
 
+            // todo to eav (props)
             $table->string('mime')->nullable();
             $table->boolean('processed')->default(0);
             $table->integer('width')->nullable();
@@ -29,7 +29,7 @@ class CreateImagesTable extends Migration
 
             $table->timestamps();
 
-            $table->unique(['user', 'name']);
+            $table->unique(['name']);
         });
     }
 

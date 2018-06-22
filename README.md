@@ -1,5 +1,16 @@
 # corundum
 
+Хранилище изображений и файлов.
+
+Структура для изображений.
+
+https://tools.ietf.org/html/rfc4122
+
+URL `/{bucket}(/{thumbs})/{uuid4}.{format}`
+PATH `/{bucket}/{thumbs|original}/{uuid4}.{format}`
+
+Нужно добавить запрет на создание конфига с именем original  
+
 ```bash
 sudo apt-get install jpegoptim
 sudo apt-get install optipng

@@ -88,6 +88,7 @@ class Image extends Model
     {
         return Config::query()
             ->where('user_id', $this->user_id)
+            ->limit(100)
             ->get();
     }
 

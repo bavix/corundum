@@ -5,8 +5,8 @@ namespace App\Jobs;
 use App\Enums\QueueEnum;
 use App\Models\Image;
 use Bavix\Helpers\Arr;
-use Bavix\Helpers\Corundum\Corundum;
-use Bavix\Helpers\Corundum\Runner;
+use App\Corundum\Corundum;
+use App\Corundum\Runner;
 use Bavix\Helpers\File;
 use Bavix\Slice\Slice;
 use Illuminate\Bus\Queueable;
@@ -86,9 +86,11 @@ class ImageProcessing implements ShouldQueue
             return;
         }
 
+        $thumbnails = $this->image->thumbnails();
+
         $this->runner($this->image->user)->apply(
             $this->image->name,
-            null, // fixme: remove v2.0
+            $thumbnails,
             // to include check on existence of the file
             $this->image->getCheckExists()
         );
@@ -111,7 +113,7 @@ class ImageProcessing implements ShouldQueue
         /**
          * отправляем на оптимизацию
          */
-        foreach ($this->image->thumbnails() as $thumbnail)
+        foreach ($thumbnails as $thumbnail)
         {
             ImageOptimization::dispatch($image, $thumbnail)
                 ->onQueue(QueueEnum::LOW);

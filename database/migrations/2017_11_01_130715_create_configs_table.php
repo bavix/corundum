@@ -20,7 +20,14 @@ class CreateConfigsTable extends Migration
             $table->string('name');
             $table->integer('user_id');
 
-            $table->enum('type', ['fit', 'none', 'cover', 'contain', 'resize']);
+            $table->enum('type', [
+                'fit',
+                'none',
+                'cover',
+                'contain',
+                'resize'
+            ]);
+
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
             $table->string('color')->nullable();

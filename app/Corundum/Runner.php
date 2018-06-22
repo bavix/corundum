@@ -2,6 +2,7 @@
 
 namespace App\Corundum;
 
+use App\Models\Config;
 use Bavix\Exceptions\Invalid;
 use Bavix\Helpers\Dir;
 use Bavix\Helpers\File;
@@ -34,9 +35,10 @@ class Runner
      */
     public function apply(string $name, array $configs, $checkExists = false): void
     {
+        /**
+         * @var Config[] $configs
+         */
         foreach ($configs as $key => $config) {
-            $slice = new Slice($config);
-            $type = $slice->getRequired('type');
             $thumb = $this->thumbnail(
                 $this->corundum->imagePath($name),
                 $key
@@ -48,11 +50,11 @@ class Runner
                 continue;
             }
 
-            $this->adapter($type, $name)
-                ->apply($slice)
+            $this->adapter($config->type, $name)
+                ->apply(new Slice($config->toArray()))
                 ->save(
                     $thumb,
-                    $slice->getData('quality')
+                    $config->quality
                 );
         }
     }
