@@ -17,7 +17,7 @@ class CreateConfigsTable extends Migration
         Schema::create('configs', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('name');
+            $table->integer('bucket_id');
             $table->integer('user_id');
 
             $table->enum('type', [

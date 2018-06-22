@@ -67,7 +67,6 @@ class Runner
      */
     public function thumbnail(string $path, string $thumbnail): string
     {
-        // original  = /<user>/original/xx/yy/xxyyzzzz.<format>
         $fullPath = preg_replace(
             '~/' . $this->corundum->type() . '/~',
             '/thumbs/' . $thumbnail . '/',

@@ -33,7 +33,7 @@ class Corundum
     /**
      * @var string
      */
-    protected $user;
+    protected $bucket;
     /**
      * @var string
      */
@@ -52,7 +52,7 @@ class Corundum
     {
         $this->disk = $slice->getRequired('disk');
         $this->driver = $slice->getData('driver', 'imagick');
-        $this->user = $slice->getData('user', 'default');
+        $this->bucket = $slice->getData('bucket', 'default');
         $this->type = $slice->getData('type', 'original');
     }
 
@@ -97,7 +97,7 @@ class Corundum
     public function imagePath(string $basename): string
     {
         $path = 'image/' . PathBuilder::sharedInstance()
-                ->generate($this->user(), $this->type(), $basename);
+                ->generate($this->bucket(), $this->type(), $basename);
 
         return Storage::disk($this->disk)->path($path);
     }
@@ -105,9 +105,9 @@ class Corundum
     /**
      * @return string
      */
-    public function user(): string
+    public function bucket(): string
     {
-        return $this->user;
+        return $this->bucket;
     }
 
     /**
