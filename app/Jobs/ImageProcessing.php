@@ -56,7 +56,6 @@ class ImageProcessing implements ShouldQueue
             return;
         }
 
-
         $this->runner($this->image->user)->apply(
             $this->image->name,
             $this->image->thumbnails,
@@ -64,26 +63,32 @@ class ImageProcessing implements ShouldQueue
             $this->image->getCheckExists()
         );
 
-        $options = [
-            'driver' => config('config.driver')
-        ];
-
-        // set information
-        $image = (new ImageManager($options))->make(
-            Image::realPath($this->image->user, $this->image->name)
-        );
-
         $this->image->processed = 1;
-        $this->image->width = $image->getWidth();
-        $this->image->height = $image->getHeight();
-        $this->image->size = $image->filesize();
         $this->image->save();
+
+//        $options = [
+//            'driver' => config('config.driver')
+//        ];
+//
+//        // set information
+//        $image = (new ImageManager($options))->make(
+//            Image::realPath($this->image->user, $this->image->name)
+//        );
+//
+//        $this->image->processed = 1;
+//        $this->image->width = $image->getWidth();
+//        $this->image->height = $image->getHeight();
+//        $this->image->size = $image->filesize();
+//        $this->image->save();
+        
+        ImageMetadata::dispatch($this->image)
+            ->onQueue(QueueEnum::LOW);
 
         /**
          * отправляем на оптимизацию
          */
         foreach ($this->image->thumbnails as $thumbnail) {
-            ImageOptimization::dispatch($image, $thumbnail)
+            ImageOptimization::dispatch($this->image, $thumbnail)
                 ->onQueue(QueueEnum::LOW);
         }
     }
