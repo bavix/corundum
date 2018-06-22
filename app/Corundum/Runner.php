@@ -6,7 +6,6 @@ use App\Models\Config;
 use Bavix\Exceptions\Invalid;
 use Bavix\Helpers\Dir;
 use Bavix\Helpers\File;
-use Bavix\Slice\Slice;
 
 class Runner
 {
@@ -50,7 +49,7 @@ class Runner
             }
 
             $this->adapter($config->type, $name)
-                ->apply(new Slice($config->toArray()))
+                ->apply($config->toArray())
                 ->save(
                     $thumb,
                     $config->quality

@@ -2,7 +2,6 @@
 
 namespace App\Corundum\Adapters;
 
-use Bavix\Slice\Slice;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
 
@@ -10,16 +9,16 @@ class Fit extends Adapter
 {
 
     /**
-     * @param Slice $slice
+     * @param array $data
      *
      * @return Image
      */
-    public function apply(Slice $slice): Image
+    public function apply(array $data): Image
     {
         $image = $this->image();
 
-        $pWidth = $slice->getRequired('width');
-        $pHeight = $slice->getRequired('height');
+        $pWidth = \array_get($data, 'width');
+        $pHeight = \array_get($data, 'height');
 
         $width = $pWidth >= $pHeight ? $pHeight : null;
         $height = $pWidth < $pHeight ? $pWidth : null;

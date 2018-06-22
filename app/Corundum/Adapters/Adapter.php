@@ -4,7 +4,6 @@ namespace App\Corundum\Adapters;
 
 use App\Corundum\Corundum;
 use App\Corundum\DriverInterface;
-use Bavix\Slice\Slice;
 use Intervention\Image\Image;
 
 abstract class Adapter implements DriverInterface
@@ -39,15 +38,15 @@ abstract class Adapter implements DriverInterface
 
     /**
      * @param Image $image
-     * @param Slice $config
+     * @param array $config
      * @param bool $minimal
      *
-     * @return Slice
+     * @return array
      */
-    protected function received(Image $image, Slice $config, $minimal = true): Slice
+    protected function received(Image $image, array $config, $minimal = true): array
     {
-        $width = (int)$config->getRequired('width');
-        $height = (int)$config->getRequired('height');
+        $width = (int)\array_get($config, 'width');
+        $height = (int)\array_get($config, 'height');
 
         $shiftWidth = 0;
         $shiftHeight = 0;
@@ -73,7 +72,7 @@ abstract class Adapter implements DriverInterface
             $_height = $height;
         }
 
-        return new Slice([
+        return [
             'config' => [
                 'width' => $width,
                 'height' => $height,
@@ -86,28 +85,28 @@ abstract class Adapter implements DriverInterface
                 'width' => (int)$shiftWidth,
                 'height' => (int)$shiftHeight,
             ]
-        ]);
+        ];
     }
 
     /**
      * @param Image $image
-     * @param Slice $slice
+     * @param array $data
      * @param string $color
      *
      * @return Image
      */
-    protected function handler(Image $image, Slice $slice, string $color = null): Image
+    protected function handler(Image $image, array $data, string $color = null): Image
     {
         $color = $color ?: 'rgba(0, 0, 0, 0)';
 
         $image->resize(
-            $slice->getRequired('received.width'),
-            $slice->getRequired('received.height')
+            \array_get($data, 'received.width'),
+            \array_get($data, 'received.height')
         );
 
         $image->resizeCanvas(
-            $width = $slice->getRequired('config.width'),
-            $height = $slice->getRequired('config.height'),
+            $width = \array_get($data, 'config.width'),
+            $height = \array_get($data, 'config.height'),
             'center',
             false,
             $color
@@ -125,8 +124,8 @@ abstract class Adapter implements DriverInterface
 
         return $fill->fill(
             $image,
-            $slice->getRequired('shifted.width'),
-            $slice->getRequired('shifted.height')
+            \array_get($data, 'shifted.width'),
+            \array_get($data, 'shifted.height')
         );
     }
 

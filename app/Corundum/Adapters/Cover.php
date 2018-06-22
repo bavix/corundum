@@ -2,21 +2,20 @@
 
 namespace App\Corundum\Adapters;
 
-use Bavix\Slice\Slice;
 use Intervention\Image\Image;
 
 class Cover extends Adapter
 {
 
     /**
-     * @param Slice $slice
+     * @param array $data
      *
      * @return Image
      */
-    public function apply(Slice $slice): Image
+    public function apply(array $data): Image
     {
         $image = $this->image();
-        $sizes = $this->received($image, $slice);
+        $sizes = $this->received($image, $data);
 
         return $this->handler($image, $sizes);
     }

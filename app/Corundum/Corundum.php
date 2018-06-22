@@ -4,7 +4,6 @@ namespace App\Corundum;
 
 use Bavix\Helpers\Arr;
 use Bavix\SDK\PathBuilder;
-use Bavix\Slice\Slice;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
@@ -46,14 +45,14 @@ class Corundum
     /**
      * Corundum constructor.
      *
-     * @param Slice $slice
+     * @param array $array
      */
-    public function __construct(Slice $slice)
+    public function __construct(array $array)
     {
-        $this->disk = $slice->getRequired('disk');
-        $this->driver = $slice->getData('driver', 'imagick');
-        $this->bucket = $slice->getData('bucket', 'default');
-        $this->type = $slice->getData('type', 'original');
+        $this->disk = \array_get($array, 'disk');
+        $this->driver = \array_get($array, 'driver', 'imagick');
+        $this->bucket = \array_get($array, 'bucket', 'default');
+        $this->type = \array_get($array, 'type', 'original');
     }
 
     /**
@@ -90,6 +89,16 @@ class Corundum
     }
 
     /**
+     * @param string $path
+     *
+     * @return DriverInterface
+     */
+    public function contain(string $path): DriverInterface
+    {
+        return new Adapters\Contain($this, $this->imagePath($path));
+    }
+
+    /**
      * @param string $basename
      *
      * @return mixed
@@ -117,16 +126,6 @@ class Corundum
     public function type(): string
     {
         return $this->type;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return DriverInterface
-     */
-    public function contain(string $path): DriverInterface
-    {
-        return new Adapters\Contain($this, $this->imagePath($path));
     }
 
     /**

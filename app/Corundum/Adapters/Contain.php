@@ -2,26 +2,25 @@
 
 namespace App\Corundum\Adapters;
 
-use Bavix\Slice\Slice;
 use Intervention\Image\Image;
 
 class Contain extends Adapter
 {
 
     /**
-     * @param Slice $slice
+     * @param array $data
      *
      * @return Image
      */
-    public function apply(Slice $slice): Image
+    public function apply(array $data): Image
     {
         $image = $this->image();
-        $sizes = $this->received($image, $slice, false);
+        $sizes = $this->received($image, $data, false);
 
         return $this->handler(
             $image,
             $sizes,
-            $slice->getRequired('color')
+            \array_get($data, 'color')
         );
     }
 

@@ -2,7 +2,6 @@
 
 namespace App\Corundum;
 
-use Bavix\Slice\Slice;
 use Intervention\Image\Image;
 
 interface DriverInterface
@@ -17,10 +16,10 @@ interface DriverInterface
     public function __construct(Corundum $corundum, string $path);
 
     /**
-     * @param Slice $slice
+     * @param array $data
      *
      * @return Image
      */
-    public function apply(Slice $slice): Image;
+    public function apply(array $data): Image;
 
 }

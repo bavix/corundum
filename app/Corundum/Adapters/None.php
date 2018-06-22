@@ -9,16 +9,16 @@ class None extends Adapter
 {
 
     /**
-     * @param Slice $slice
+     * @param array $data
      *
      * @return Image
      */
-    public function apply(Slice $slice): Image
+    public function apply(array $data): Image
     {
         $image = $this->image();
 
-        $width = $slice->getRequired('width');
-        $height = $slice->getRequired('height');
+        $width = \array_get($data, 'width');
+        $height = \array_get($data, 'height');
 
         $widthFit = $image->width() >= $image->height() ? $width : null;
         $heightFit = $image->width() <= $image->height() ? $height : null;
@@ -33,7 +33,7 @@ class None extends Adapter
             $image->fit($widthFit, $heightFit);
         }
 
-        $color = $slice->getRequired('color');
+        $color = \array_get($data, 'color');
         $fill = $this->corundum->imageManager()
             ->canvas($width, $height, $color);
 

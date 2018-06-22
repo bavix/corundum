@@ -2,17 +2,20 @@
 
 namespace App\Corundum\Adapters;
 
-use Bavix\Slice\Slice;
 use Intervention\Image\Image;
 
 class Resize extends Adapter
 {
 
-    public function apply(Slice $slice): Image
+    /**
+     * @param array $data
+     * @return Image
+     */
+    public function apply(array $data): Image
     {
         return $this->image()->resize(
-            $slice->getRequired('width'),
-            $slice->getRequired('height')
+            \array_get($data, 'width'),
+            \array_get($data, 'height')
         );
     }
 
