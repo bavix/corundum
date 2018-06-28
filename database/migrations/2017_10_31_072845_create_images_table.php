@@ -15,29 +15,29 @@ class CreateImagesTable extends Migration
     {
         return [
             [
-                'type' => 'varchar',
-                'name' => 'mime',
+                'type' => \Rinvex\Attributes\Models\Type\Varchar::class,
+                'name' => 'MIME type',
                 'slug' => 'mime',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
             ],
             [
-                'type' => 'integer',
-                'name' => 'width',
+                'type' => \Rinvex\Attributes\Models\Type\Integer::class,
+                'name' => 'Image width',
                 'slug' => 'width',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
             ],
             [
-                'type' => 'integer',
-                'name' => 'height',
+                'type' => \Rinvex\Attributes\Models\Type\Integer::class,
+                'name' => 'Image height',
                 'slug' => 'height',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
             ],
             [
-                'type' => 'integer',
-                'name' => 'size',
+                'type' => \Rinvex\Attributes\Models\Type\Integer::class,
+                'name' => 'Image size',
                 'slug' => 'size',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
