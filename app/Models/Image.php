@@ -15,11 +15,6 @@ class Image extends Model
     public const TYPE_ORIGINAL = 'original';
 
     /**
-     * @var bool
-     */
-    protected $checkExists = false;
-
-    /**
      * @param string $bucket
      * @param string $ext
      *
@@ -70,7 +65,6 @@ class Image extends Model
      */
     public function thumbnail(string $name)
     {
-
         return Config::query()
             ->where('name', $name)
             ->where('user_id', $this->user_id)
@@ -91,14 +85,6 @@ class Image extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getCheckExists(): bool
-    {
-        return $this->checkExists;
     }
 
 }

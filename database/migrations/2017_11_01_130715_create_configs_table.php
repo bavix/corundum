@@ -33,7 +33,7 @@ class CreateConfigsTable extends Migration
             $table->string('color')->nullable();
             $table->integer('quality')->nullable();
 
-            $table->unique(['name', 'user_id']);
+            $table->unique(['bucket_id', 'user_id']);
 
             $table->timestamps();
         });
