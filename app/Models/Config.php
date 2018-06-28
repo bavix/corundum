@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Config extends Model
 {
 
-    use \Rinvex\Attributes\Traits\Attributable;
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

@@ -15,28 +15,28 @@ class CreateImagesTable extends Migration
     {
         return [
             [
-                'type' => \Rinvex\Attributes\Models\Type\Varchar::class,
+                'type' => 'varchar',
                 'name' => 'MIME type',
                 'slug' => 'mime',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
             ],
             [
-                'type' => \Rinvex\Attributes\Models\Type\Integer::class,
+                'type' => 'integer',
                 'name' => 'Image width',
                 'slug' => 'width',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
             ],
             [
-                'type' => \Rinvex\Attributes\Models\Type\Integer::class,
+                'type' => 'integer',
                 'name' => 'Image height',
                 'slug' => 'height',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
             ],
             [
-                'type' => \Rinvex\Attributes\Models\Type\Integer::class,
+                'type' => 'integer',
                 'name' => 'Image size',
                 'slug' => 'size',
                 'entities' => [\App\Models\Image::class],
@@ -63,7 +63,8 @@ class CreateImagesTable extends Migration
         });
 
         foreach ($this->attributes() as $attribute) {
-            Attribute::create($attribute);
+            app('rinvex.attributes.attribute')
+                ->create($attribute);
         }
     }
 
