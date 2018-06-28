@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Image;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \app('rinvex.attributes.entities')->push(Image::class);
 //        Image::observe(ImageObserver::class);
 //        Config::observe(ConfigObserver::class);
     }

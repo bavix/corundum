@@ -3,28 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rinvex\Attributes\Traits\Attributable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Model;
 use Bavix\SDK\PathBuilder;
 use Ramsey\Uuid\Uuid;
 
 class Image extends Model
 {
 
+    use Attributable;
+
     public const TYPE_ORIGINAL = 'original';
 
+    // Eager loading all the registered attributes
+    protected $with = ['eav'];
+
     /**
-     * @param string $bucket
+     * @param int $bucketId
      * @param string $ext
      *
      * @return string
      */
-    public static function generateName(string $bucket, string $ext): string
+    public static function generateName(int $bucketId, string $ext): string
     {
         do {
             $name = Uuid::uuid4()->toString() . '.' . $ext;
-        } while (static::findByName($bucket, $name));
+        } while (static::findByName($bucketId, $name));
 
         return $name;
     }

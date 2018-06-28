@@ -8,10 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Config extends Model
 {
 
-    /**
-     * @var bool
-     */
-    public $timestamps = false;
+    use \Rinvex\Attributes\Traits\Attributable;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

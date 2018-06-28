@@ -17,8 +17,9 @@ class CreateConfigsTable extends Migration
         Schema::create('configs', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('bucket_id');
             $table->integer('user_id');
+            $table->integer('bucket_id');
+            $table->string('name');
 
             $table->enum('type', [
                 'fit',
@@ -33,7 +34,7 @@ class CreateConfigsTable extends Migration
             $table->string('color')->nullable();
             $table->integer('quality')->nullable();
 
-            $table->unique(['bucket_id', 'user_id']);
+            $table->unique(['user_id', 'bucket_id', 'name']);
 
             $table->timestamps();
         });
