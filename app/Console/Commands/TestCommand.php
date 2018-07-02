@@ -39,11 +39,8 @@ class TestCommand extends Command
             $image->save();
         }
 
-//        $image->height = 100;
-//        $image->width = 100;
-//        $image->size = 12344;
-//        $image->save();
-
+        var_dump($image->toArray());
+        die;
     }
 
 }
