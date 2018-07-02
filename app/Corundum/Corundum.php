@@ -21,22 +21,27 @@ class Corundum
         'none',
         'fit',
     ];
+
     /**
      * @var string
      */
     protected $disk;
+
     /**
      * @var string
      */
     protected $driver;
+
     /**
      * @var string
      */
     protected $bucket;
+
     /**
      * @var string
      */
     protected $type;
+
     /**
      * @var ImageManager
      */
@@ -52,7 +57,15 @@ class Corundum
         $this->disk = \array_get($array, 'disk');
         $this->driver = \array_get($array, 'driver', 'imagick');
         $this->bucket = \array_get($array, 'bucket', 'default');
-        $this->type = \array_get($array, 'type', 'original');
+        $this->type = \array_get($array, 'type', \App\Models\Image::TYPE_ORIGINAL);
+    }
+
+    /**
+     * @return string
+     */
+    public function disk(): string
+    {
+        return $this->disk;
     }
 
     /**
@@ -64,14 +77,29 @@ class Corundum
     }
 
     /**
+     * @return string
+     */
+    public function bucket(): string
+    {
+        return $this->bucket;
+    }
+
+    /**
+     * @return string
+     */
+    public function type(): string
+    {
+        return $this->type;
+    }
+
+    /**
      * @param string $path
      *
      * @return Image
      */
     public function createImage(string $path): Image
     {
-        return $this->imageManager()
-            ->make($path);
+        return $this->imageManager()->make($path);
     }
 
     /**
@@ -110,22 +138,6 @@ class Corundum
                 ->generate($this->bucket(), $this->type(), $basename);
 
         return Storage::disk($this->disk)->path($path);
-    }
-
-    /**
-     * @return string
-     */
-    public function bucket(): string
-    {
-        return $this->bucket;
-    }
-
-    /**
-     * @return string
-     */
-    public function type(): string
-    {
-        return $this->type;
     }
 
     /**
