@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConfigsTable extends Migration
+class CreateViewsTable extends Migration
 {
 
     /**
@@ -14,7 +14,7 @@ class CreateConfigsTable extends Migration
      */
     public function up()
     {
-        Schema::create('configs', function (Blueprint $table) {
+        Schema::create('views', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('user_id');
@@ -22,11 +22,11 @@ class CreateConfigsTable extends Migration
             $table->string('name');
 
             $table->enum('type', [
-                'fit',
-                'none',
-                'cover',
-                'contain',
-                'resize'
+                \App\Enums\Image\ImageViewsEnum::FIT,
+                \App\Enums\Image\ImageViewsEnum::NONE,
+                \App\Enums\Image\ImageViewsEnum::COVER,
+                \App\Enums\Image\ImageViewsEnum::CONTAIN,
+                \App\Enums\Image\ImageViewsEnum::RESIZE,
             ]);
 
             $table->integer('width')->nullable();

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\Image\ImageStatusEnum;
 use App\Models\Image;
 use Illuminate\Console\Command;
 

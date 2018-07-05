@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\Queue;
 
-class QueueEnum
+use App\Enums\Enum;
+
+class QueueEnum extends Enum
 {
     /**
      * Оптимизация + форматы изображений

@@ -5,8 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Config extends Model
+class View extends Model
 {
+
+    /**
+     * @return BelongsTo
+     */
+    public function bucket(): BelongsTo
+    {
+        return $this->belongsTo(Bucket::class);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

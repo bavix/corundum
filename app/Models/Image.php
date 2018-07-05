@@ -4,93 +4,57 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Rinvex\Attributes\Traits\Attributable;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Model;
-use Bavix\SDK\PathBuilder;
 use Ramsey\Uuid\Uuid;
+use Rinvex\Attributes\Traits\Attributable;
+use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
 
     use Attributable;
 
-    public const TYPE_ORIGINAL = 'original';
-
-    // Eager loading all the registered attributes
+    /**
+     * @var array
+     */
     protected $with = ['eav'];
 
     /**
-     * @param int $bucketId
-     * @param string $ext
+     * Image constructor.
      *
-     * @return string
+     * @param array $attributes
      */
-    public static function generateName(int $bucketId, string $ext): string
+    public function __construct(array $attributes = [])
     {
-        do {
-            $name = Uuid::uuid4()->toString() . '.' . $ext;
-        } while (static::findByName($bucketId, $name));
+        if (empty($attributes['name'])) {
+            $attributes['name'] = Uuid::uuid4();
+        }
 
-        return $name;
+        parent::__construct($attributes);
     }
 
     /**
-     * @param int $bucketId
-     * @param string $name
-     *
-     * @return Model|null|static
+     * @return BelongsTo
      */
-    public static function findByName(int $bucketId, string $name)
+    public function bucket(): BelongsTo
     {
-        return static::query()
-            ->where('bucket_id', $bucketId)
-            ->where('name', $name)
-            ->first();
+        return $this->belongsTo(Bucket::class);
     }
 
     /**
-     * @param string $bucket
-     * @param string $name
-     * @param string $type
-     *
-     * @return string
+     * @return BelongsTo
      */
-    public static function realPath(string $bucket, string $name, $type = self::TYPE_ORIGINAL): string
+    public function user(): BelongsTo
     {
-        $storage = Storage::disk(config('corundum.disk'));
-        $hash = PathBuilder::sharedInstance()->hash($name);
-        $paths = [$bucket, $type, $hash, $name];
-        return $storage->path(\implode('/', $paths));
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Model|Config|null
-     */
-    public function thumbnail(string $name)
-    {
-        return Config::query()
-            ->where('name', $name)
-            ->where('user_id', $this->user_id)
-            ->first();
+        return $this->belongsTo(User::class);
     }
 
     /**
      * @return HasMany
      */
-    public function thumbnails(): HasMany
+    public function views(): HasMany
     {
-        return $this->hasMany(Config::class, 'user_id', 'user_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(View::class, 'bucket_id', 'bucket_id')
+            ->where('user_id', $this->user_id);
     }
 
 }

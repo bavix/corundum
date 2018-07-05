@@ -2,28 +2,28 @@
 
 namespace App\Observes;
 
-use App\Models\Config;
+use App\Models\View;
 use Bavix\Extra\Gearman;
 
 class ConfigObserver
 {
 
     /**
-     * @param Config $config
+     * @param View $config
      *
      * @return void
      */
-    public function created(Config $config)
+    public function created(View $config)
     {
         $config->doCreated();
     }
 
     /**
-     * @param Config $config
+     * @param View $config
      *
      * @return void
      */
-    public function updated(Config $config)
+    public function updated(View $config)
     {
         $config->doUpdated();
     }
@@ -34,11 +34,11 @@ class ConfigObserver
     }
 
     /**
-     * @param Config $config
+     * @param View $config
      *
      * @return void
      */
-    public function deleting(Config $config)
+    public function deleting(View $config)
     {
         $config->doDeleted();
     }

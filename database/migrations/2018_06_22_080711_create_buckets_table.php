@@ -17,6 +17,7 @@ class CreateBucketsTable extends Migration
         Schema::create('buckets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

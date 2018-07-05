@@ -2,7 +2,7 @@
 
 namespace App\Corundum;
 
-use App\Models\Config;
+use App\Models\View;
 use Bavix\Exceptions\Invalid;
 use Bavix\Helpers\Dir;
 use Bavix\Helpers\File;
@@ -34,7 +34,7 @@ class Runner
     public function apply(string $name, array $configs, $checkExists = false): void
     {
         /**
-         * @var Config[] $configs
+         * @var View[] $configs
          */
         foreach ($configs as $key => $config) {
             $thumb = $this->thumbnail(

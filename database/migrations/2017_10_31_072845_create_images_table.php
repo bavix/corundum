@@ -52,14 +52,27 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
+        $status = [
+            \App\Enums\Image\ImageStatusEnum::UPLOADED,
+            \App\Enums\Image\ImageStatusEnum::PROCESSING,
+            \App\Enums\Image\ImageStatusEnum::FINISHED,
+            \App\Enums\Image\ImageStatusEnum::DELETED,
+            \App\Enums\Image\ImageStatusEnum::FAILED,
+        ];
+
+        Schema::create('images', function (Blueprint $table) use ($status) {
             $table->increments('id');
+
             $table->string('name');
             $table->integer('bucket_id');
             $table->integer('user_id');
-            $table->boolean('processed')->default(0);
+
+            $table->enum('status', $status)
+                ->default(\App\Enums\Image\ImageStatusEnum::UPLOADED);
+
             $table->timestamps();
-            $table->unique(['name']);
+
+            $table->unique(['name', 'bucket_id']);
         });
 
         foreach ($this->attributes() as $attribute) {

@@ -35,7 +35,7 @@ class User extends Authenticatable
      */
     public function configs(): HasMany
     {
-        return $this->hasMany(Config::class);
+        return $this->hasMany(View::class);
     }
 
     /**

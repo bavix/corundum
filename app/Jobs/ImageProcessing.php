@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Corundum\Corundum;
 use App\Corundum\Runner;
-use App\Enums\QueueEnum;
+use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
 use Bavix\Helpers\Arr;
 use Bavix\Helpers\File;
