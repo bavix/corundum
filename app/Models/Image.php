@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Rinvex\Attributes\Traits\Attributable;
-use Illuminate\Database\Eloquent\Model;
-use Ramsey\Uuid\Uuid;
 
 /**
  * App\Models\Image
@@ -46,7 +45,7 @@ class Image extends Model
     protected $with = ['eav'];
 
     /**
-     * @var array 
+     * @var array
      */
     protected $fillable = ['name'];
 

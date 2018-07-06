@@ -2,9 +2,9 @@
 
 namespace App\Corundum\Kit;
 
-use Illuminate\Support\Facades\Storage;
 use App\Enums\Image\ImageTypesEnum;
 use App\Models\Image;
+use Illuminate\Support\Facades\Storage;
 
 class Path
 {

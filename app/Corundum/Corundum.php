@@ -77,22 +77,6 @@ class Corundum
     }
 
     /**
-     * @return string
-     */
-    public function bucket(): string
-    {
-        return $this->bucket;
-    }
-
-    /**
-     * @return string
-     */
-    public function type(): string
-    {
-        return $this->type;
-    }
-
-    /**
      * @param string $path
      *
      * @return Image
@@ -138,6 +122,22 @@ class Corundum
                 ->generate($this->bucket(), $this->type(), $basename);
 
         return Storage::disk($this->disk)->path($path);
+    }
+
+    /**
+     * @return string
+     */
+    public function bucket(): string
+    {
+        return $this->bucket;
+    }
+
+    /**
+     * @return string
+     */
+    public function type(): string
+    {
+        return $this->type;
     }
 
     /**

@@ -6,16 +6,13 @@ use App\Corundum\Corundum;
 use App\Corundum\Runner;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
-use Bavix\Helpers\Arr;
 use Bavix\Helpers\File;
-use Bavix\Slice\Slice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\ImageManager;
 
 class ImageProcessing implements ShouldQueue
 {
@@ -80,7 +77,7 @@ class ImageProcessing implements ShouldQueue
 //        $this->image->height = $image->getHeight();
 //        $this->image->size = $image->filesize();
 //        $this->image->save();
-        
+
         ImageMetadata::dispatch($this->image)
             ->onQueue(QueueEnum::LOW);
 
