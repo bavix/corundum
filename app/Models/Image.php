@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
@@ -57,7 +57,7 @@ class Image extends Model
     public function __construct(array $attributes = [])
     {
         if (empty($attributes['name'])) {
-            $attributes['name'] = Str::uuid();
+            $attributes['name'] = Str::uuid()->toString();
         }
 
         parent::__construct($attributes);
@@ -89,11 +89,11 @@ class Image extends Model
     }
 
     /**
-     * @return MorphMany
+     * @return BelongsToMany
      */
-    public function formats(): MorphMany
+    public function formats(): BelongsToMany
     {
-        return $this->morphMany(Format::class, 'formatable');
+        return $this->belongsToMany(Format::class);
     }
 
 }

@@ -7,7 +7,14 @@ use App\Enums\Enum;
 class ImageStatusEnum extends Enum
 {
     /**
-     * Загружено (init)
+     * модель создана
+     *
+     * @var string
+     */
+    public const INITIALIZED = 'initialized';
+
+    /**
+     * Загружено
      *
      *  Получает метаданные и ставит в очередь на генерацию миниатюрок
      *

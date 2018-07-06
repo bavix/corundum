@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\Image\ImageStatusEnum;
+use App\Models\Format;
 use App\Models\Image;
 use Illuminate\Console\Command;
 
@@ -30,11 +31,11 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $image = Image::query()->first();
+        $image = Image::with(['formats'])->first();
 
         if (!$image) {
             $image = new Image();
-            $image->name = Image::generateName(1, 'png');
+//            $image->name = Image::generateName(1, 'png');
             $image->bucket_id = 1;
             $image->user_id = 1;
             $image->save();

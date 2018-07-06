@@ -15,10 +15,15 @@ class CreateFormatsTable extends Migration
     public function up()
     {
         Schema::create('formats', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->increments('id');
             $table->string('name')->unique();
-            $table->morphs('formatable');
             $table->timestamps();
+        });
+
+        Schema::create('format_image', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('image_id');
+            $table->integer('format_id');
         });
     }
 
@@ -30,6 +35,7 @@ class CreateFormatsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('formats');
+        Schema::dropIfExists('format_image');
     }
 
 }

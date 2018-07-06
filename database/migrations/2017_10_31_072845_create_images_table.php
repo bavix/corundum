@@ -53,6 +53,7 @@ class CreateImagesTable extends Migration
     public function up()
     {
         $status = [
+            \App\Enums\Image\ImageStatusEnum::INITIALIZED,
             \App\Enums\Image\ImageStatusEnum::UPLOADED,
             \App\Enums\Image\ImageStatusEnum::PROCESSING,
             \App\Enums\Image\ImageStatusEnum::FINISHED,
@@ -68,7 +69,7 @@ class CreateImagesTable extends Migration
             $table->integer('user_id');
 
             $table->enum('status', $status)
-                ->default(\App\Enums\Image\ImageStatusEnum::UPLOADED);
+                ->default(\App\Enums\Image\ImageStatusEnum::INITIALIZED);
 
             $table->timestamps();
 
