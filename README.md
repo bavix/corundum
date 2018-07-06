@@ -6,18 +6,32 @@
 
 https://tools.ietf.org/html/rfc4122
 
-URL `/{bucket}(/{thumbs})/{uuid4}.{format}`
+ORIGINAL `/{bucket}/{uuid4}(.{format})`
+URL `/{bucket}(/{thumbs})/{uuid4}(.{format})`
 
-PATH `/{bucket}/{thumbs|original}/{uuid4:2}/{uuid4:2,2}//{uuid4}.{format}`
+PATH ORIGINAL `/{bucket}/original/{uuid4:2}/{uuid4:2,2}//{uuid4}.{format}`
+PATH `/{bucket}/{thumbs}/{uuid4:2}/{uuid4:2,2}//{uuid4}.{format}`
 
 Нужно добавить запрет на создание конфига с именем original  
+
+---
+Форматы
+
+
+1. Автоматический выбор формата. 
+    - Если в заголовке есть accept webp, отдаем webp.
+    - Если нет, тогда png/jpg.
+    
+2. Если изображение содержит альфа канал -- png, в ином случае jpg.
+
+3. Автоматически генерируем аналогичное изображение в webp, если в представлении был включен формат webp. 
 
 ```bash
 sudo apt-get install jpegoptim
 sudo apt-get install optipng
 sudo apt-get install pngquant
 sudo npm install -g svgo
-sudo apt-get install gifsicle
+#sudo apt-get install gifsicle
 ```
 
 Example
