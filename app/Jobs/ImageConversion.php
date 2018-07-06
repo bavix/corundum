@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Enums\Image\ImageFormatEnum;
+use App\Enums\Image\ImageFormatsEnum;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

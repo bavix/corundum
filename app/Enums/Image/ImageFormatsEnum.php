@@ -10,7 +10,7 @@ use App\Enums\Enum;
  *
  * @see http://image.intervention.io/getting_started/formats
  */
-class ImageFormatEnum extends Enum
+class ImageFormatsEnum extends Enum
 {
     public const PNG = 'png';
     public const JPG = 'jpg';
