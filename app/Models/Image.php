@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 use Rinvex\Attributes\Traits\Attributable;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 /**
  * App\Models\Image
@@ -55,7 +57,7 @@ class Image extends Model
     public function __construct(array $attributes = [])
     {
         if (empty($attributes['name'])) {
-            $attributes['name'] = Uuid::uuid4();
+            $attributes['name'] = Str::uuid();
         }
 
         parent::__construct($attributes);
@@ -84,6 +86,14 @@ class Image extends Model
     {
         return $this->hasMany(View::class, 'bucket_id', 'bucket_id')
             ->where('user_id', $this->user_id);
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function formats(): MorphMany
+    {
+        return $this->morphMany(Format::class, 'formatable');
     }
 
 }
