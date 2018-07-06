@@ -25,6 +25,17 @@ class CreateFormatsTable extends Migration
             $table->integer('image_id');
             $table->integer('format_id');
         });
+
+        $values = new \Illuminate\Support\Collection(
+            \App\Enums\Image\ImageFormatEnum::enums()
+        );
+        
+        $formats = $values->map(function ($value) {
+            return ['name' => $value];
+        });
+
+        \Illuminate\Support\Facades\DB::table('formats')
+            ->insert($formats->toArray());
     }
 
     /**
