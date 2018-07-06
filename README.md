@@ -7,9 +7,11 @@
 https://tools.ietf.org/html/rfc4122
 
 ORIGINAL `/{bucket}/{uuid4}(.{format})`
+
 URL `/{bucket}(/{thumbs})/{uuid4}(.{format})`
 
 PATH ORIGINAL `/{bucket}/original/{uuid4:2}/{uuid4:2,2}//{uuid4}.{format}`
+
 PATH `/{bucket}/{thumbs}/{uuid4:2}/{uuid4:2,2}//{uuid4}.{format}`
 
 Нужно добавить запрет на создание конфига с именем original  
