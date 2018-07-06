@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y libmcrypt-dev libssh-dev librabbitmq-de
    mysql-client libmagickwand-dev --no-install-recommends \
    && pecl install imagick amqp \
    && docker-php-ext-enable imagick amqp \
-   && docker-php-ext-install mcrypt pdo_mysql zip bcmath
+   && docker-php-ext-install pdo_mysql zip bcmath
 
 # startup
 WORKDIR /var/www/html
