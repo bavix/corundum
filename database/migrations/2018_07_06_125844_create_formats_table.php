@@ -31,7 +31,10 @@ class CreateFormatsTable extends Migration
         );
         
         $formats = $values->map(function ($value) {
-            return ['name' => $value];
+            return [
+                'name' => $value,
+                'created_at' => DB::raw('NOW()')
+            ];
         });
 
         \Illuminate\Support\Facades\DB::table('formats')
