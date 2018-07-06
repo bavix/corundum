@@ -2,9 +2,9 @@
 
 namespace App\Corundum\Kit;
 
-use App\Enums\ImageEnum;
-use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
+use App\Enums\Image\ImageTypesEnum;
+use App\Models\Image;
 
 class Path
 {
@@ -17,7 +17,7 @@ class Path
      * @return string
      * @throws
      */
-    public static function physical(Image $image, string $disk = null, string $type = ImageEnum::TYPE_ORIGINAL): string
+    public static function physical(Image $image, string $disk = null, string $type = ImageTypesEnum::TYPE_ORIGINAL): string
     {
         return Storage::disk($disk)->get(static::relative($image, $type));
     }
@@ -28,9 +28,9 @@ class Path
      *
      * @return string
      */
-    public static function relative(Image $image, string $type = ImageEnum::TYPE_ORIGINAL): string
+    public static function relative(Image $image, string $type = ImageTypesEnum::TYPE_ORIGINAL): string
     {
-        if ($type === ImageEnum::TYPE_ORIGINAL) {
+        if ($type === ImageTypesEnum::TYPE_ORIGINAL) {
             return static::original($image);
         }
 

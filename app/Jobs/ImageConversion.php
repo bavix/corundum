@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\Image\ImageFormatEnum;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,7 +37,7 @@ class ImageConversion implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+
     }
 
 }
