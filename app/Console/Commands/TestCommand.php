@@ -6,7 +6,6 @@ use App\Enums\Image\ImageFormatsEnum;
 use App\Models\Format;
 use App\Models\Image;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Request;
 
 class TestCommand extends Command
 {
