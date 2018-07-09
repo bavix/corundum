@@ -2,7 +2,7 @@
 
 namespace App\Corundum;
 
-class PointInt
+class Point
 {
 
     /**

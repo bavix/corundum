@@ -2,7 +2,7 @@
 
 namespace App\Corundum\Adapters;
 
-use App\Corundum\PointInt;
+use App\Corundum\Point;
 use Intervention\Image\Image;
 
 class None extends Adapter
@@ -55,11 +55,11 @@ class None extends Adapter
      * @param Image $fill
      * @param Image $image
      *
-     * @return PointInt
+     * @return Point
      */
-    protected function point(Image $fill, Image $image): PointInt
+    protected function point(Image $fill, Image $image): Point
     {
-        return new PointInt(
+        return new Point(
             ($fill->width() - $image->width()) / 2,
             ($fill->height() - $image->height()) / 2
         );
