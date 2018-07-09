@@ -2,7 +2,7 @@
 
 namespace App\Corundum\Adapters;
 
-use Bavix\Slice\Slice;
+use App\Corundum\PointInt;
 use Intervention\Image\Image;
 
 class None extends Adapter
@@ -46,7 +46,7 @@ class None extends Adapter
         );
 
         $point = $this->point($fill, $image);
-        $fill->fill($image, $point->x, $point->y);
+        $fill->fill($image, $point->getX(), $point->getY());
 
         return $fill;
     }
@@ -55,17 +55,14 @@ class None extends Adapter
      * @param Image $fill
      * @param Image $image
      *
-     * @return Slice
+     * @return PointInt
      */
-    protected function point(Image $fill, Image $image): Slice
+    protected function point(Image $fill, Image $image): PointInt
     {
-        $x = ($fill->height() - $image->width()) / 2;
-        $y = ($fill->height() - $image->height()) / 2;
-
-        return new Slice([
-            'x' => (int)$x,
-            'y' => (int)$y
-        ]);
+        return new PointInt(
+            ($fill->width() - $image->width()) / 2,
+            ($fill->height() - $image->height()) / 2
+        );
     }
 
 }
