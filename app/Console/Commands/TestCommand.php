@@ -6,6 +6,7 @@ use App\Enums\Image\ImageFormatsEnum;
 use App\Models\Format;
 use App\Models\Image;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Request;
 
 class TestCommand extends Command
 {
@@ -35,7 +36,6 @@ class TestCommand extends Command
 
         if (!$image) {
             $image = new Image();
-//            $image->name = Image::generateName(1, 'png');
             $image->bucket_id = 1;
             $image->user_id = 1;
             $image->save();
