@@ -15,6 +15,6 @@ Route::view('/', 'welcome');
 
 Auth::routes();
 
-Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
-    return 'Hello, ' . $request->user()->login;
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', 'TestController@dashboard')
+    ->middleware('auth')
+    ->name('dashboard');

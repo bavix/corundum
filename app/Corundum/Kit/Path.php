@@ -9,17 +9,19 @@ use Illuminate\Support\Facades\Storage;
 class Path
 {
 
+    protected const SPLIT_LENGTH = 2;
+
     /**
      * @param Image $image
-     * @param string $disk
      * @param string $type
      *
      * @return string
      * @throws
      */
-    public static function physical(Image $image, string $disk = null, string $type = ImageTypesEnum::TYPE_ORIGINAL): string
+    public static function physical(Image $image, string $type = ImageTypesEnum::TYPE_ORIGINAL): string
     {
-        return Storage::disk($disk)->get(static::relative($image, $type));
+        return Storage::disk(config('corundum.disk'))
+            ->path(static::relative($image, $type));
     }
 
     /**
@@ -30,25 +32,50 @@ class Path
      */
     public static function relative(Image $image, string $type = ImageTypesEnum::TYPE_ORIGINAL): string
     {
-        if ($type === ImageTypesEnum::TYPE_ORIGINAL) {
-            return static::original($image);
-        }
-
-        return static::thumbnail($image);
+        return static::path($image, $type);
     }
 
     /**
-     * @param Image $image
+     * @param Image  $image
+     * @param string $type
+     *
      * @return string
      */
-    protected static function original(Image $image): string
+    protected static function path(Image $image, string $type): string
     {
-        // todo: original path
+        [$xx, $yy] = static::split($image->name);
+
+        return \implode(
+            '/',
+            [static::thumbnail($type), $xx, $yy, $image->name]
+        );
     }
 
-    protected static function thumbnail(Image $image): string
+    /**
+     * @param string $uuid
+     *
+     * @return array
+     */
+    protected static function split(string $uuid): array
     {
-        // todo: thumbnail path
+        return \str_split(
+            \preg_replace('~\W~', '', $uuid),
+            static::SPLIT_LENGTH
+        );
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    protected static function thumbnail(string $type): string
+    {
+        if ($type === ImageTypesEnum::TYPE_ORIGINAL) {
+            return $type;
+        }
+
+        return __FUNCTION__ . '/' . $type;
     }
 
 }
