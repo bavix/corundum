@@ -11,7 +11,7 @@ use Bavix\Helpers\File;
  * Class Runner
  *
  * @package App\Corundum
- *          
+ *
  * @deprecated
  */
 class Runner
