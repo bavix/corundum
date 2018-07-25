@@ -13,39 +13,8 @@
 
 Route::view('/', 'welcome');
 
-
-//Route::get('/redirect', function () {
-//
-//
-//    $query = http_build_query([
-//        'client_id'     => 'client-id',
-//        'redirect_uri'  => 'http://larapi.local/auth/callback',
-//        'response_type' => 'code',
-//        'scope'         => '',
-//    ]);
-//
-//    return redirect('http://larapi.local/oauth/authorize?' . $query);
-//
-//});
-//
-//Route::get('/auth/callback', function (Request $request) {
-//
-//    $http = new GuzzleHttp\Client;
-//
-//    $response = $http->post('http://larapi.local/oauth/token', [
-//        'form_params' => [
-//            'grant_type'    => 'authorization_code',
-//            'client_id'     => 'client-id',
-//            'client_secret' => 'client-secret',
-//            'redirect_uri'  => 'http://larapi.local/auth/callback',
-//            'code'          => $request->code,
-//        ],
-//    ]);
-//
-//    return json_decode((string)$response->getBody(), true);
-//
-//});
-
 Auth::routes();
 
-Route::resource('/config', 'ConfigController', ['as' => 'ux']);
+Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
+    return 'Hello, ' . $request->user()->login;
+})->middleware('auth')->name('dashboard');

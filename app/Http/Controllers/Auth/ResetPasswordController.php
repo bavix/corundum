@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Routing\Controller as BaseController;
 
-class ResetPasswordController extends BaseController
+class ResetPasswordController extends Controller
 {
 
     /*
@@ -26,14 +26,15 @@ class ResetPasswordController extends BaseController
      *
      * @var string
      */
-    protected $redirectTo;
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
+     *
+     * @return void
      */
     public function __construct()
     {
-        $this->redirectTo = route('ux.config.index');
         $this->middleware('guest');
     }
 

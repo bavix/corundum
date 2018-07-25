@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Routing\Controller as BaseController;
 
-class LoginController extends BaseController
+class LoginController extends Controller
 {
 
     /*
@@ -26,14 +26,15 @@ class LoginController extends BaseController
      *
      * @var string
      */
-    protected $redirectTo;
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
+     *
+     * @return void
      */
     public function __construct()
     {
-        $this->redirectTo = route('ux.config.index');
         $this->middleware('guest')->except('logout');
     }
 
