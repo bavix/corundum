@@ -14,10 +14,10 @@ services:
         ipv4_address: 172.16.241.3
 
   nginx:
-    build:
-      context: ./environment/nginx
+    image: nginx:stable
     depends_on:
       - php
+    command: "echo `nginx -g 'daemon off;'`"
     volumes:
       - ./:/var/www/html
       - ./environment/nginx/default.conf:/etc/nginx/conf.d/default.conf
