@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 
+/**
+ * Class Corundum
+ *
+ * @package App\Corundum
+ *
+ * @deprecated
+ */
 class Corundum
 {
 

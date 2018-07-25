@@ -7,6 +7,13 @@ use Bavix\Exceptions\Invalid;
 use Bavix\Helpers\Dir;
 use Bavix\Helpers\File;
 
+/**
+ * Class Runner
+ *
+ * @package App\Corundum
+ *          
+ * @deprecated
+ */
 class Runner
 {
 
