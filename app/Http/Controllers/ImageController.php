@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ImageResource;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
 {
@@ -14,10 +15,9 @@ class ImageController extends Controller
      */
     public function index()
     {
-        $image = Image::with([
-            Image::REL_BUCKET,
-            Image::REL_FORMATS,
-        ]);
+        $relations = [Image::REL_FORMATS, Image::REL_BUCKET];
+        $image = Image::whereUserId(Auth::id())
+            ->with($relations);
 
         return ImageResource::collection($image->paginate());
     }
@@ -31,7 +31,7 @@ class ImageController extends Controller
      */
     public function show($id)
     {
-        return new ImageResource(Image::findOrFail($id));
+        return new ImageResource($this->image($id));
     }
 
     /**
@@ -42,6 +42,9 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
+        foreach ($request->files as $file) {
+            // todo: dispatch(new ... (file))
+        }
     }
 
     /**
@@ -53,7 +56,7 @@ class ImageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // todo
     }
 
     /**
@@ -64,7 +67,18 @@ class ImageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // todo
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Image
+     */
+    protected function image(int $id): Image
+    {
+        return Image::whereUserId(Auth::id())
+            ->findOrFail($id);
     }
 
 }
