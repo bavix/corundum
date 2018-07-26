@@ -13,7 +13,7 @@ class ImageController extends Controller
     /**
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
         $relations = [Image::REL_FORMATS, Image::REL_BUCKET];
         $image = Image::whereUserId(Auth::id())
