@@ -10,7 +10,6 @@ interface DriverInterface
     /**
      * DriverInterface constructor.
      *
-     * @param Corundum $corundum
      * @param string $path
      */
     public function __construct(string $path);

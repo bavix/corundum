@@ -39,6 +39,11 @@ class Image extends Model
 
     use Attributable;
 
+    public const REL_FORMATS = 'formats';
+    public const REL_VIEWS = 'views';
+    public const REL_BUCKET = 'bucket';
+    public const REL_USER = 'user';
+
     /**
      * @var array
      */

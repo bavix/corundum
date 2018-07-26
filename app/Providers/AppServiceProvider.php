@@ -19,18 +19,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \app('rinvex.attributes.entities')->push(Image::class);
+        try {
+            \app('rinvex.attributes.entities')->push(Image::class);
 
-        Attribute::typeMap([
-            'boolean' => \Rinvex\Attributes\Models\Type\Boolean::class,
-            'datetime' => \Rinvex\Attributes\Models\Type\Datetime::class,
-            'integer' => \Rinvex\Attributes\Models\Type\Integer::class,
-            'text' => \Rinvex\Attributes\Models\Type\Text::class,
-            'varchar' => \Rinvex\Attributes\Models\Type\Varchar::class,
-        ]);
+            Attribute::typeMap([
+                'boolean' => \Rinvex\Attributes\Models\Type\Boolean::class,
+                'datetime' => \Rinvex\Attributes\Models\Type\Datetime::class,
+                'integer' => \Rinvex\Attributes\Models\Type\Integer::class,
+                'text' => \Rinvex\Attributes\Models\Type\Text::class,
+                'varchar' => \Rinvex\Attributes\Models\Type\Varchar::class,
+            ]);
 
-        Image::observe(ImageObserver::class);
-        View::observe(ViewObserver::class);
+            Image::observe(ImageObserver::class);
+            View::observe(ViewObserver::class);
+        } catch (\Throwable $throwable) {
+
+        }
     }
 
     /**

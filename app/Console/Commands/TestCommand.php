@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\Image\ImageFormatsEnum;
+use App\Models\Bucket;
 use App\Models\Format;
 use App\Models\Image;
 use Illuminate\Console\Command;
@@ -31,6 +32,13 @@ class TestCommand extends Command
      */
     public function handle()
     {
+        $bucket = Bucket::query()->first();
+        if (!$bucket) {
+            $bucket = new Bucket();
+            $bucket->name = 'test';
+            $bucket->save();
+        }
+
         $image = Image::with(['formats'])->first();
 
         if (!$image) {

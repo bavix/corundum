@@ -13,28 +13,5 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::middleware('client_credentials'/*'auth:api'*/)->get('/user', function (Request $request) {
-//    return \App\Models\User::query()->first();
-//});
-
-Route::middleware('auth:api')->post('/verify', function (Request $request) {
-
-    /**
-     * @var \App\Models\User $user
-     */
-    $user = $request->user();
-
-    return [
-        'verify' => $user !== null
-    ];
-
-});
-
-Route::middleware('auth:api')
-    ->post('/image', 'ImageController@upload');
-
-Route::middleware('auth:api')
-    ->post('/image/{name}', 'ImageController@update');
-
-Route::middleware('auth:api')
-    ->delete('/image/{name}', 'ImageController@delete');
+Route::apiResource('image', 'ImageController')
+;//    ->middleware('auth:api');
