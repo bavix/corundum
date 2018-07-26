@@ -44,7 +44,10 @@ class ImageController extends Controller
     {
         foreach ($request->files as $file) {
             // todo: dispatch(new ... (file))
+
         }
+//            $product = Product::create($request->all());
+//            return response()->json($product, 201);
     }
 
     /**
@@ -57,6 +60,9 @@ class ImageController extends Controller
     public function update(Request $request, $id)
     {
         // todo
+
+//        $product->update($request->all());
+//        return response()->json($product, 200);
     }
 
     /**
@@ -68,6 +74,9 @@ class ImageController extends Controller
     public function destroy($id)
     {
         // todo
+
+//        $product->delete();
+//        return response()->json(null, 204);
     }
 
     /**
