@@ -13,7 +13,7 @@ interface DriverInterface
      * @param Corundum $corundum
      * @param string $path
      */
-    public function __construct(Corundum $corundum, string $path);
+    public function __construct(string $path);
 
     /**
      * @param array $data

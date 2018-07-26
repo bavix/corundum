@@ -5,14 +5,10 @@ namespace App\Corundum\Adapters;
 use App\Corundum\Corundum;
 use App\Corundum\DriverInterface;
 use Intervention\Image\Image;
+use Intervention\Image\ImageManagerStatic;
 
 abstract class Adapter implements DriverInterface
 {
-
-    /**
-     * @var Corundum
-     */
-    protected $corundum;
 
     /**
      * @var Image
@@ -30,9 +26,8 @@ abstract class Adapter implements DriverInterface
      * @param Corundum $corundum
      * @param string $path
      */
-    public function __construct(Corundum $corundum, string $path)
+    public function __construct(string $path)
     {
-        $this->corundum = $corundum;
         $this->path = $path;
     }
 
@@ -112,11 +107,9 @@ abstract class Adapter implements DriverInterface
             $color
         );
 
-        $fill = $this->corundum
-            ->imageManager()
-            ->canvas($width, $height, $color);
+        $fill = ImageManagerStatic::canvas($width, $height, $color);
 
-        if ($this->corundum->driver() === 'gd') {
+        if ($this->image->getDriver() instanceof \Intervention\Image\Gd\Driver) {
             $object = $fill;
             $fill = $image;
             $image = $object;
@@ -135,7 +128,7 @@ abstract class Adapter implements DriverInterface
     protected function image(): Image
     {
         if (!$this->image) {
-            $this->image = $this->corundum->createImage($this->path);
+            $this->image = \Intervention\Image\Facades\Image::make($this->path);
         }
 
         return $this->image;

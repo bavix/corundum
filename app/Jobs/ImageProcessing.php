@@ -2,10 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Corundum\Adapters\Adapter;
 use App\Corundum\Corundum;
+use App\Corundum\Kit\Path;
 use App\Corundum\Runner;
+use App\Enums\Image\ImageViewsEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
+use App\Models\View;
 use Bavix\Helpers\File;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,6 +22,17 @@ class ImageProcessing implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * @var array
+     */
+    protected $adapters = [
+        ImageViewsEnum::CONTAIN => \App\Corundum\Adapters\Contain::class,
+        ImageViewsEnum::COVER => \App\Corundum\Adapters\Cover::class,
+        ImageViewsEnum::FIT => \App\Corundum\Adapters\Fit::class,
+        ImageViewsEnum::NONE => \App\Corundum\Adapters\None::class,
+        ImageViewsEnum::RESIZE => \App\Corundum\Adapters\Resize::class,
+    ];
 
     /**
      * @var Image $image
@@ -47,10 +62,13 @@ class ImageProcessing implements ShouldQueue
     public function handle(): void
     {
 
-        if (!File::isFile(Image::realPath($this->image->user, $this->image->name))) {
+        if (!Path::exists($this->image)) {
             Log::error('The file `' . $this->image->name . '` of the user `' .
                 $this->image->user . '` isn\'t found');
-            return;
+        }
+
+        foreach ($this->image->views as $view) {
+            $this->processing($view);
         }
 
         $this->runner($this->image->user)->apply(
@@ -88,6 +106,21 @@ class ImageProcessing implements ShouldQueue
             ImageOptimization::dispatch($this->image, $thumbnail)
                 ->onQueue(QueueEnum::LOW);
         }
+    }
+
+    /**
+     * @param View $view
+     */
+    protected function processing(View $view): void
+    {
+        $physical = Path::physical($this->image);
+
+        /**
+         * @var Adapter $adapter
+         */
+        $adapter = new $this->adapters[$view->type]($physical);
+        $adapter->apply($view->toArray())
+            ->save(Path::physical($this->image, $view->type), $view->quality);
     }
 
     /**

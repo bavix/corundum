@@ -13,41 +13,54 @@ class Path
 
     /**
      * @param Image $image
-     * @param string $type
+     * @param string $bucket
      *
      * @return string
      * @throws
      */
-    public static function physical(Image $image, string $type = ImageTypesEnum::TYPE_ORIGINAL): string
+    public static function exists(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
     {
         return Storage::disk(config('corundum.disk'))
-            ->path(static::relative($image, $type));
+            ->exists(static::relative($image, $bucket));
     }
 
     /**
      * @param Image $image
-     * @param string $type
+     * @param string $bucket
      *
      * @return string
+     * @throws
      */
-    public static function relative(Image $image, string $type = ImageTypesEnum::TYPE_ORIGINAL): string
+    public static function physical(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
     {
-        return static::path($image, $type);
+        return Storage::disk(config('corundum.disk'))
+            ->path(static::relative($image, $bucket));
     }
 
     /**
-     * @param Image  $image
-     * @param string $type
+     * @param Image $image
+     * @param string $bucket
      *
      * @return string
      */
-    protected static function path(Image $image, string $type): string
+    public static function relative(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
+    {
+        return static::path($image, $bucket);
+    }
+
+    /**
+     * @param Image $image
+     * @param string $bucket
+     *
+     * @return string
+     */
+    protected static function path(Image $image, string $bucket): string
     {
         [$xx, $yy] = static::split($image->name);
 
         return \implode(
             '/',
-            [static::thumbnail($type), $xx, $yy, $image->name]
+            [static::thumbnail($bucket), $xx, $yy, $image->name]
         );
     }
 
@@ -75,7 +88,7 @@ class Path
             return $type;
         }
 
-        return __FUNCTION__ . '/' . $type;
+        return 'thumbnail/' . $type;
     }
 
 }
