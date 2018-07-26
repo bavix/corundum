@@ -33,6 +33,7 @@ class CreateViewsTable extends Migration
             $table->integer('height')->nullable();
             $table->string('color')->nullable();
             $table->integer('quality')->nullable();
+            $table->boolean('optimize')->default(0);
 
             $table->unique(['user_id', 'bucket_id', 'name']);
 

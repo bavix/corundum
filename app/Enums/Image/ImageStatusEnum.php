@@ -40,6 +40,13 @@ class ImageStatusEnum extends Enum
     public const FINISHED = 'finished';
 
     /**
+     * Поставлено на удаление
+     *
+     * @var string
+     */
+    public const DELETING = 'deleting';
+
+    /**
      * изображение удалено
      *
      * @var string

@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use Illuminate\Support\Collection;
+
 class Enum
 {
 
@@ -31,6 +33,14 @@ class Enum
     {
         return (new \ReflectionClass(static::class))
             ->getConstants();
+    }
+
+    /**
+     * @return Collection
+     */
+    public static function collection(): Collection
+    {
+        return new Collection(static::enums());
     }
 
 }

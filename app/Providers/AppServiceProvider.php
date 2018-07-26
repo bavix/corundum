@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Image;
+use App\Models\View;
+use App\Observes\ImageObserver;
+use App\Observes\ViewObserver;
 use Illuminate\Support\ServiceProvider;
 use Rinvex\Attributes\Models\Attribute;
 
@@ -25,8 +28,9 @@ class AppServiceProvider extends ServiceProvider
             'text' => \Rinvex\Attributes\Models\Type\Text::class,
             'varchar' => \Rinvex\Attributes\Models\Type\Varchar::class,
         ]);
-//        Image::observe(ImageObserver::class);
-//        Config::observe(ConfigObserver::class);
+
+        Image::observe(ImageObserver::class);
+        View::observe(ViewObserver::class);
     }
 
     /**
@@ -34,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }

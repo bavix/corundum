@@ -7,17 +7,22 @@ use App\Enums\Enum;
 class QueueEnum extends Enum
 {
     /**
-     * Оптимизация + форматы изображений
+     * Получение метаданных
      */
-    public const LOW = 'low';
+    public const METADATA = 'metadata';
 
     /**
-     * Ресайз изображений
+     * Оптимизация изображений
      */
-    public const NORMAL = 'normal';
+    public const OPTIMIZE = 'optimize';
 
     /**
-     * Для сохранения изображений физически и в СУБД
+     * Генерация миниатюр
      */
-    public const HIGH = 'high';
+    public const PROCESSING = 'processing';
+
+    /**
+     * Конвертирование в разные форматы
+     */
+    public const CONVERT = 'convert';
 }

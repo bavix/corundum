@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ImageConversion implements ShouldQueue
+class ImageConvert implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -26,6 +27,7 @@ class ImageConversion implements ShouldQueue
      */
     public function __construct(Image $image)
     {
+        $this->queue = QueueEnum::CONVERT;
         $this->image = $image;
     }
 
@@ -36,7 +38,7 @@ class ImageConversion implements ShouldQueue
      */
     public function handle(): void
     {
-
+        // todo
     }
 
 }

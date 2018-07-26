@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Rinvex\Attributes\Models\Attribute;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -57,6 +56,7 @@ class CreateImagesTable extends Migration
             \App\Enums\Image\ImageStatusEnum::UPLOADED,
             \App\Enums\Image\ImageStatusEnum::PROCESSING,
             \App\Enums\Image\ImageStatusEnum::FINISHED,
+            \App\Enums\Image\ImageStatusEnum::DELETING,
             \App\Enums\Image\ImageStatusEnum::DELETED,
             \App\Enums\Image\ImageStatusEnum::FAILED,
         ];
@@ -64,7 +64,7 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) use ($status) {
             $table->increments('id');
 
-            $table->string('name');
+            $table->uuid('name');
             $table->integer('bucket_id');
             $table->integer('user_id');
 

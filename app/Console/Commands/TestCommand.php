@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Enums\Image\ImageFormatsEnum;
-use App\Jobs\TestJob;
 use App\Models\Format;
 use App\Models\Image;
 use Illuminate\Console\Command;
@@ -32,8 +31,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        dispatch(new TestJob(__METHOD__));
-        die;
         $image = Image::with(['formats'])->first();
 
         if (!$image) {

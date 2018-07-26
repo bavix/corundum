@@ -33,6 +33,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereWidth($value)
  * @mixin \Eloquent
+ * @property int $optimize
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereOptimize($value)
  */
 class View extends Model
 {

@@ -2,6 +2,10 @@
 
 namespace App\Observes;
 
+use App\Corundum\Kit\Path;
+use App\Enums\Image\ImageStatusEnum;
+use App\Enums\Queue\QueueEnum;
+use App\Jobs\ImageProcessing;
 use App\Models\Image;
 
 class ImageObserver
@@ -9,22 +13,35 @@ class ImageObserver
 
     /**
      * @param Image $image
-     *
-     * @return void
      */
-    public function created(Image $image)
+    public function created(Image $image): void
     {
-        $image->doBackground();
+        /**
+         * Если изображение уже существует, тогда меняем статус на "uploaded"
+         */
+        if ($image->status === ImageStatusEnum::INITIALIZED && Path::exists($image)) {
+            $image->status = ImageStatusEnum::UPLOADED;
+            $image->save();
+        }
     }
 
     /**
      * @param Image $image
-     *
-     * @return void
      */
-    public function deleting(Image $image)
+    public function updated(Image $image): void
     {
-        $image->doDeleted();
+        if ($image->status === ImageStatusEnum::UPLOADED) {
+            dispatch(new ImageProcessing($image));
+        }
+    }
+
+    /**
+     * @param Image $image
+     */
+    public function deleting(Image $image): void
+    {
+        $image->status = ImageStatusEnum::DELETING;
+        // todo добавить удаление миниатюр
     }
 
 }

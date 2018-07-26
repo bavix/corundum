@@ -2,9 +2,10 @@
 
 namespace App\Corundum\Adapters;
 
+use App\Corundum\Adapter;
 use App\Corundum\Point;
 use Intervention\Image\Image;
-use Intervention\Image\ImageManagerStatic;
+use Intervention\Image\ImageManagerStatic as ImageManager;
 
 class None extends Adapter
 {
@@ -35,7 +36,7 @@ class None extends Adapter
         }
 
         $color = \array_get($data, 'color');
-        $fill = ImageManagerStatic::canvas($width, $height, $color);
+        $fill = ImageManager::canvas($width, $height, $color);
 
         $image->resizeCanvas(
             $width,

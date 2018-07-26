@@ -2,32 +2,40 @@
 
 namespace App\Jobs;
 
+use App\Enums\Queue\QueueEnum;
+use App\Models\Image;
+use App\Models\View;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class TestJob implements ShouldQueue
+class ImageOptimize implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var string
+     * @var Image $image
      */
-    protected $message;
+    protected $image;
+
+    /**
+     * @var View
+     */
+    protected $view;
 
     /**
      * Create a new job instance.
      *
-     * @param string $message
+     * @param Image $image
+     * @param View $view
      */
-    public function __construct(string $message)
+    public function __construct(Image $image, View $view)
     {
-        $this->queue = 'default';
-        $this->message = $message;
+        $this->queue = QueueEnum::OPTIMIZE;
+        $this->image = $image;
     }
 
     /**
@@ -37,7 +45,11 @@ class TestJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info($this->message);
+        if (!$this->view->optimize) {
+            return;
+        }
+
+        // todo;
     }
 
 }

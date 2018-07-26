@@ -2,6 +2,7 @@
 
 namespace App\Corundum\Adapters;
 
+use App\Corundum\Adapter;
 use Intervention\Image\Image;
 
 class Cover extends Adapter

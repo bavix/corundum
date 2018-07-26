@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,6 +27,7 @@ class ImageMetadata implements ShouldQueue
      */
     public function __construct(Image $image)
     {
+        $this->queue = QueueEnum::METADATA;
         $this->image = $image;
     }
 
@@ -36,7 +38,7 @@ class ImageMetadata implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        // todo
     }
 
 }

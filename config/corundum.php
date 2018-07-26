@@ -1,6 +1,5 @@
 <?php
 
 return [
-    'disk' => 'public',
-    'driver' => 'imagick'
+    'disk' => 'public'
 ];

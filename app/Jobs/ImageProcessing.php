@@ -2,20 +2,19 @@
 
 namespace App\Jobs;
 
-use App\Corundum\Adapters\Adapter;
-use App\Corundum\Corundum;
+use App\Corundum\Adapter;
 use App\Corundum\Kit\Path;
-use App\Corundum\Runner;
+use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Image\ImageViewsEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
 use App\Models\View;
-use Bavix\Helpers\File;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class ImageProcessing implements ShouldQueue
@@ -40,18 +39,23 @@ class ImageProcessing implements ShouldQueue
     protected $image;
 
     /**
-     * @var Runner[]
+     * Принудительная генерация изображений
+     *
+     * @var bool
      */
-    protected $runners;
+    protected $force;
 
     /**
      * ImageProcessing constructor.
      *
      * @param Image $image
+     * @param bool $force
      */
-    public function __construct(Image $image)
+    public function __construct(Image $image, bool $force = false)
     {
+        $this->queue = QueueEnum::PROCESSING;
         $this->image = $image;
+        $this->force = $force;
     }
 
     /**
@@ -61,86 +65,67 @@ class ImageProcessing implements ShouldQueue
      */
     public function handle(): void
     {
-
         if (!Path::exists($this->image)) {
             Log::error('The file `' . $this->image->name . '` of the user `' .
                 $this->image->user . '` isn\'t found');
+
+            return;
         }
 
+        $states = [ImageStatusEnum::UPLOADED];
+        if (\in_array($this->image->status, $states, true)) {
+            $this->image->status = ImageStatusEnum::PROCESSING;
+            $this->image->save();
+        }
+
+        /**
+         * Ставим задачу на получение метаданных
+         */
+        dispatch(new ImageMetadata($this->image));
+
+        /**
+         * Генерируем представления
+         */
         foreach ($this->image->views as $view) {
             $this->processing($view);
         }
 
-        $this->runner($this->image->user)->apply(
-            $this->image->name,
-            $this->image->thumbnails,
-            // to include check on existence of the file
-            $this->image->getCheckExists()
-        );
-
-        $this->image->processed = 1;
-        $this->image->save();
-
-//        $options = [
-//            'driver' => config('config.driver')
-//        ];
-//
-//        // set information
-//        $image = (new ImageManager($options))->make(
-//            Image::realPath($this->image->user, $this->image->name)
-//        );
-//
-//        $this->image->processed = 1;
-//        $this->image->width = $image->getWidth();
-//        $this->image->height = $image->getHeight();
-//        $this->image->size = $image->filesize();
-//        $this->image->save();
-
-        ImageMetadata::dispatch($this->image)
-            ->onQueue(QueueEnum::LOW);
-
         /**
-         * отправляем на оптимизацию
+         * Завершено
          */
-        foreach ($this->image->thumbnails as $thumbnail) {
-            ImageOptimization::dispatch($this->image, $thumbnail)
-                ->onQueue(QueueEnum::LOW);
-        }
+        $this->image->status = ImageStatusEnum::FINISHED;
+        $this->image->save();
     }
 
     /**
+     * Процесс генерации миниатюр
+     *
      * @param View $view
      */
     protected function processing(View $view): void
     {
         $physical = Path::physical($this->image);
+        $thumbnail = Path::physical($this->image, $view->type);
+
+        /**
+         * Файл принудительно генерировать не нужно и
+         *  он уже существует
+         */
+        if (!$this->force && File::exists($thumbnail)) {
+            /**
+             * Файл уже существует
+             */
+            return;
+        }
 
         /**
          * @var Adapter $adapter
          */
         $adapter = new $this->adapters[$view->type]($physical);
         $adapter->apply($view->toArray())
-            ->save(Path::physical($this->image, $view->type), $view->quality);
-    }
+            ->save($thumbnail, $view->quality);
 
-    /**
-     * @param string $user
-     *
-     * @return Runner
-     */
-    protected function runner(string $user): Runner
-    {
-        if (!isset($this->runners[$user])) {
-            $array = \array_merge(
-                \config('corundum'),
-                \compact('user')
-            );
-
-            $corundum = new Corundum($array);
-            $this->runners[$user] = new Runner($corundum);
-        }
-
-        return $this->runners[$user];
+        dispatch(new ImageOptimize($this->image, $view));
     }
 
 }
