@@ -4,7 +4,6 @@ namespace App\Observes;
 
 use App\Corundum\Kit\Path;
 use App\Enums\Image\ImageStatusEnum;
-use App\Enums\Queue\QueueEnum;
 use App\Jobs\ImageProcessing;
 use App\Models\Image;
 

@@ -29,7 +29,7 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      *
      * @return ImageResource
      */
@@ -39,9 +39,20 @@ class ImageController extends Controller
     }
 
     /**
+     * @param int $id
+     *
+     * @return Image
+     */
+    protected function image(int $id): Image
+    {
+        return Image::whereUserId(Auth::id())
+            ->findOrFail($id);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
-     * @param  ImageRequest  $request
+     * @param  ImageRequest $request
      * @param  int $bucketId
      *
      * @return JsonResponse
@@ -68,17 +79,6 @@ class ImageController extends Controller
         }
 
         return response()->json($models, 201);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return Image
-     */
-    protected function image(int $id): Image
-    {
-        return Image::whereUserId(Auth::id())
-            ->findOrFail($id);
     }
 
 }

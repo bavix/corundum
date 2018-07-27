@@ -29,19 +29,6 @@ class Path
      * @param string $bucket
      *
      * @return string
-     * @throws
-     */
-    public static function physical(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
-    {
-        return Storage::disk(config('corundum.disk'))
-            ->path(static::relative($image, $bucket));
-    }
-
-    /**
-     * @param Image $image
-     * @param string $bucket
-     *
-     * @return string
      */
     public static function relative(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
     {
@@ -89,6 +76,19 @@ class Path
         }
 
         return 'thumbnail/' . $type;
+    }
+
+    /**
+     * @param Image $image
+     * @param string $bucket
+     *
+     * @return string
+     * @throws
+     */
+    public static function physical(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
+    {
+        return Storage::disk(config('corundum.disk'))
+            ->path(static::relative($image, $bucket));
     }
 
 }
