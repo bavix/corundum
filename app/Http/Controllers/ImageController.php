@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Corundum\Kit\Path;
+use App\Http\Requests\ImageRequest;
 use App\Http\Resources\ImageResource;
 use App\Models\Image;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageController extends Controller
 {
@@ -15,8 +19,8 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-        $relations = [Image::REL_FORMATS, Image::REL_BUCKET];
-        $image = Image::whereUserId(Auth::id())
+        $relations = [Image::REL_BUCKET];
+        $image = Image::whereUserId(1)
             ->with($relations);
 
         return ImageResource::collection($image->paginate());
@@ -37,46 +41,33 @@ class ImageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  ImageRequest  $request
+     * @param  int $bucketId
+     *
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(ImageRequest $request, int $bucketId): JsonResponse
     {
-        foreach ($request->files as $file) {
-            // todo: dispatch(new ... (file))
+        /**
+         * @var UploadedFile $file
+         */
+        $files = $request->files->get('file');
 
+        $models = [];
+        foreach ($files as $file) {
+            $model = new Image();
+            $model->user_id = 1;
+            $model->bucket_id = $bucketId;
+            $model->size = $file->getSize();
+            $model->mime = $file->getMimeType();
+            $path = Path::physical($model);
+            if ($file->move(\dirname($path), $model->name)) {
+                $model->save();
+                $models[] = $model;
+            }
         }
-//            $product = Product::create($request->all());
-//            return response()->json($product, 201);
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        // todo
-
-//        $product->update($request->all());
-//        return response()->json($product, 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        // todo
-
-//        $product->delete();
-//        return response()->json(null, 204);
+        return response()->json($models, 201);
     }
 
     /**

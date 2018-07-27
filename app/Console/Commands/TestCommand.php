@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\Image\ImageFormatsEnum;
 use App\Models\Bucket;
-use App\Models\Format;
 use App\Models\Image;
 use Illuminate\Console\Command;
 
@@ -39,7 +37,7 @@ class TestCommand extends Command
             $bucket->save();
         }
 
-        $image = Image::with(['formats'])->first();
+        $image = Image::query()->first();
 
         if (!$image) {
             $image = new Image();
@@ -47,15 +45,6 @@ class TestCommand extends Command
             $image->user_id = 1;
             $image->save();
         }
-
-        $formats = Format::query()
-            ->whereIn('name', [
-                ImageFormatsEnum::WEBP,
-                ImageFormatsEnum::PNG
-            ])
-            ->get();
-
-        $image->formats()->sync($formats);
 
         var_dump($image->toArray());
         die;

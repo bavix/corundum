@@ -63,14 +63,10 @@ class CreateImagesTable extends Migration
 
         Schema::create('images', function (Blueprint $table) use ($status) {
             $table->increments('id');
-
             $table->uuid('name');
             $table->integer('bucket_id');
             $table->integer('user_id');
-
-            $table->enum('status', $status)
-                ->default(\App\Enums\Image\ImageStatusEnum::INITIALIZED);
-
+            $table->enum('status', $status);
             $table->timestamps();
 
             $table->unique(['name', 'bucket_id']);

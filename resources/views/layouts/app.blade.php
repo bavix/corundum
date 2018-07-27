@@ -30,15 +30,15 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand" href="{{ route('ux.config.index') }}">
-                <img src="https://ds.bavix.ru/svg/logo.svg" height="32" alt="Bavix" />
-            </a>
+            {{--<a class="navbar-brand" href="{{ route('ux.config.index') }}">--}}
+                {{--<img src="https://ds.bavix.ru/svg/logo.svg" height="32" alt="Bavix" />--}}
+            {{--</a>--}}
             
             <div class="collapse navbar-collapse" id="navbar">
                 
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('ux.config.index') }}">Home</a>
+{{--                        <a class="nav-link" href="{{ route('ux.config.index') }}">Home</a>--}}
                     </li>
                 </ul>
 

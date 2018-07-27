@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\Image\ImageStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Rinvex\Attributes\Traits\Attributable;
@@ -32,14 +32,12 @@ use Rinvex\Attributes\Traits\Attributable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereUserId($value)
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Format[] $formats
  */
 class Image extends Model
 {
 
     use Attributable;
 
-    public const REL_FORMATS = 'formats';
     public const REL_VIEWS = 'views';
     public const REL_BUCKET = 'bucket';
     public const REL_USER = 'user';
@@ -66,6 +64,9 @@ class Image extends Model
         }
 
         parent::__construct($attributes);
+        if ($this->status === null) {
+            $this->status = ImageStatusEnum::INITIALIZED;
+        }
     }
 
     /**
@@ -91,14 +92,6 @@ class Image extends Model
     {
         return $this->hasMany(View::class, 'bucket_id', 'bucket_id')
             ->where('user_id', $this->user_id);
-    }
-
-    /**
-     * @return BelongsToMany
-     */
-    public function formats(): BelongsToMany
-    {
-        return $this->belongsToMany(Format::class);
     }
 
 }
