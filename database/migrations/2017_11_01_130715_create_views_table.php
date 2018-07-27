@@ -34,6 +34,7 @@ class CreateViewsTable extends Migration
             $table->string('color')->nullable();
             $table->integer('quality')->nullable();
             $table->boolean('optimize')->default(0);
+            $table->boolean('webp')->default(0);
 
             $table->unique(['user_id', 'bucket_id', 'name']);
 
