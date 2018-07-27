@@ -45,11 +45,6 @@ class Image extends Model
     /**
      * @var array
      */
-    protected $with = ['eav'];
-
-    /**
-     * @var array
-     */
     protected $fillable = ['name'];
 
     /**
