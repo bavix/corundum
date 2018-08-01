@@ -7,6 +7,7 @@ use App\Corundum\Kit\Path;
 use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Image\ImageViewsEnum;
 use App\Enums\Queue\QueueEnum;
+use App\Models\Bucket;
 use App\Models\Image;
 use App\Models\View;
 use Illuminate\Bus\Queueable;
@@ -66,9 +67,13 @@ class ImageProcessing implements ShouldQueue
     public function handle(): void
     {
         if (!Path::exists($this->image)) {
-            Log::error('The file `' . $this->image->name . '` of the user `' .
-                $this->image->user . '` isn\'t found');
+            Log::error('The original image was deleted', $this->image->toArray());
+            dispatch(new ImageFailed($this->image));
+            return;
+        }
 
+        if ($this->image->status === ImageStatusEnum::PROCESSING) {
+            Log::info('The image is already in process', $this->image->toArray());
             return;
         }
 
@@ -84,10 +89,15 @@ class ImageProcessing implements ShouldQueue
         dispatch(new ImageMetadata($this->image));
 
         /**
+         * загружаем корзину
+         */
+        $this->image->load(Image::REL_BUCKET);
+
+        /**
          * Генерируем представления
          */
         foreach ($this->image->views as $view) {
-            $this->processing($view);
+            $this->processing($this->image->bucket, $view);
         }
 
         /**
@@ -100,12 +110,13 @@ class ImageProcessing implements ShouldQueue
     /**
      * Процесс генерации миниатюр
      *
+     * @param Bucket $bucket
      * @param View $view
      */
-    protected function processing(View $view): void
+    protected function processing(Bucket $bucket, View $view): void
     {
         $physical = Path::physical($this->image);
-        $thumbnail = Path::physical($this->image, $view->type);
+        $thumbnail = Path::physical($this->image, $bucket->name);
 
         /**
          * Файл принудительно генерировать не нужно и

@@ -24,15 +24,6 @@ services:
       static:
         ipv4_address: 172.16.241.4
 
-  php_build:
-    image: composer
-    volumes:
-      - ./:/app
-    command: composer update --ignore-platform-reqs
-    networks:
-      static:
-        ipv4_address: 172.16.241.240
-
   php:
     depends_on:
       - php_build
@@ -67,6 +58,29 @@ services:
     networks:
       static:
         ipv4_address: 172.16.241.7
+
+  supervisor:
+    depends_on:
+    - mysql
+    - rabbitmq
+    build:
+      context: ./environment/supervisor
+    volumes:
+    - ./:/var/www/html
+    - ./storage/supervisor:/var/log/supervisor
+    - ./environment/supervisor/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    networks:
+      static:
+        ipv4_address: 172.16.241.8
+
+  php_build:
+    image: composer
+    volumes:
+    - ./:/app
+    command: composer update --ignore-platform-reqs
+    networks:
+      static:
+        ipv4_address: 172.16.241.240
 
 volumes:
   dbdata:

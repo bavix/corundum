@@ -17,6 +17,11 @@ class QueueEnum extends Enum
     public const OPTIMIZE = 'optimize';
 
     /**
+     * Пробуем обработать изображения еще раз
+     */
+    public const REPROCESSING = 'reprocessing';
+
+    /**
      * Генерация миниатюр
      */
     public const PROCESSING = 'processing';
@@ -25,4 +30,9 @@ class QueueEnum extends Enum
      * Конвертирование в разные форматы
      */
     public const CONVERT = 'convert';
+
+    /**
+     * Обрабока плохих изображений
+     */
+    public const FAILED = 'failed';
 }

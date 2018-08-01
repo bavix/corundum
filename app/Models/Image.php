@@ -85,7 +85,8 @@ class Image extends Model
      */
     public function views(): HasMany
     {
-        return $this->hasMany(View::class, 'bucket_id', 'bucket_id')
+        return $this
+            ->hasMany(View::class, 'bucket_id', 'bucket_id')
             ->where('user_id', $this->user_id);
     }
 
