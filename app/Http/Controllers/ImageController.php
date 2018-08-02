@@ -83,8 +83,7 @@ class ImageController extends Controller
             (int)\ini_get('max_file_uploads'),
             1,
             [
-                'path' => Paginator::resolveCurrentPath(),
-                'pageName' => 'page',
+                'path' => Paginator::resolveCurrentPath()
             ]
         );
 
