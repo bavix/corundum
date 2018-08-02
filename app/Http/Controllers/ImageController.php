@@ -73,7 +73,7 @@ class ImageController extends Controller
             $path = Path::physical($model);
             if ($file->move(\dirname($path), $model->name)) {
                 $model->save();
-                $collection->push($model->setRelation('bucket', $bucket));
+                $collection->push($model->setRelation(Image::REL_BUCKET, $bucket));
             }
         }
 
