@@ -27,6 +27,7 @@ class ImageController extends Controller
     {
         $relations = [Image::REL_BUCKET, Image::REL_EAV];
         $image = Image::whereUserId(1)
+            ->orderByDesc('id')
             ->with($relations);
 
         return ImageResource::collection($image->paginate());
