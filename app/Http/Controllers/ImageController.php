@@ -80,7 +80,7 @@ class ImageController extends Controller
         $paginate = new LengthAwarePaginator(
             $collection,
             $collection->count(),
-            $collection->count(),
+            (int)\ini_get('max_file_uploads'),
             1,
             [
                 'path' => Paginator::resolveCurrentPath(),
