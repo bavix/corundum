@@ -41,6 +41,7 @@ class Image extends Model
     public const REL_VIEWS = 'views';
     public const REL_BUCKET = 'bucket';
     public const REL_USER = 'user';
+    public const REL_EAV = 'eav';
 
     /**
      * @var array

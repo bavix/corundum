@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Corundum\Kit\Path;
 use App\Http\Requests\ImageRequest;
 use App\Http\Resources\ImageResource;
+use App\Models\Bucket;
 use App\Models\Image;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -15,11 +19,13 @@ class ImageController extends Controller
 {
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @param Request $request
+     *
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
-        $relations = [Image::REL_BUCKET];
+        $relations = [Image::REL_BUCKET, Image::REL_EAV];
         $image = Image::whereUserId(1)
             ->with($relations);
 
@@ -33,20 +39,12 @@ class ImageController extends Controller
      *
      * @return ImageResource
      */
-    public function show($id)
+    public function show(int $id): ImageResource
     {
-        return new ImageResource($this->image($id));
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return Image
-     */
-    protected function image(int $id): Image
-    {
-        return Image::whereUserId(Auth::id())
+        $image = Image::whereUserId(Auth::id())
             ->findOrFail($id);
+
+        return new ImageResource($image);
     }
 
     /**
@@ -55,16 +53,17 @@ class ImageController extends Controller
      * @param  ImageRequest $request
      * @param  int $bucketId
      *
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function store(ImageRequest $request, int $bucketId): JsonResponse
+    public function store(ImageRequest $request, int $bucketId): AnonymousResourceCollection
     {
         /**
          * @var UploadedFile $file
          */
         $files = $request->files->get('file');
+        $bucket = Bucket::findOrFail($bucketId);
 
-        $models = [];
+        $collection = new Collection();
         foreach ($files as $file) {
             $model = new Image();
             $model->user_id = 1;
@@ -74,11 +73,22 @@ class ImageController extends Controller
             $path = Path::physical($model);
             if ($file->move(\dirname($path), $model->name)) {
                 $model->save();
-                $models[] = $model;
+                $collection->push($model->setRelation('bucket', $bucket));
             }
         }
 
-        return response()->json($models, 201);
+        $paginate = new LengthAwarePaginator(
+            $collection,
+            $collection->count(),
+            $collection->count(),
+            1,
+            [
+                'path' => Paginator::resolveCurrentPath(),
+                'pageName' => 'page',
+            ]
+        );
+
+        return ImageResource::collection($paginate);
     }
 
 }
