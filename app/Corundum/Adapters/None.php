@@ -5,7 +5,7 @@ namespace App\Corundum\Adapters;
 use App\Corundum\Adapter;
 use App\Corundum\Point;
 use Intervention\Image\Image;
-use Intervention\Image\ImageManagerStatic as ImageManager;
+use Intervention\Image\Facades\Image as ImageManager;
 
 class None extends Adapter
 {

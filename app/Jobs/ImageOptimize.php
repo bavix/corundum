@@ -36,6 +36,7 @@ class ImageOptimize implements ShouldQueue
     {
         $this->queue = QueueEnum::OPTIMIZE;
         $this->image = $image;
+        $this->view = $view;
     }
 
     /**

@@ -18,6 +18,22 @@ class Path
      * @return string
      * @throws
      */
+    public static function makeDirectory(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
+    {
+        $path = static::relative($image, $bucket);
+        $directory = \dirname($path);
+
+        return Storage::disk(config('corundum.disk'))
+            ->makeDirectory($directory);
+    }
+
+    /**
+     * @param Image $image
+     * @param string $bucket
+     *
+     * @return string
+     * @throws
+     */
     public static function exists(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
     {
         return Storage::disk(config('corundum.disk'))

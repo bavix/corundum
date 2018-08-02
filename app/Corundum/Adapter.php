@@ -3,7 +3,7 @@
 namespace App\Corundum;
 
 use Intervention\Image\Image;
-use Intervention\Image\ImageManagerStatic as ImageManager;
+use Intervention\Image\Facades\Image as ImageManager;
 
 abstract class Adapter implements DriverInterface
 {
@@ -125,7 +125,7 @@ abstract class Adapter implements DriverInterface
     protected function image(): Image
     {
         if (!$this->image) {
-            $this->image = \Intervention\Image\Facades\Image::make($this->path);
+            $this->image = ImageManager::make($this->path);
         }
 
         return $this->image;

@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @mixin \Eloquent
  * @property int $optimize
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereOptimize($value)
+ * @property int $webp
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereWebp($value)
  */
 class View extends Model
 {

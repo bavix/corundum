@@ -17,6 +17,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ImageProcessing implements ShouldQueue
 {
@@ -72,7 +73,7 @@ class ImageProcessing implements ShouldQueue
             return;
         }
 
-        if ($this->image->status === ImageStatusEnum::PROCESSING) {
+        if (!$this->force && $this->image->status === ImageStatusEnum::PROCESSING) {
             Log::info('The image is already in process', $this->image->toArray());
             return;
         }
@@ -128,6 +129,11 @@ class ImageProcessing implements ShouldQueue
              */
             return;
         }
+
+        /**
+         * создаем директорию
+         */
+        Path::makeDirectory($this->image, $bucket->name);
 
         /**
          * @var Adapter $adapter

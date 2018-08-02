@@ -37,14 +37,8 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $query = Image::query()
-            ->whereDate('updated_at', '<=', Carbon::now()->subMinute())
-            ->where('status', ImageStatusEnum::PROCESSING);
-
-        $query->chunk(1000, function (Collection $collection) {
-            dispatch(new ImageReprocessing($collection));
-        });
-
+        $time = Carbon::now()->subMinute();
+        dispatch(new ImageReprocessing($time));
         die;
 
         $bucket = Bucket::query()->first();

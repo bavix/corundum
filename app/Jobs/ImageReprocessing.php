@@ -5,13 +5,13 @@ namespace App\Jobs;
 use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ImageReprocessing implements ShouldQueue
 {
@@ -19,19 +19,19 @@ class ImageReprocessing implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Builder
+     * @var Carbon
      */
-    protected $collection;
+    protected $time;
 
     /**
      * ImageProcessing constructor.
      *
-     * @param Collection $collection
+     * @param Carbon $time
      */
-    public function __construct(Collection $collection)
+    public function __construct(Carbon $time)
     {
         $this->queue = QueueEnum::REPROCESSING;
-        $this->collection = $collection;
+        $this->time = $time;
     }
 
     /**
@@ -41,14 +41,13 @@ class ImageReprocessing implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->collection->update(['status' => ImageStatusEnum::UPLOADED]);
+        $query = Image::query()
+            ->whereDate('updated_at', '<=', $this->time)
+            ->where('status', ImageStatusEnum::PROCESSING);
 
-        /**
-         * @var Image $image
-         */
-        foreach ($this->collection as $image) {
-            dispatch(new ImageProcessing($image));
-        }
+        $query->each(function (Image $image) {
+            dispatch(new ImageProcessing($image, true));
+        });
     }
 
 }
