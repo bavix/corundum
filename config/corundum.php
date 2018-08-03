@@ -1,5 +1,8 @@
 <?php
 
 return [
-    'disk' => 'public'
+    'disk' => [
+        'image' => 'public',
+        'file' => 'public',
+    ]
 ];

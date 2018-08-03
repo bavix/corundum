@@ -31,7 +31,7 @@ class FilePath
         $path = static::relative($image, $bucket, $view);
         $directory = \dirname($path);
 
-        return Storage::disk(config('corundum.disk'))
+        return Storage::disk(config('corundum.disk.' . static::$type))
             ->makeDirectory($directory);
     }
 
@@ -45,7 +45,7 @@ class FilePath
      */
     public static function exists(Image $image, string $bucket, ?string $view = null): string
     {
-        return Storage::disk(config('corundum.disk'))
+        return Storage::disk(config('corundum.disk.' . static::$type))
             ->exists(static::relative($image, $bucket, $view));
     }
 
@@ -116,7 +116,7 @@ class FilePath
      */
     public static function physical(Image $image, string $bucket, ?string $view = null): string
     {
-        return Storage::disk(config('corundum.disk'))
+        return Storage::disk(config('corundum.disk.' . static::$type))
             ->path(static::relative($image, $bucket, $view));
     }
 
