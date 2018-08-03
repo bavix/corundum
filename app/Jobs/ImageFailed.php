@@ -51,7 +51,8 @@ class ImageFailed implements ShouldQueue
     {
         if (!ImagePath::exists($this->image, $this->bucket)) {
             Log::error('The original image was deleted', $this->image->toArray());
-            $this->image->update(['status' => ImageStatusEnum::DELETED]);
+            $this->image->status = ImageStatusEnum::DELETED;
+            $this->image->save();
             return;
         }
     }

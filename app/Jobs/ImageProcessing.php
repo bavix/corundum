@@ -111,7 +111,8 @@ class ImageProcessing implements ShouldQueue
         /**
          * Завершено
          */
-        $this->image->update(['status' => ImageStatusEnum::FINISHED]);
+        $this->image->status = ImageStatusEnum::FINISHED;
+        $this->image->save();
     }
 
     /**

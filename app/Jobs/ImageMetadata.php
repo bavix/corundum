@@ -50,11 +50,12 @@ class ImageMetadata implements ShouldQueue
     {
         $image = ImageManager::make(ImagePath::physical($this->image, $this->bucket));
 
-        $this->image->width = $image->width();
-        $this->image->height = $image->height();
-        $this->image->size = $image->filesize();
-        $this->image->mime = $image->mime();
-        $this->image->save();
+        $this->image->update([
+            'width' => $image->width(),
+            'height' => $image->height(),
+            'size' => $image->filesize(),
+            'mime' => $image->mime(),
+        ]);
     }
 
 }
