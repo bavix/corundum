@@ -2,9 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Corundum\Kit\Path;
+use App\Corundum\Kit\ImagePath;
 use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Queue\QueueEnum;
+use App\Models\Bucket;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,19 +20,26 @@ class ImageFailed implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Image $image
+     * @var Image
      */
     protected $image;
+
+    /**
+     * @var Bucket
+     */
+    protected $bucket;
 
     /**
      * ImageFailed constructor.
      *
      * @param Image $image
+     * @param Bucket $bucket
      */
-    public function __construct(Image $image)
+    public function __construct(Image $image, Bucket $bucket)
     {
         $this->queue = QueueEnum::FAILED;
         $this->image = $image;
+        $this->bucket = $bucket;
     }
 
     /**
@@ -41,10 +49,9 @@ class ImageFailed implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!Path::exists($this->image)) {
+        if (!ImagePath::exists($this->image, $this->bucket)) {
             Log::error('The original image was deleted', $this->image->toArray());
-            $this->image->status = ImageStatusEnum::DELETED;
-            $this->image->save();
+            $this->image->update(['status' => ImageStatusEnum::DELETED]);
             return;
         }
     }

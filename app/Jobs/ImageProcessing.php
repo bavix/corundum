@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Corundum\Adapter;
-use App\Corundum\Kit\Path;
+use App\Corundum\Kit\ImagePath;
 use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Image\ImageViewsEnum;
 use App\Enums\Queue\QueueEnum;
@@ -36,9 +36,14 @@ class ImageProcessing implements ShouldQueue
     ];
 
     /**
-     * @var Image $image
+     * @var Image
      */
     protected $image;
+
+    /**
+     * @var Bucket
+     */
+    protected $bucket;
 
     /**
      * Принудительная генерация изображений
@@ -51,12 +56,14 @@ class ImageProcessing implements ShouldQueue
      * ImageProcessing constructor.
      *
      * @param Image $image
+     * @param Bucket $bucket
      * @param bool $force
      */
-    public function __construct(Image $image, bool $force = false)
+    public function __construct(Image $image, Bucket $bucket, bool $force = false)
     {
         $this->queue = QueueEnum::PROCESSING;
         $this->image = $image;
+        $this->bucket = $bucket;
         $this->force = $force;
     }
 
@@ -67,9 +74,9 @@ class ImageProcessing implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!Path::exists($this->image)) {
+        if (!ImagePath::exists($this->image, $this->bucket)) {
             Log::error('The original image was deleted', $this->image->toArray());
-            dispatch(new ImageFailed($this->image));
+            $this->failed();
             return;
         }
 
@@ -87,7 +94,7 @@ class ImageProcessing implements ShouldQueue
         /**
          * Ставим задачу на получение метаданных
          */
-        dispatch(new ImageMetadata($this->image));
+        dispatch(new ImageMetadata($this->image, $this->bucket));
 
         /**
          * загружаем корзину
@@ -98,26 +105,24 @@ class ImageProcessing implements ShouldQueue
          * Генерируем представления
          */
         foreach ($this->image->views as $view) {
-            $this->processing($this->image->bucket, $view);
+            $this->processing($view);
         }
 
         /**
          * Завершено
          */
-        $this->image->status = ImageStatusEnum::FINISHED;
-        $this->image->save();
+        $this->image->update(['status' => ImageStatusEnum::FINISHED]);
     }
 
     /**
      * Процесс генерации миниатюр
      *
-     * @param Bucket $bucket
      * @param View $view
      */
-    protected function processing(Bucket $bucket, View $view): void
+    protected function processing(View $view): void
     {
-        $physical = Path::physical($this->image);
-        $thumbnail = Path::physical($this->image, $bucket->name);
+        $physical = ImagePath::physical($this->image, $this->bucket);
+        $thumbnail = ImagePath::physical($this->image, $this->bucket, $view->name);
 
         /**
          * Файл принудительно генерировать не нужно и
@@ -133,7 +138,7 @@ class ImageProcessing implements ShouldQueue
         /**
          * создаем директорию
          */
-        Path::makeDirectory($this->image, $bucket->name);
+        ImagePath::makeDirectory($this->image, $view->name);
 
         /**
          * @var Adapter $adapter
@@ -142,7 +147,15 @@ class ImageProcessing implements ShouldQueue
         $adapter->apply($view->toArray())
             ->save($thumbnail, $view->quality);
 
-        dispatch(new ImageOptimize($this->image, $view));
+        dispatch(new ImageOptimize($this->image, $this->bucket, $view));
+    }
+
+    /**
+     * @return void
+     */
+    protected function failed(): void
+    {
+        dispatch(new ImageFailed($this->image, $this->bucket));
     }
 
 }

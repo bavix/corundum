@@ -2,25 +2,33 @@
 
 namespace App\Corundum\Kit;
 
-use App\Enums\Image\ImageTypesEnum;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
 
-class Path
+class FilePath
 {
 
+    /**
+     * @var string
+     */
+    protected static $type = 'file';
+
+    /**
+     * @var int
+     */
     protected const SPLIT_LENGTH = 2;
 
     /**
      * @param Image $image
      * @param string $bucket
+     * @param null|string $view
      *
      * @return string
      * @throws
      */
-    public static function makeDirectory(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
+    public static function makeDirectory(Image $image, string $bucket, ?string $view = null): string
     {
-        $path = static::relative($image, $bucket);
+        $path = static::relative($image, $bucket, $view);
         $directory = \dirname($path);
 
         return Storage::disk(config('corundum.disk'))
@@ -30,40 +38,43 @@ class Path
     /**
      * @param Image $image
      * @param string $bucket
+     * @param null|string $view
      *
      * @return string
      * @throws
      */
-    public static function exists(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
+    public static function exists(Image $image, string $bucket, ?string $view = null): string
     {
         return Storage::disk(config('corundum.disk'))
-            ->exists(static::relative($image, $bucket));
+            ->exists(static::relative($image, $bucket, $view));
     }
 
     /**
      * @param Image $image
      * @param string $bucket
+     * @param null|string $view
      *
      * @return string
      */
-    public static function relative(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
+    public static function relative(Image $image, string $bucket, ?string $view = null): string
     {
-        return static::path($image, $bucket);
+        return static::path($image, $bucket, $view);
     }
 
     /**
      * @param Image $image
      * @param string $bucket
+     * @param null|string $view
      *
      * @return string
      */
-    protected static function path(Image $image, string $bucket): string
+    protected static function path(Image $image, string $bucket, ?string $view = null): string
     {
         [$xx, $yy] = static::split($image->name);
 
         return \implode(
             '/',
-            [static::thumbnail($bucket), $xx, $yy, $image->name]
+            [static::viewPath($bucket, $view), $xx, $yy, $image->name]
         );
     }
 
@@ -81,30 +92,32 @@ class Path
     }
 
     /**
-     * @param string $type
+     * @param string $bucket
+     * @param null|string $view
      *
      * @return string
      */
-    protected static function thumbnail(string $type): string
+    protected static function viewPath(string $bucket, ?string $view = null): string
     {
-        if ($type === ImageTypesEnum::TYPE_ORIGINAL) {
-            return $type;
+        if ($view === null) {
+            return static::$type . '/' . $bucket;
         }
 
-        return 'thumbnail/' . $type;
+        return 'views/' . static::$type . '/' . $bucket . '/' . $view;
     }
 
     /**
      * @param Image $image
      * @param string $bucket
+     * @param string $view
      *
      * @return string
      * @throws
      */
-    public static function physical(Image $image, string $bucket = ImageTypesEnum::TYPE_ORIGINAL): string
+    public static function physical(Image $image, string $bucket, ?string $view = null): string
     {
         return Storage::disk(config('corundum.disk'))
-            ->path(static::relative($image, $bucket));
+            ->path(static::relative($image, $bucket, $view));
     }
 
 }

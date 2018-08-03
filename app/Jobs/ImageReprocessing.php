@@ -41,12 +41,12 @@ class ImageReprocessing implements ShouldQueue
      */
     public function handle(): void
     {
-        $query = Image::query()
+        $query = Image::with([Image::REL_BUCKET])
             ->whereDate('updated_at', '<=', $this->time)
             ->where('status', ImageStatusEnum::PROCESSING);
 
         $query->each(function (Image $image) {
-            dispatch(new ImageProcessing($image, true));
+            dispatch(new ImageProcessing($image, $image->bucket, true));
         });
     }
 

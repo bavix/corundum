@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\Queue\QueueEnum;
+use App\Models\Bucket;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,19 +17,26 @@ class ImageConvert implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Image $image
+     * @var Image
      */
     protected $image;
+
+    /**
+     * @var Bucket
+     */
+    protected $bucket;
 
     /**
      * Create a new job instance.
      *
      * @param Image $image
+     * @param Bucket $bucket
      */
-    public function __construct(Image $image)
+    public function __construct(Image $image, Bucket $bucket)
     {
         $this->queue = QueueEnum::CONVERT;
         $this->image = $image;
+        $this->bucket = $bucket;
     }
 
     /**
