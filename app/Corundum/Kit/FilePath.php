@@ -104,7 +104,7 @@ class FilePath
     protected static function viewPath($bucket, $view = null): string
     {
         if ($view === null) {
-            return $bucket;
+            return 'sources/' . $bucket;
         }
 
         return 'views/' . $bucket . '/' . $view;
