@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Image\ImageStatusEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -58,22 +59,12 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        $status = [
-            \App\Enums\Image\ImageStatusEnum::INITIALIZED,
-            \App\Enums\Image\ImageStatusEnum::UPLOADED,
-            \App\Enums\Image\ImageStatusEnum::PROCESSING,
-            \App\Enums\Image\ImageStatusEnum::FINISHED,
-            \App\Enums\Image\ImageStatusEnum::DELETING,
-            \App\Enums\Image\ImageStatusEnum::DELETED,
-            \App\Enums\Image\ImageStatusEnum::FAILED,
-        ];
-
-        Schema::create('images', function (Blueprint $table) use ($status) {
+        Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('name');
             $table->integer('bucket_id');
             $table->integer('user_id');
-            $table->enum('status', $status);
+            $table->enum('status', ImageStatusEnum::enums());
             $table->timestamps();
 
             $table->unique(['name', 'bucket_id']);

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Corundum\Adapter;
 use App\Corundum\Kit\Path;
+use App\Enums\Image\ImageFormatsEnum;
 use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Image\ImageViewsEnum;
 use App\Enums\Queue\QueueEnum;
@@ -131,8 +132,19 @@ class ImageProcessing implements ShouldQueue
          * @var Adapter $adapter
          */
         $adapter = new $this->adapters[$view->type]($physical);
-        $adapter->apply($view->toArray())
-            ->save($thumbnail, $view->quality);
+        $image = $adapter->apply($view->toArray());
+
+        $image->encode(ImageFormatsEnum::PNG, $view->quality)
+            ->save($thumbnail);
+
+        if ($view->webp) {
+            $image->encode(ImageFormatsEnum::WEBP, $view->quality)
+                ->save($thumbnail . '.' . ImageFormatsEnum::WEBP)
+                ->destroy();
+        }
+
+        // Free up memory
+        $image->destroy();
 
         dispatch(new ImageOptimize($this->image, $view));
     }

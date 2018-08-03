@@ -27,11 +27,6 @@ class QueueEnum extends Enum
     public const PROCESSING = 'processing';
 
     /**
-     * Конвертирование в разные форматы
-     */
-    public const CONVERT = 'convert';
-
-    /**
      * Обрабока плохих изображений
      */
     public const FAILED = 'failed';

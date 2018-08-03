@@ -38,9 +38,9 @@ class TestCommand extends Command
     public function handle()
     {
 
-//        $time = Carbon::now()->subMinute();
-//        dispatch(new ImageReprocessing($time));
-//        die;
+        $time = Carbon::now()->subMinute();
+        dispatch(new ImageReprocessing($time));
+        die;
 
         $bucket = Bucket::query()->first();
         if (!$bucket) {
@@ -55,9 +55,10 @@ class TestCommand extends Command
             $view = new View();
             $view->type = ImageViewsEnum::FIT;
             $view->name = 'xs-fit';
-            $view->height = 100;
-            $view->width = 100;
+            $view->height = 250;
+            $view->width = 250;
             $view->quality = 75;
+            $view->webp = 1;
             $view->user_id = $userId;
             $view->bucket_id = $userId;
             $view->save();
@@ -65,9 +66,10 @@ class TestCommand extends Command
             $view = new View();
             $view->type = ImageViewsEnum::CONTAIN;
             $view->name = 'xs-contain';
-            $view->height = 100;
-            $view->width = 100;
+            $view->height = 250;
+            $view->width = 250;
             $view->quality = 75;
+            $view->webp = 1;
             $view->user_id = $userId;
             $view->bucket_id = $userId;
             $view->save();
@@ -75,9 +77,10 @@ class TestCommand extends Command
             $view = new View();
             $view->type = ImageViewsEnum::COVER;
             $view->name = 'xs-cover';
-            $view->height = 100;
-            $view->width = 100;
+            $view->height = 250;
+            $view->width = 250;
             $view->quality = 75;
+            $view->webp = 1;
             $view->user_id = $userId;
             $view->bucket_id = $userId;
             $view->save();

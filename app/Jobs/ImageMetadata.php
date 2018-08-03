@@ -49,6 +49,9 @@ class ImageMetadata implements ShouldQueue
             'size' => $image->filesize(),
             'mime' => $image->mime(),
         ]);
+
+        // Free up memory
+        $image->destroy();
     }
 
 }

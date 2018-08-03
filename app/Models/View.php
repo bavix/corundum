@@ -42,6 +42,16 @@ class View extends Model
 {
 
     /**
+     * @param int|null $quality
+     *
+     * @return int
+     */
+    public function getQualityAttribute(?int $quality): int
+    {
+        return $quality ?: 100;
+    }
+
+    /**
      * @return BelongsTo
      */
     public function bucket(): BelongsTo

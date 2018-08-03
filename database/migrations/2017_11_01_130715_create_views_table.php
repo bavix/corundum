@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Image\ImageViewsEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -21,13 +22,7 @@ class CreateViewsTable extends Migration
             $table->integer('bucket_id');
             $table->string('name');
 
-            $table->enum('type', [
-                \App\Enums\Image\ImageViewsEnum::FIT,
-                \App\Enums\Image\ImageViewsEnum::NONE,
-                \App\Enums\Image\ImageViewsEnum::COVER,
-                \App\Enums\Image\ImageViewsEnum::CONTAIN,
-                \App\Enums\Image\ImageViewsEnum::RESIZE,
-            ]);
+            $table->enum('type', ImageViewsEnum::enums());
 
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
