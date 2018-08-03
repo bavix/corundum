@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Enums\Queue\QueueEnum;
-use App\Models\Bucket;
 use App\Models\Image;
 use App\Models\View;
 use Illuminate\Bus\Queueable;
@@ -23,11 +22,6 @@ class ImageOptimize implements ShouldQueue
     protected $image;
 
     /**
-     * @var Bucket
-     */
-    protected $bucket;
-
-    /**
      * @var View
      */
     protected $view;
@@ -36,14 +30,12 @@ class ImageOptimize implements ShouldQueue
      * Create a new job instance.
      *
      * @param Image $image
-     * @param Bucket $bucket
      * @param View $view
      */
-    public function __construct(Image $image, Bucket $bucket, View $view)
+    public function __construct(Image $image, View $view)
     {
         $this->queue = QueueEnum::OPTIMIZE;
         $this->image = $image;
-        $this->bucket = $bucket;
         $this->view = $view;
     }
 

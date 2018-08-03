@@ -37,9 +37,10 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $time = Carbon::now()->subMinute();
-        dispatch(new ImageReprocessing($time));
-        die;
+
+//        $time = Carbon::now()->subMinute();
+//        dispatch(new ImageReprocessing($time));
+//        die;
 
         $bucket = Bucket::query()->first();
         if (!$bucket) {

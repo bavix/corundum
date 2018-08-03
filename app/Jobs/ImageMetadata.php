@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Corundum\Kit\ImagePath;
+use App\Corundum\Kit\Path;
 use App\Enums\Queue\QueueEnum;
-use App\Models\Bucket;
 use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,21 +23,14 @@ class ImageMetadata implements ShouldQueue
     protected $image;
 
     /**
-     * @var Bucket
-     */
-    protected $bucket;
-
-    /**
      * Create a new job instance.
      *
      * @param Image $image
-     * @param Bucket $bucket
      */
-    public function __construct(Image $image, Bucket $bucket)
+    public function __construct(Image $image)
     {
         $this->queue = QueueEnum::METADATA;
         $this->image = $image;
-        $this->bucket = $bucket;
     }
 
     /**
@@ -48,7 +40,8 @@ class ImageMetadata implements ShouldQueue
      */
     public function handle(): void
     {
-        $image = ImageManager::make(ImagePath::physical($this->image, $this->bucket));
+        $physical = Path::physical($this->image);
+        $image = ImageManager::make($physical);
 
         $this->image->update([
             'width' => $image->width(),

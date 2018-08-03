@@ -36,8 +36,15 @@ class CreateImagesTable extends Migration
             ],
             [
                 'type' => 'integer',
-                'name' => 'Image size',
+                'name' => 'File size',
                 'slug' => 'size',
+                'entities' => [\App\Models\Image::class],
+                'group' => 'metadata',
+            ],
+            [
+                'type' => 'boolean',
+                'name' => 'Alpha channel',
+                'slug' => 'alpha',
                 'entities' => [\App\Models\Image::class],
                 'group' => 'metadata',
             ]

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Corundum\Kit\ImagePath;
+use App\Corundum\Kit\Path;
 use App\Http\Requests\ImageRequest;
 use App\Http\Resources\ImageResource;
 use App\Models\Bucket;
@@ -70,7 +70,7 @@ class ImageController extends Controller
             $model = new Image();
             $model->user_id = 1;
             $model->bucket_id = $bucketId;
-            $path = ImagePath::physical($model, $bucket);
+            $path = Path::physical($model);
             if ($file->move(\dirname($path), \basename($path))) {
                 $model->save();
                 $collection->push($model->setRelation(Image::REL_BUCKET, $bucket));

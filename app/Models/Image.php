@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\Image\ImageStatusEnum;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
-use Rinvex\Attributes\Traits\Attributable;
 
 /**
  * App\Models\Image
@@ -33,53 +29,10 @@ use Rinvex\Attributes\Traits\Attributable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereUserId($value)
  * @mixin \Eloquent
  */
-class Image extends Model
+class Image extends Fileable
 {
 
-    use Attributable;
-
     public const REL_VIEWS = 'views';
-    public const REL_BUCKET = 'bucket';
-    public const REL_USER = 'user';
-    public const REL_EAV = 'eav';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['name'];
-
-    /**
-     * Image constructor.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        if (empty($attributes['name'])) {
-            $attributes['name'] = Str::uuid()->toString();
-        }
-
-        parent::__construct($attributes);
-        if ($this->status === null) {
-            $this->status = ImageStatusEnum::INITIALIZED;
-        }
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function bucket(): BelongsTo
-    {
-        return $this->belongsTo(Bucket::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     /**
      * @return HasMany

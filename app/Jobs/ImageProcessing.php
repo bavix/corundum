@@ -3,11 +3,10 @@
 namespace App\Jobs;
 
 use App\Corundum\Adapter;
-use App\Corundum\Kit\ImagePath;
+use App\Corundum\Kit\Path;
 use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Image\ImageViewsEnum;
 use App\Enums\Queue\QueueEnum;
-use App\Models\Bucket;
 use App\Models\Image;
 use App\Models\View;
 use Illuminate\Bus\Queueable;
@@ -17,7 +16,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class ImageProcessing implements ShouldQueue
 {
@@ -41,11 +39,6 @@ class ImageProcessing implements ShouldQueue
     protected $image;
 
     /**
-     * @var Bucket
-     */
-    protected $bucket;
-
-    /**
      * Принудительная генерация изображений
      *
      * @var bool
@@ -56,14 +49,12 @@ class ImageProcessing implements ShouldQueue
      * ImageProcessing constructor.
      *
      * @param Image $image
-     * @param Bucket $bucket
      * @param bool $force
      */
-    public function __construct(Image $image, Bucket $bucket, bool $force = false)
+    public function __construct(Image $image, bool $force = false)
     {
         $this->queue = QueueEnum::PROCESSING;
         $this->image = $image;
-        $this->bucket = $bucket;
         $this->force = $force;
     }
 
@@ -74,7 +65,7 @@ class ImageProcessing implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!ImagePath::exists($this->image, $this->bucket)) {
+        if (!Path::exists($this->image)) {
             Log::error('The original image was deleted', $this->image->toArray());
             $this->failed();
             return;
@@ -94,12 +85,7 @@ class ImageProcessing implements ShouldQueue
         /**
          * Ставим задачу на получение метаданных
          */
-        dispatch(new ImageMetadata($this->image, $this->bucket));
-
-        /**
-         * загружаем корзину
-         */
-        $this->image->load(Image::REL_BUCKET);
+        dispatch(new ImageMetadata($this->image));
 
         /**
          * Генерируем представления
@@ -122,8 +108,8 @@ class ImageProcessing implements ShouldQueue
      */
     protected function processing(View $view): void
     {
-        $physical = ImagePath::physical($this->image, $this->bucket);
-        $thumbnail = ImagePath::physical($this->image, $this->bucket, $view);
+        $physical = Path::physical($this->image);
+        $thumbnail = Path::physical($this->image, $view->name);
 
         /**
          * Файл принудительно генерировать не нужно и
@@ -139,7 +125,7 @@ class ImageProcessing implements ShouldQueue
         /**
          * создаем директорию
          */
-        ImagePath::makeDirectory($this->image, $this->bucket, $view);
+        Path::makeDirectory($this->image, $view->name);
 
         /**
          * @var Adapter $adapter
@@ -148,7 +134,7 @@ class ImageProcessing implements ShouldQueue
         $adapter->apply($view->toArray())
             ->save($thumbnail, $view->quality);
 
-        dispatch(new ImageOptimize($this->image, $this->bucket, $view));
+        dispatch(new ImageOptimize($this->image, $view));
     }
 
     /**
@@ -156,7 +142,7 @@ class ImageProcessing implements ShouldQueue
      */
     protected function failed(): void
     {
-        dispatch(new ImageFailed($this->image, $this->bucket));
+        dispatch(new ImageFailed($this->image));
     }
 
 }
