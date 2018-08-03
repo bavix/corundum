@@ -47,15 +47,8 @@ class TestCommand extends Command
             $bucket->name = 'test';
             $bucket->save();
         }
-
-        $image = Image::query()->first();
-
-        if (!$image) {
-            $image = new Image();
-            $image->bucket_id = $bucket->id;
-            $image->user_id = 1;
-            $image->save();
-        }
+        
+        $userId = 1;
 
         if (View::query()->count() < 3) {
             $view = new View();
@@ -64,8 +57,8 @@ class TestCommand extends Command
             $view->height = 100;
             $view->width = 100;
             $view->quality = 75;
-            $view->user_id = $image->user_id;
-            $view->bucket_id = $image->user_id;
+            $view->user_id = $userId;
+            $view->bucket_id = $userId;
             $view->save();
 
             $view = new View();
@@ -74,8 +67,8 @@ class TestCommand extends Command
             $view->height = 100;
             $view->width = 100;
             $view->quality = 75;
-            $view->user_id = $image->user_id;
-            $view->bucket_id = $image->user_id;
+            $view->user_id = $userId;
+            $view->bucket_id = $userId;
             $view->save();
 
             $view = new View();
@@ -84,12 +77,21 @@ class TestCommand extends Command
             $view->height = 100;
             $view->width = 100;
             $view->quality = 75;
-            $view->user_id = $image->user_id;
-            $view->bucket_id = $image->user_id;
+            $view->user_id = $userId;
+            $view->bucket_id = $userId;
             $view->save();
         }
 
-        var_dump($image->toArray());
+//        $image = Image::query()->first();
+//
+//        if (!$image) {
+//            $image = new Image();
+//            $image->bucket_id = $bucket->id;
+//            $image->user_id = $userId;
+//            $image->save();
+//        }
+//
+//        var_dump($image->toArray());
         die;
     }
 

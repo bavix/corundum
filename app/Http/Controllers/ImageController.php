@@ -60,6 +60,7 @@ class ImageController extends Controller
     {
         /**
          * @var UploadedFile $file
+         * @var Bucket $bucket
          */
         $files = $request->files->get('file');
         $bucket = Bucket::findOrFail($bucketId);
@@ -70,7 +71,7 @@ class ImageController extends Controller
             $model->user_id = 1;
             $model->bucket_id = $bucketId;
             $path = ImagePath::physical($model, $bucket);
-            if ($file->move(\dirname($path), $model->name)) {
+            if ($file->move(\dirname($path), \basename($path))) {
                 $model->save();
                 $collection->push($model->setRelation(Image::REL_BUCKET, $bucket));
             }

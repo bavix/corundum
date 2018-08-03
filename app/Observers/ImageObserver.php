@@ -2,7 +2,7 @@
 
 namespace App\Observes;
 
-use App\Corundum\Kit\FilePath;
+use App\Corundum\Kit\ImagePath;
 use App\Enums\Image\ImageStatusEnum;
 use App\Jobs\ImageProcessing;
 use App\Models\Image;
@@ -18,7 +18,7 @@ class ImageObserver
         /**
          * Если изображение уже существует, тогда меняем статус на "uploaded"
          */
-        if ($image->status === ImageStatusEnum::INITIALIZED && FilePath::exists($image)) {
+        if ($image->status === ImageStatusEnum::INITIALIZED && ImagePath::exists($image, $image->bucket)) {
             $image->status = ImageStatusEnum::UPLOADED;
             $image->save();
         }

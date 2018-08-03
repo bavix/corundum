@@ -122,7 +122,7 @@ class ImageProcessing implements ShouldQueue
     protected function processing(View $view): void
     {
         $physical = ImagePath::physical($this->image, $this->bucket);
-        $thumbnail = ImagePath::physical($this->image, $this->bucket, $view->name);
+        $thumbnail = ImagePath::physical($this->image, $this->bucket, $view);
 
         /**
          * Файл принудительно генерировать не нужно и
@@ -138,7 +138,7 @@ class ImageProcessing implements ShouldQueue
         /**
          * создаем директорию
          */
-        ImagePath::makeDirectory($this->image, $view->name);
+        ImagePath::makeDirectory($this->image, $this->bucket, $view);
 
         /**
          * @var Adapter $adapter

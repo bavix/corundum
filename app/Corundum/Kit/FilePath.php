@@ -2,7 +2,9 @@
 
 namespace App\Corundum\Kit;
 
+use App\Models\Bucket;
 use App\Models\Image;
+use App\Models\View;
 use Illuminate\Support\Facades\Storage;
 
 class FilePath
@@ -20,13 +22,13 @@ class FilePath
 
     /**
      * @param Image $image
-     * @param string $bucket
-     * @param null|string $view
+     * @param Bucket|string $bucket
+     * @param null|View|string $view
      *
      * @return string
      * @throws
      */
-    public static function makeDirectory(Image $image, string $bucket, ?string $view = null): string
+    public static function makeDirectory(Image $image, $bucket, $view = null): string
     {
         $path = static::relative($image, $bucket, $view);
         $directory = \dirname($path);
@@ -37,13 +39,13 @@ class FilePath
 
     /**
      * @param Image $image
-     * @param string $bucket
-     * @param null|string $view
+     * @param Bucket|string $bucket
+     * @param null|View|string $view
      *
      * @return string
      * @throws
      */
-    public static function exists(Image $image, string $bucket, ?string $view = null): string
+    public static function exists(Image $image, $bucket, $view = null): string
     {
         return Storage::disk(config('corundum.disk.' . static::$type))
             ->exists(static::relative($image, $bucket, $view));
@@ -51,30 +53,32 @@ class FilePath
 
     /**
      * @param Image $image
-     * @param string $bucket
-     * @param null|string $view
+     * @param Bucket|string $bucket
+     * @param null|View|string $view
      *
      * @return string
      */
-    public static function relative(Image $image, string $bucket, ?string $view = null): string
+    public static function relative(Image $image, $bucket, $view = null): string
     {
         return static::path($image, $bucket, $view);
     }
 
     /**
      * @param Image $image
-     * @param string $bucket
-     * @param null|string $view
+     * @param Bucket|string $bucket
+     * @param null|View|string $view
      *
      * @return string
      */
-    protected static function path(Image $image, string $bucket, ?string $view = null): string
+    protected static function path(Image $image, $bucket, $view = null): string
     {
         [$xx, $yy] = static::split($image->name);
+        $bucketName = \is_object($bucket) ? $bucket->name : $bucket;
+        $viewName = \is_object($view) ? $view->name : $view;
 
         return \implode(
             '/',
-            [static::viewPath($bucket, $view), $xx, $yy, $image->name]
+            [static::viewPath($bucketName, $viewName), $xx, $yy, $image->name]
         );
     }
 
@@ -92,12 +96,12 @@ class FilePath
     }
 
     /**
-     * @param string $bucket
-     * @param null|string $view
+     * @param Bucket|string $bucket
+     * @param null|View|string $view
      *
      * @return string
      */
-    protected static function viewPath(string $bucket, ?string $view = null): string
+    protected static function viewPath($bucket, $view = null): string
     {
         if ($view === null) {
             return static::$type . '/' . $bucket;
@@ -108,13 +112,13 @@ class FilePath
 
     /**
      * @param Image $image
-     * @param string $bucket
-     * @param string $view
+     * @param Bucket|string $bucket
+     * @param null|View|string $view
      *
      * @return string
      * @throws
      */
-    public static function physical(Image $image, string $bucket, ?string $view = null): string
+    public static function physical(Image $image, $bucket, $view = null): string
     {
         return Storage::disk(config('corundum.disk.' . static::$type))
             ->path(static::relative($image, $bucket, $view));
