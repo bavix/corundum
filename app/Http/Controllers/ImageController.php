@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Corundum\Kit\Path;
+use App\Enums\Image\ImageStatusEnum;
 use App\Http\Requests\ImageRequest;
 use App\Http\Resources\ImageResource;
 use App\Models\Bucket;
@@ -27,6 +28,7 @@ class ImageController extends Controller
     {
         $relations = [Image::REL_BUCKET, Image::REL_EAV];
         $image = Image::whereUserId(1)
+            ->where('status', '!=', ImageStatusEnum::DELETED)
             ->orderByDesc('id')
             ->with($relations);
 

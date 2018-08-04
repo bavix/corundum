@@ -34,19 +34,19 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        View::query()
-            ->orderByDesc('id')
-            ->first()
-            ->delete();
+//        View::query()
+//            ->orderByDesc('id')
+//            ->first()
+//            ->delete();
+//
+//        die;
 
-        die;
-
-        Image::query()
-            ->orderByDesc('id')
-            ->first()
-            ->delete();
-
-        die;
+//        Image::query()
+//            ->orderByDesc('id')
+//            ->first()
+//            ->delete();
+//
+//        die;
 
         $time = Carbon::now()->subMinute();
         dispatch(new ImageReprocessing($time));
