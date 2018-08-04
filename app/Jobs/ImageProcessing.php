@@ -59,7 +59,7 @@ class ImageProcessing implements ShouldQueue
      */
     public function __construct(Image $image, View $view, bool $force = false)
     {
-        $this->queue = QueueEnum::PROCESSING;
+        $this->queue = QueueEnum::IMAGE_PROCESSING;
         $this->image = $image;
         $this->view = $view;
         $this->force = $force;

@@ -4,8 +4,8 @@ namespace App\Corundum\Adapters;
 
 use App\Corundum\Adapter;
 use App\Corundum\Point;
-use Intervention\Image\Image;
 use Intervention\Image\Facades\Image as ImageManager;
+use Intervention\Image\Image;
 
 class None extends Adapter
 {

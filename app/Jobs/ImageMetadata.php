@@ -29,7 +29,7 @@ class ImageMetadata implements ShouldQueue
      */
     public function __construct(Image $image)
     {
-        $this->queue = QueueEnum::METADATA;
+        $this->queue = QueueEnum::IMAGE_METADATA;
         $this->image = $image;
     }
 

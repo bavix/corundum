@@ -2,20 +2,15 @@
 
 namespace App\Jobs;
 
-use App\Corundum\Adapter;
 use App\Corundum\Kit\Path;
-use App\Enums\Image\ImageFormatsEnum;
 use App\Enums\Image\ImageStatusEnum;
-use App\Enums\Image\ImageViewsEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
-use App\Models\View;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class ImageQueue implements ShouldQueue
@@ -43,7 +38,7 @@ class ImageQueue implements ShouldQueue
      */
     public function __construct(Image $image, bool $force = false)
     {
-        $this->queue = QueueEnum::QUEUE;
+        $this->queue = QueueEnum::IMAGE_QUEUE;
         $this->image = $image;
         $this->force = $force;
     }

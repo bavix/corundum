@@ -9,40 +9,50 @@ class QueueEnum extends Enum
     /**
      * Генерация миниатюр
      */
-    public const QUEUE = 'queue';
+    public const IMAGE_QUEUE = 'image_queue';
 
     /**
      * Получение метаданных
      */
-    public const METADATA = 'metadata';
+    public const IMAGE_METADATA = 'image_metadata';
 
     /**
      * Конвертируем в webp
      */
-    public const WEBP = 'webp';
+    public const IMAGE_WEBP = 'image_webp';
 
     /**
      * Оптимизация изображений
      */
-    public const OPTIMIZE = 'optimize';
+    public const IMAGE_OPTIMIZE = 'image_optimize';
 
     /**
      * Пробуем обработать изображения еще раз
      */
-    public const REPROCESSING = 'reprocessing';
+    public const IMAGE_REPROCESSING = 'image_reprocessing';
 
     /**
      * Генерация миниатюр
      */
-    public const PROCESSING = 'processing';
+    public const IMAGE_PROCESSING = 'image_processing';
 
     /**
      * Удаление изображений и миниатюр
      */
-    public const DELETING = 'deleting';
+    public const IMAGE_DELETING = 'image_deleting';
 
     /**
      * Обрабока плохих изображений
      */
-    public const FAILED = 'failed';
+    public const IMAGE_FAILED = 'image_failed';
+
+    /**
+     * Добавляет генерацию миниатюр
+     */
+    public const VIEW_PROCESSING = 'view_processing';
+
+    /**
+     * Удаляем миниатюры
+     */
+    public const VIEW_DELETING = 'view_deleting';
 }

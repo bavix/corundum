@@ -2,61 +2,14 @@
 
 namespace App\Enums\Image;
 
-use App\Enums\Enum;
+use App\Enums\File\FileStatusEnum;
 
-class ImageStatusEnum extends Enum
+class ImageStatusEnum extends FileStatusEnum
 {
-    /**
-     * модель создана
-     *
-     * @var string
-     */
-    public const INITIALIZED = 'initialized';
-
-    /**
-     * Загружено
-     *
-     *  Получает метаданные и ставит в очередь на генерацию миниатюрок
-     *
-     * @var string
-     */
-    public const UPLOADED = 'uploaded';
-
     /**
      * Поставлено в очередь (генерация миниатюрок)
      *
      * @var string
      */
     public const PROCESSING = 'processing';
-
-    /**
-     * получены метаданные + сгенерированы изображения
-     *
-     * - При обновлении конфигураций,
-     *  все изображения должны переходить в статус PROCESSING
-     *
-     * @var string
-     */
-    public const FINISHED = 'finished';
-
-    /**
-     * Поставлено на удаление
-     *
-     * @var string
-     */
-    public const DELETING = 'deleting';
-
-    /**
-     * изображение удалено
-     *
-     * @var string
-     */
-    public const DELETED = 'deleted';
-
-    /**
-     * Проблемное изображение
-     *
-     * @var string
-     */
-    public const FAILED = 'failed';
 }

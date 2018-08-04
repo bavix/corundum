@@ -29,7 +29,7 @@ class ImageDeleting implements ShouldQueue
      */
     public function __construct(Image $image)
     {
-        $this->queue = QueueEnum::DELETING;
+        $this->queue = QueueEnum::IMAGE_DELETING;
         $this->image = $image;
     }
 

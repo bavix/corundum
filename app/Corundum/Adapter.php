@@ -2,8 +2,8 @@
 
 namespace App\Corundum;
 
-use Intervention\Image\Image;
 use Intervention\Image\Facades\Image as ImageManager;
+use Intervention\Image\Image;
 
 abstract class Adapter implements DriverInterface
 {

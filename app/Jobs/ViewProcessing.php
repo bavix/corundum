@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Corundum\Kit\Path;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
 use App\Models\View;
@@ -11,17 +10,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 
-class ImageOptimize implements ShouldQueue
+class ViewProcessing implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * @var Image
-     */
-    protected $image;
 
     /**
      * @var View
@@ -29,16 +22,21 @@ class ImageOptimize implements ShouldQueue
     protected $view;
 
     /**
-     * Create a new job instance.
-     *
-     * @param Image $image
-     * @param View $view
+     * @var bool
      */
-    public function __construct(Image $image, View $view)
+    protected $force;
+
+    /**
+     * ViewCreated constructor.
+     *
+     * @param View $view
+     * @param bool $force
+     */
+    public function __construct(View $view, bool $force = false)
     {
-        $this->queue = QueueEnum::IMAGE_OPTIMIZE;
-        $this->image = $image;
+        $this->queue = QueueEnum::VIEW_PROCESSING;
         $this->view = $view;
+        $this->force = $force;
     }
 
     /**
@@ -48,12 +46,9 @@ class ImageOptimize implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->view->optimize) {
-            return;
-        }
-
-        OptimizerChainFactory::create()
-            ->optimize(Path::physical($this->image, $this->view->name));
+        $this->view->images()->each(function (Image $image) {
+            dispatch(new ImageProcessing($image, $this->view, $this->force));
+        });
     }
 
 }

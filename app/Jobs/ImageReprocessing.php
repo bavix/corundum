@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class ImageReprocessing implements ShouldQueue
 {
@@ -30,7 +29,7 @@ class ImageReprocessing implements ShouldQueue
      */
     public function __construct(Carbon $time)
     {
-        $this->queue = QueueEnum::REPROCESSING;
+        $this->queue = QueueEnum::IMAGE_REPROCESSING;
         $this->time = $time;
     }
 

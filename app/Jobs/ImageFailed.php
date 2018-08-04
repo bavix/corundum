@@ -30,7 +30,7 @@ class ImageFailed implements ShouldQueue
      */
     public function __construct(Image $image)
     {
-        $this->queue = QueueEnum::FAILED;
+        $this->queue = QueueEnum::IMAGE_FAILED;
         $this->image = $image;
     }
 

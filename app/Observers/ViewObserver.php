@@ -2,6 +2,8 @@
 
 namespace App\Observes;
 
+use App\Jobs\ViewDeleting;
+use App\Jobs\ViewProcessing;
 use App\Models\View;
 
 class ViewObserver
@@ -14,7 +16,7 @@ class ViewObserver
      */
     public function created(View $view): void
     {
-        // todo: создаем миниатюру
+        dispatch(new ViewProcessing($view));
     }
 
     /**
@@ -24,7 +26,7 @@ class ViewObserver
      */
     public function updated(View $view): void
     {
-        // todo: обновляем миниатюру
+        dispatch(new ViewProcessing($view, true));
     }
 
     /**
@@ -34,7 +36,7 @@ class ViewObserver
      */
     public function deleted(View $view): void
     {
-        // todo: удаляем миниатюру
+        dispatch(new ViewDeleting($view));
     }
 
 }

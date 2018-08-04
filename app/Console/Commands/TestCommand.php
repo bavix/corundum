@@ -2,18 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Corundum\Kit\Path;
-use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Image\ImageViewsEnum;
-use App\Jobs\ImageFailed;
 use App\Jobs\ImageReprocessing;
 use App\Models\Bucket;
-use App\Models\Image;
 use App\Models\View;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class TestCommand extends Command
 {
@@ -49,7 +43,7 @@ class TestCommand extends Command
             $bucket->name = 'test';
             $bucket->save();
         }
-        
+
         $userId = 1;
 
         if (View::query()->count() < 3) {

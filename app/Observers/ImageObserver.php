@@ -4,6 +4,7 @@ namespace App\Observes;
 
 use App\Corundum\Kit\Path;
 use App\Enums\Image\ImageStatusEnum;
+use App\Jobs\ImageDeleting;
 use App\Jobs\ImageQueue;
 use App\Models\Image;
 
@@ -40,7 +41,7 @@ class ImageObserver
     public function deleting(Image $image): void
     {
         $image->status = ImageStatusEnum::DELETING;
-        // todo добавить удаление миниатюр
+        dispatch(new ImageDeleting($image));
     }
 
 }

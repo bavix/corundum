@@ -37,7 +37,7 @@ class ImageWebp implements ShouldQueue
      */
     public function __construct(Image $image, View $view)
     {
-        $this->queue = QueueEnum::WEBP;
+        $this->queue = QueueEnum::IMAGE_WEBP;
         $this->image = $image;
         $this->view = $view;
     }

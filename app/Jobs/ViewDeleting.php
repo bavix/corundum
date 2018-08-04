@@ -11,17 +11,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 
-class ImageOptimize implements ShouldQueue
+class ViewDeleting implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * @var Image
-     */
-    protected $image;
 
     /**
      * @var View
@@ -29,15 +23,13 @@ class ImageOptimize implements ShouldQueue
     protected $view;
 
     /**
-     * Create a new job instance.
+     * ViewCreated constructor.
      *
-     * @param Image $image
      * @param View $view
      */
-    public function __construct(Image $image, View $view)
+    public function __construct(View $view)
     {
-        $this->queue = QueueEnum::IMAGE_OPTIMIZE;
-        $this->image = $image;
+        $this->queue = QueueEnum::VIEW_PROCESSING;
         $this->view = $view;
     }
 
@@ -48,12 +40,9 @@ class ImageOptimize implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->view->optimize) {
-            return;
-        }
-
-        OptimizerChainFactory::create()
-            ->optimize(Path::physical($this->image, $this->view->name));
+        $this->view->images()->each(function (Image $image) {
+            Path::remove($image, $this->view->name);
+        });
     }
 
 }
