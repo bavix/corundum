@@ -7,13 +7,13 @@ RUN apk add libmcrypt-dev \
    libwebp libwebp-dev libpng-dev libjpeg pngquant \
    optipng gifsicle pngcrush \
    mysql-client \
-   supervisor \
+   supervisor dcron \
    && pecl install imagick amqp \
    && docker-php-ext-enable imagick amqp \
    && docker-php-ext-install pdo_mysql zip bcmath
 
 COPY crontab /var/spool/cron/crontabs/root
-COPY schedule.sh /etc/periodic/minutely/
-RUN chmod +x /etc/periodic/minutely/*.sh
+COPY schedule /etc/periodic/minutely/
+RUN chmod a+x /etc/periodic/minutely/*
 
 CMD ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf"]
