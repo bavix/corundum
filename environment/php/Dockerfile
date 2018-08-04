@@ -20,5 +20,7 @@ RUN ln -s /usr/local/bin/docker-entrypoint / && chmod +x /docker-entrypoint
 COPY ./startup.sh /usr/local/bin/startup
 RUN ln -s /usr/local/bin/startup / && chmod +x /startup
 
+COPY php.ini /usr/local/etc/php/
+
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["php-fpm"]

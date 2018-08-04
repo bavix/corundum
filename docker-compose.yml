@@ -66,9 +66,9 @@ services:
     build:
       context: ./environment/supervisor
     volumes:
-    - ./:/var/www/html
-    - ./storage/supervisor:/var/log/supervisor
-    - ./environment/supervisor/supervisord.conf:/etc/supervisor.d/consumers.ini
+      - ./:/var/www/html
+      - ./storage/supervisor:/var/log/supervisor
+      - ./environment/supervisor/supervisord.conf:/etc/supervisor.d/consumers.ini
     networks:
       static:
         ipv4_address: 172.16.241.8
