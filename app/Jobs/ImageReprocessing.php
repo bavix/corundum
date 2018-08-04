@@ -23,14 +23,21 @@ class ImageReprocessing implements ShouldQueue
     protected $time;
 
     /**
+     * @var string
+     */
+    protected $status;
+
+    /**
      * ImageProcessing constructor.
      *
      * @param Carbon $time
+     * @param string  $status
      */
-    public function __construct(Carbon $time)
+    public function __construct(Carbon $time, string $status)
     {
         $this->queue = QueueEnum::IMAGE_REPROCESSING;
         $this->time = $time;
+        $this->status = $status;
     }
 
     /**
@@ -41,8 +48,8 @@ class ImageReprocessing implements ShouldQueue
     public function handle(): void
     {
         $query = Image::with([Image::REL_BUCKET])
-            ->whereDate('updated_at', '<=', $this->time)
-            ->where('status', ImageStatusEnum::PROCESSING);
+            ->whereTime('updated_at', '<=', $this->time)
+            ->where('status', $this->status);
 
         $query->each(function (Image $image) {
             dispatch(new ImageQueue($image, true));

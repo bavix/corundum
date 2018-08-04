@@ -12,4 +12,8 @@ RUN apk add libmcrypt-dev \
    && docker-php-ext-enable imagick amqp \
    && docker-php-ext-install pdo_mysql zip bcmath
 
+COPY crontab /var/spool/cron/crontabs/root
+COPY schedule.sh /etc/periodic/minutely/
+RUN chmod +x /etc/periodic/minutely/*.sh
+
 CMD ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf"]
