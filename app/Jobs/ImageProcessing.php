@@ -16,7 +16,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 
 class ImageProcessing implements ShouldQueue
 {
@@ -40,6 +39,11 @@ class ImageProcessing implements ShouldQueue
     protected $image;
 
     /**
+     * @var Image
+     */
+    protected $view;
+
+    /**
      * Принудительная генерация изображений
      *
      * @var bool
@@ -50,12 +54,14 @@ class ImageProcessing implements ShouldQueue
      * ImageProcessing constructor.
      *
      * @param Image $image
+     * @param View $view
      * @param bool $force
      */
-    public function __construct(Image $image, bool $force = false)
+    public function __construct(Image $image, View $view, bool $force = false)
     {
         $this->queue = QueueEnum::PROCESSING;
         $this->image = $image;
+        $this->view = $view;
         $this->force = $force;
     }
 
@@ -66,51 +72,8 @@ class ImageProcessing implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!Path::exists($this->image)) {
-            Log::error('The original image was deleted', $this->image->toArray());
-            $this->failed();
-            return;
-        }
-
-        if (!$this->force && $this->image->status === ImageStatusEnum::PROCESSING) {
-            Log::info('The image is already in process', $this->image->toArray());
-            return;
-        }
-
-        $states = [ImageStatusEnum::UPLOADED];
-        if (\in_array($this->image->status, $states, true)) {
-            $this->image->status = ImageStatusEnum::PROCESSING;
-            $this->image->save();
-        }
-
-        /**
-         * Ставим задачу на получение метаданных
-         */
-        dispatch(new ImageMetadata($this->image));
-
-        /**
-         * Генерируем представления
-         */
-        foreach ($this->image->views as $view) {
-            $this->processing($view);
-        }
-
-        /**
-         * Завершено
-         */
-        $this->image->status = ImageStatusEnum::FINISHED;
-        $this->image->save();
-    }
-
-    /**
-     * Процесс генерации миниатюр
-     *
-     * @param View $view
-     */
-    protected function processing(View $view): void
-    {
         $physical = Path::physical($this->image);
-        $thumbnail = Path::physical($this->image, $view->name);
+        $thumbnail = Path::physical($this->image, $this->view->name);
 
         /**
          * Файл принудительно генерировать не нужно и
@@ -126,29 +89,20 @@ class ImageProcessing implements ShouldQueue
         /**
          * создаем директорию
          */
-        Path::makeDirectory($this->image, $view->name);
+        Path::makeDirectory($this->image, $this->view->name);
 
         /**
          * @var Adapter $adapter
          */
-        $adapter = new $this->adapters[$view->type]($physical);
-        $image = $adapter->apply($view->toArray());
+        $adapter = new $this->adapters[$this->view->type]($physical);
+        $image = $adapter->apply($this->view->toArray());
 
-        $image->backup();
-        $image->encode(ImageFormatsEnum::PNG, $view->quality)
-            ->save($thumbnail);
+        $image->encode(ImageFormatsEnum::PNG, $this->view->quality)
+            ->save($thumbnail)
+            ->destroy();
 
-        if ($view->webp) {
-            $image->reset();
-            $image->encode(ImageFormatsEnum::WEBP, $view->quality)
-                ->save($thumbnail . '.' . ImageFormatsEnum::WEBP)
-                ->destroy();
-        }
-
-        // Free up memory
-        $image->destroy();
-
-        dispatch(new ImageOptimize($this->image, $view));
+        dispatch(new ImageOptimize($this->image, $this->view));
+        dispatch(new ImageWebp($this->image, $this->view));
     }
 
     /**
@@ -156,6 +110,9 @@ class ImageProcessing implements ShouldQueue
      */
     protected function failed(): void
     {
+        $this->image->status = ImageStatusEnum::PROCESSING;
+        $this->image->save();
+
         dispatch(new ImageFailed($this->image));
     }
 

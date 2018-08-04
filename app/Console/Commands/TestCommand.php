@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Corundum\Kit\Path;
 use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Image\ImageViewsEnum;
+use App\Jobs\ImageFailed;
 use App\Jobs\ImageReprocessing;
 use App\Models\Bucket;
 use App\Models\Image;
@@ -37,7 +39,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-
         $time = Carbon::now()->subMinute();
         dispatch(new ImageReprocessing($time));
         die;

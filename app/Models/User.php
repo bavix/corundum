@@ -11,7 +11,6 @@ use Laravel\Passport\HasApiTokens;
  * App\Models\User
  *
  * @property int $id
- * @property string $login
  * @property string $email
  * @property string $password
  * @property string|null $remember_token
@@ -25,7 +24,6 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereLogin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
@@ -42,7 +40,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'login', 'email', 'password',
+        'email', 'password',
     ];
 
     /**

@@ -4,7 +4,7 @@ namespace App\Observes;
 
 use App\Corundum\Kit\Path;
 use App\Enums\Image\ImageStatusEnum;
-use App\Jobs\ImageProcessing;
+use App\Jobs\ImageQueue;
 use App\Models\Image;
 
 class ImageObserver
@@ -30,7 +30,7 @@ class ImageObserver
     public function updated(Image $image): void
     {
         if ($image->status === ImageStatusEnum::UPLOADED) {
-            dispatch(new ImageProcessing($image));
+            dispatch(new ImageQueue($image));
         }
     }
 

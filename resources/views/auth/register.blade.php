@@ -19,19 +19,6 @@
                 </span>
             @endif
         </div>
-        
-        <div class="form-group">
-            <label for="login">Login</label>
-            <input type="text" name="login" value="{{ old('login') }}"
-                   class="form-control{{ $errors->has('login') ? ' is-invalid' : '' }}"
-                   id="login" placeholder="Enter your login" />
-
-            @if ($errors->has('login'))
-                <span class="invalid-feedback">
-                    <strong>{{ $errors->first('login') }}</strong>
-                </span>
-            @endif
-        </div>
 
         <div class="form-group">
             <label for="password">Password</label>

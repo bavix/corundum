@@ -46,7 +46,7 @@ class ImageReprocessing implements ShouldQueue
             ->where('status', ImageStatusEnum::PROCESSING);
 
         $query->each(function (Image $image) {
-            dispatch(new ImageProcessing($image, true));
+            dispatch(new ImageQueue($image, true));
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Corundum\Kit\Path;
+use App\Enums\Image\ImageFormatsEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
 use App\Models\View;
@@ -11,9 +12,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Intervention\Image\Facades\Image as ImageManager;
 
-class ImageOptimize implements ShouldQueue
+class ImageWebp implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -36,7 +37,7 @@ class ImageOptimize implements ShouldQueue
      */
     public function __construct(Image $image, View $view)
     {
-        $this->queue = QueueEnum::OPTIMIZE;
+        $this->queue = QueueEnum::WEBP;
         $this->image = $image;
         $this->view = $view;
     }
@@ -48,12 +49,15 @@ class ImageOptimize implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->view->optimize) {
+        if (!$this->view->webp) {
             return;
         }
 
-        OptimizerChainFactory::create()
-            ->optimize(Path::physical($this->image, $this->view->name));
+        $path = Path::physical($this->image, $this->view->name);
+        $image = ImageManager::make($path);
+        $image->encode(ImageFormatsEnum::WEBP, 100)
+            ->save($path . '.' . ImageFormatsEnum::WEBP)
+            ->destroy();
     }
 
 }

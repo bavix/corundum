@@ -2,12 +2,17 @@
 
 namespace App\Corundum\Kit;
 
+use App\Enums\Image\ImageFormatsEnum;
+use App\Enums\Image\ImageStatusEnum;
 use App\Models\Bucket;
 use App\Models\Fileable;
 use App\Models\Image;
 use App\Models\File;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use phpDocumentor\Reflection\Types\Null_;
 
 class Path
 {
@@ -57,6 +62,37 @@ class Path
     /**
      * @param Fileable $model
      * @param null|string $view
+     */
+    public static function remove(Fileable $model, ?string $view = null): void
+    {
+        $disk = static::disk($model);
+
+        $relative = self::relative($model, $view);
+        $disk->delete($relative);
+
+        foreach (ImageFormatsEnum::enums() as $enum) {
+            echo $relative . '.' . $enum . PHP_EOL;
+            $disk->delete($relative . '.' . $enum);
+        }
+
+        $directory = self::directory($model, $view);
+
+        do {
+            $list = $disk->listContents($directory);
+
+            if (!empty($list)) {
+                break;
+            }
+
+            $disk->deleteDirectory($directory);
+            $directory = \dirname($directory);
+        }
+        while (true);
+    }
+
+    /**
+     * @param Fileable $model
+     * @param null|string $view
      *
      * @return string
      * @throws
@@ -84,6 +120,16 @@ class Path
             '/',
             [static::viewPath($model->bucket, $view), $xx, $yy, $model->name]
         );
+    }
+
+    /**
+     * @param Fileable $model
+     * @param null|string $view
+     * @return string
+     */
+    protected static function directory(Fileable $model, ?string $view = null): string
+    {
+        return \dirname(static::relative($model, $view));
     }
 
     /**

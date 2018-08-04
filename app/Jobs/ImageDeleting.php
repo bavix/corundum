@@ -3,17 +3,16 @@
 namespace App\Jobs;
 
 use App\Corundum\Kit\Path;
+use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
-use App\Models\View;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 
-class ImageOptimize implements ShouldQueue
+class ImageDeleting implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -24,21 +23,14 @@ class ImageOptimize implements ShouldQueue
     protected $image;
 
     /**
-     * @var View
-     */
-    protected $view;
-
-    /**
-     * Create a new job instance.
+     * ImageProcessing constructor.
      *
      * @param Image $image
-     * @param View $view
      */
-    public function __construct(Image $image, View $view)
+    public function __construct(Image $image)
     {
-        $this->queue = QueueEnum::OPTIMIZE;
+        $this->queue = QueueEnum::DELETING;
         $this->image = $image;
-        $this->view = $view;
     }
 
     /**
@@ -48,12 +40,13 @@ class ImageOptimize implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->view->optimize) {
-            return;
+        Path::remove($this->image);
+        foreach ($this->image->views as $view) {
+            Path::remove($this->image, $view->name);
         }
 
-        OptimizerChainFactory::create()
-            ->optimize(Path::physical($this->image, $this->view->name));
+        $this->image->status = ImageStatusEnum::DELETED;
+        $this->image->save();
     }
 
 }
