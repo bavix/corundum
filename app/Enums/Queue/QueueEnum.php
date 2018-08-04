@@ -42,6 +42,11 @@ class QueueEnum extends Enum
     public const IMAGE_DELETING = 'image_deleting';
 
     /**
+     * Получаем палитру из изображения
+     */
+    public const IMAGE_PALETTE = 'image_palette';
+
+    /**
      * Обрабока плохих изображений
      */
     public const IMAGE_FAILED = 'image_failed';

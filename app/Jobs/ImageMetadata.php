@@ -11,6 +11,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Intervention\Image\Facades\Image as ImageManager;
+use Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
 class ImageMetadata implements ShouldQueue
 {
@@ -43,6 +45,13 @@ class ImageMetadata implements ShouldQueue
         $physical = Path::physical($this->image);
         $image = ImageManager::make($physical);
 
+        $hasher = new ImageHash(
+            new DifferenceHash(),
+            ImageHash::HEXADECIMAL,
+            ImageManager::configure()
+        );
+
+        $this->image->fingerprint = $hasher->hash($physical);
         $this->image->width = $image->width();
         $this->image->height = $image->height();
         $this->image->size = $image->filesize();

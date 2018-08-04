@@ -73,6 +73,11 @@ class ImageQueue implements ShouldQueue
         dispatch(new ImageMetadata($this->image));
 
         /**
+         * Ставим задачу на получение палитры
+         */
+        dispatch(new ImagePalette($this->image));
+
+        /**
          * Генерируем представления
          */
         foreach ($this->image->views as $view) {

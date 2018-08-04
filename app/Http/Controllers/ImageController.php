@@ -26,7 +26,7 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-        $relations = [Image::REL_BUCKET, Image::REL_EAV];
+        $relations = [Image::REL_BUCKET, Image::REL_EAV, Image::REL_PALETTE];
         $image = Image::whereUserId(1)
             ->where('status', '!=', ImageStatusEnum::DELETED)
             ->orderByDesc('id')

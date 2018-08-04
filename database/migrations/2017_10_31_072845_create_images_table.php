@@ -43,6 +43,13 @@ class CreateImagesTable extends Migration
                 'group' => 'metadata',
             ],
             [
+                'type' => 'varchar',
+                'name' => 'Image fingerprint',
+                'slug' => 'fingerprint',
+                'entities' => [\App\Models\Image::class],
+                'group' => 'metadata',
+            ],
+            [
                 'type' => 'boolean',
                 'name' => 'Alpha channel',
                 'slug' => 'alpha',

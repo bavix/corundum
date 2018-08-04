@@ -31,7 +31,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Image extends Fileable
 {
 
-    public const REL_VIEWS = 'views';
+    public const REL_VIEWS   = 'views';
+    public const REL_PALETTE = 'palette';
 
     /**
      * @return HasMany
@@ -41,6 +42,14 @@ class Image extends Fileable
         return $this
             ->hasMany(View::class, 'bucket_id', 'bucket_id')
             ->where('user_id', $this->user_id);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function palette(): HasMany
+    {
+        return $this->hasMany(Color::class);
     }
 
 }
