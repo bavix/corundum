@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Enums\Image\ImageViewsEnum;
 use App\Jobs\ImageReprocessing;
 use App\Models\Bucket;
+use App\Models\Image;
 use App\Models\View;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -33,6 +34,20 @@ class TestCommand extends Command
      */
     public function handle()
     {
+        View::query()
+            ->orderByDesc('id')
+            ->first()
+            ->delete();
+
+        die;
+
+        Image::query()
+            ->orderByDesc('id')
+            ->first()
+            ->delete();
+
+        die;
+
         $time = Carbon::now()->subMinute();
         dispatch(new ImageReprocessing($time));
         die;

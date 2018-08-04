@@ -40,7 +40,6 @@ class ImageDeleting implements ShouldQueue
      */
     public function handle(): void
     {
-        Path::remove($this->image);
         foreach ($this->image->views as $view) {
             Path::remove($this->image, $view->name);
         }

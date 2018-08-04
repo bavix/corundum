@@ -43,6 +43,9 @@ class ViewDeleting implements ShouldQueue
         $this->view->images()->each(function (Image $image) {
             Path::remove($image, $this->view->name);
         });
+
+        View::whereId($this->view->id)
+            ->delete();
     }
 
 }

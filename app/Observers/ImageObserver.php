@@ -37,11 +37,14 @@ class ImageObserver
 
     /**
      * @param Image $image
+     *
+     * @return bool
      */
-    public function deleting(Image $image): void
+    public function deleting(Image $image): bool
     {
-        $image->status = ImageStatusEnum::DELETING;
         dispatch(new ImageDeleting($image));
+
+        return false;
     }
 
 }

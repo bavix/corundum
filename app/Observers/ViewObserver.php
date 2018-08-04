@@ -32,11 +32,13 @@ class ViewObserver
     /**
      * @param View $view
      *
-     * @return void
+     * @return bool
      */
-    public function deleted(View $view): void
+    public function deleting(View $view): bool
     {
         dispatch(new ViewDeleting($view));
+
+        return false;
     }
 
 }
