@@ -134,10 +134,12 @@ class ImageProcessing implements ShouldQueue
         $adapter = new $this->adapters[$view->type]($physical);
         $image = $adapter->apply($view->toArray());
 
+        $image->backup();
         $image->encode(ImageFormatsEnum::PNG, $view->quality)
             ->save($thumbnail);
 
         if ($view->webp) {
+            $image->reset();
             $image->encode(ImageFormatsEnum::WEBP, $view->quality)
                 ->save($thumbnail . '.' . ImageFormatsEnum::WEBP)
                 ->destroy();
