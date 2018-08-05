@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 class ImageOptimize implements ShouldQueue
 {
@@ -52,8 +52,8 @@ class ImageOptimize implements ShouldQueue
             return;
         }
 
-        OptimizerChainFactory::create()
-            ->optimize(Path::physical($this->image, $this->view->name));
+        $physical = Path::physical($this->image, $this->view->name);
+        ImageOptimizer::optimize($physical);
     }
 
 }

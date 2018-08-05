@@ -11,6 +11,7 @@ use App\Models\View;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use League\ColorExtractor\Palette;
+use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 class TestCommand extends Command
 {
@@ -36,13 +37,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-//        View::query()
-//            ->orderByDesc('id')
-//            ->first()
-//            ->delete();
-//
-//        die;
-
 //        Image::query()
 //            ->orderByDesc('id')
 //            ->first()

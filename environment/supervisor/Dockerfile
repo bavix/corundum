@@ -23,6 +23,7 @@ RUN apk add --no-cache libwebp freetype libpng libjpeg libjpeg-turbo \
 RUN pecl install imagick amqp
 RUN docker-php-ext-enable imagick amqp
 RUN docker-php-ext-install pdo_mysql zip bcmath gmp
+RUN apk add jpegoptim optipng pngquant
 
 # cleanup
 RUN apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev libwebp-dev \

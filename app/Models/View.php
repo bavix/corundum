@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereOptimize($value)
  * @property int $webp
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereWebp($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
  */
 class View extends Model
 {
