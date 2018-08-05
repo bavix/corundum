@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -53,11 +54,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return BelongsToMany
      */
-    public function configs(): HasMany
+    public function buckets(): BelongsToMany
     {
-        return $this->hasMany(View::class);
+        return $this->belongsToMany(Bucket::class)
+            ->withTimestamps();
     }
 
     /**
