@@ -33,4 +33,6 @@ COPY crontab /var/spool/cron/crontabs/root
 COPY schedule /etc/periodic/minutely/
 RUN chmod a+x /etc/periodic/minutely/*
 
+COPY php.ini /usr/local/etc/php/
+
 CMD ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf"]

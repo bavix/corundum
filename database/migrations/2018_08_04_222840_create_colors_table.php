@@ -20,6 +20,7 @@ class CreateColorsTable extends Migration
             $table->integer('decimal');
             $table->integer('count');
             $table->integer('image_id');
+            $table->boolean('dominant');
             $table->timestamps();
         });
     }

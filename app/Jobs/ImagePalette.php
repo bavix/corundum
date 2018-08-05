@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use League\ColorExtractor\ColorExtractor;
 use League\ColorExtractor\Palette;
 
 class ImagePalette implements ShouldQueue
@@ -45,13 +46,19 @@ class ImagePalette implements ShouldQueue
             return;
         }
 
+        $palette = $this->palette();
         $colors = [];
 
-        foreach ($this->palette() as $decimal => $count) {
+        $extractor = new ColorExtractor($palette);
+        $representative = $extractor->extract(100);
+        $mostUsedColors = $palette->getMostUsedColors(10000);
+
+        foreach ($mostUsedColors as $decimal => $count) {
             $colors[] = [
                 'decimal' => $decimal,
                 'count' => $count,
                 'image_id' => $this->image->id,
+                'dominant' => \in_array($decimal, $representative, true),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -61,21 +68,16 @@ class ImagePalette implements ShouldQueue
     }
 
     /**
-     * @return \Generator
+     * @return Palette
      */
-    protected function palette(): \Generator
+    protected function palette(): Palette
     {
         $physical = Path::physical($this->image);
 
         /**
          * @var $palette Palette
          */
-        $palette = Palette::fromFilename($physical);
-        $mostUsedColors = $palette->getMostUsedColors(10000);
-
-        foreach ($mostUsedColors as $decimal => $count) {
-            yield $decimal => $count;
-        }
+        return Palette::fromFilename($physical);
     }
 
 }

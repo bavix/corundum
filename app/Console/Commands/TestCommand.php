@@ -10,6 +10,7 @@ use App\Models\Image;
 use App\Models\View;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use League\ColorExtractor\ColorExtractor;
 use League\ColorExtractor\Palette;
 use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
@@ -37,12 +38,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-//        Image::query()
-//            ->orderByDesc('id')
-//            ->first()
-//            ->delete();
-//
-//        die;
 //
 //        $bucket = Bucket::query()->first();
 //        if (!$bucket) {

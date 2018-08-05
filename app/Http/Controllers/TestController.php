@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Corundum\Kit\Path;
 use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
+use League\ColorExtractor\Color;
+use League\ColorExtractor\ColorExtractor;
+use League\ColorExtractor\Palette;
 
 class TestController extends Controller
 {
