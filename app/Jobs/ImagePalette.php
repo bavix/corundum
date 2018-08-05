@@ -41,19 +41,41 @@ class ImagePalette implements ShouldQueue
      */
     public function handle(): void
     {
-        $physical = Path::physical($this->image);
-        $palette = Palette::fromFilename($physical);
+        if ($this->image->palette()->count()) {
+            return;
+        }
+
         $colors = [];
 
-        foreach ($palette as $decimal => $count) {
+        foreach ($this->palette() as $decimal => $count) {
             $colors[] = [
                 'decimal' => $decimal,
                 'count' => $count,
                 'image_id' => $this->image->id,
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
         }
 
         Color::insert($colors);
+    }
+
+    /**
+     * @return \Generator
+     */
+    protected function palette(): \Generator
+    {
+        $physical = Path::physical($this->image);
+
+        /**
+         * @var $palette Palette
+         */
+        $palette = Palette::fromFilename($physical);
+        $mostUsedColors = $palette->getMostUsedColors(10000);
+
+        foreach ($mostUsedColors as $decimal => $count) {
+            yield $decimal => $count;
+        }
     }
 
 }

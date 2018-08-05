@@ -8,7 +8,7 @@ RUN apk add gmp-dev \
    mysql-client
 
 RUN apk add --no-cache libwebp freetype libpng libjpeg libjpeg-turbo \
-   libwebp-dev freetype-dev libpng-dev libjpeg-dev libjpeg-turbo-dev && \
+   libwebp-dev freetype-dev libpng-dev libjpeg-turbo-dev && \
   docker-php-ext-configure gd \
     --with-gd \
     --with-freetype-dir=/usr/include/ \
@@ -23,9 +23,8 @@ RUN docker-php-ext-enable imagick amqp
 RUN docker-php-ext-install pdo_mysql zip bcmath gmp
 
 # cleanup
-RUN apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev \
-    libwebp-dev libjpeg-dev \
-    gmp-dev imagemagick-dev rabbitmq-c-dev
+RUN apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev libwebp-dev \
+    gmp-dev imagemagick-dev
 
 # startup
 WORKDIR /var/www/html

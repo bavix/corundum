@@ -2,10 +2,15 @@
 
 namespace App\Console\Commands;
 
+use App\Corundum\Kit\Path;
 use App\Enums\Image\ImageViewsEnum;
 use App\Models\Bucket;
+use App\Models\Color;
+use App\Models\Image;
 use App\Models\View;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use League\ColorExtractor\Palette;
 
 class TestCommand extends Command
 {
