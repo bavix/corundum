@@ -20,7 +20,7 @@ class CreateBucketsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('bucket_user', function (Blueprint $table) {
+        Schema::create('bucket_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('bucket_id');
             $table->integer('user_id');
@@ -37,6 +37,7 @@ class CreateBucketsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('buckets');
+        Schema::dropIfExists('bucket_user');
     }
 
 }
