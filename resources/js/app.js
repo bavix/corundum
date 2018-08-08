@@ -15,8 +15,17 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('bucket-menu', require('./components/BucketMenuComponent.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+        buckets: [
+            {id: 1, name: 'wheels'},
+            {id: 2, name: 'brands'},
+            {id: 3, name: 'users'},
+        ]
+    },
 });
+
+window.vm = app
