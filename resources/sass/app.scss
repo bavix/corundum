@@ -7,3 +7,12 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.logo {
+  width: 32px;
+  height: 32px;
+}
+
+.navbar + #app {
+  margin-top: 10px;
+}
