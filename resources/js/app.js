@@ -16,6 +16,8 @@ window.Vue = require('vue');
  */
 
 Vue.component('bucket-menu', require('./components/BucketMenuComponent.vue'));
+Vue.component('view-menu', require('./components/ViewMenuComponent.vue'));
+Vue.component('view-form', require('./components/ViewFormComponent.vue'));
 
 const app = new Vue({
     el: '#app',
@@ -28,4 +30,4 @@ const app = new Vue({
     },
 });
 
-window.vm = app
+window.vm = app;

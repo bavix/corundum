@@ -11,8 +11,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="/svg/logo.svg" class="logo" />
+            <a class="navbar-brand" href="{{ route('welcome') }}">
+                <img src="/svg/logo.svg" class="image" />
             </a>
             <button class="navbar-toggler" type="button"
                     data-toggle="collapse"
@@ -25,26 +25,32 @@
 
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard <span class="sr-only">(current)</span></a>
-                    </li>
+                    @auth
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ route('dashboard') }}">Dashboard <span class="sr-only">(current)</span></a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
+
+            @auth
+                <form class="form-inline" method="post" action="{{ route('logout') }}">
+                    {{ csrf_field() }}
+                    <button class="btn btn-outline-info" type="submit">Logout</button>
+                </form>
+            @else
+                @if (request()->routeIs(['login']))
+                    <a href="{{ route('register') }}" class="btn btn-outline-info" rel="nofollow noreferrer">Register</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-info" rel="nofollow noreferrer">Login</a>
+                @endif
+            @endauth
         </div>
     </nav>
 
     <main id="app" class="container">
         <div class="row">
-            <div class="col-md-3">
-                <bucket-menu v-bind:items="buckets"></bucket-menu>
-            </div>
-            <div class="col-md-3">
-                <bucket-menu v-bind:items="buckets"></bucket-menu>
-            </div>
-            <div class="col-md-6">
-                <bucket-menu v-bind:items="buckets"></bucket-menu>
-            </div>
-            {{--@yield('content')--}}
+            @yield('content')
         </div>
     </main>
 

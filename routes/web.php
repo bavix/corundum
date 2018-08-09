@@ -11,10 +11,11 @@
 |
 */
 
-Route::view('/', 'welcome');
-
 Auth::routes();
 
-Route::get('/dashboard', 'TestController@dashboard')
+Route::view('/', 'welcome')
+    ->name('welcome');
+
+Route::get('/dashboard', 'DashboardController@index')
     ->middleware('auth')
     ->name('dashboard');

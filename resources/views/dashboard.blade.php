@@ -1,27 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Dashboard</div>
-
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        <form action="{{ route('image.store', ['id' => 1]) }}" method="post" enctype="multipart/form-data">
-                            <input multiple type="file" name="file[]" />
-                            <button>send</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-3">
+        <bucket-menu v-bind:items="buckets"></bucket-menu>
+    </div>
+    <div class="col-md-3">
+        <view-menu v-bind:items="buckets"></view-menu>
+    </div>
+    <div class="col-md-6">
+        <view-form v-bind:items="buckets"></view-form>
     </div>
 @endsection
