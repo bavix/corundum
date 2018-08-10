@@ -10,7 +10,7 @@
 
                 <form method="POST" action="{{ route('login') }}">
 
-                    {{ csrf_field() }}
+                    @csrf
 
                     <div class="form-group">
                         <label for="email">Email address</label>
@@ -41,6 +41,13 @@
                                 Forgot Your Password?
                             </a>
                         </small>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="remember" value="remember">
+                            <label class="custom-control-label" for="remember">Remember me</label>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-block btn-warning">Log In</button>
