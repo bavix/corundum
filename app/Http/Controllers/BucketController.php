@@ -32,16 +32,18 @@ class BucketController extends Controller
     public function show(int $id): BucketResource
     {
         return new BucketResource(
-            Bucket::findOrFail($id)
+            Auth::user()->buckets()
+                ->wherePivot('bucket_id', $id)
+                ->firstOrFail()
         );
     }
 
     /**
      * @param Request $request
      *
-     * @return BucketResource
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request): BucketResource
+    public function store(Request $request)
     {
         $name = $request->input('name');
 
@@ -57,11 +59,18 @@ class BucketController extends Controller
             ->wherePivot('bucket_id', $object->id)
             ->exists();
 
+        $response = (new BucketResource($object))
+            ->response();
+
         if (!$bucketExists) {
             $buckets->attach($object->id);
+
+            return $response
+                ->setStatusCode(201);
         }
 
-        return new BucketResource($object);
+        return $response
+            ->setStatusCode(409);
     }
 
 }
