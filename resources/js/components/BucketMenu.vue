@@ -59,6 +59,7 @@
         async mounted() {
             await api.get('bucket.index')
                 .then(res => res.data)
+                .then(res => res.data)
                 .then(this.appends);
         }
     }
