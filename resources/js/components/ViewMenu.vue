@@ -1,5 +1,5 @@
 <template>
-    <table class="table table-striped table-bordered">
+    <table v-show="items.length > 0" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th scope="col">#</th>

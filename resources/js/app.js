@@ -22,11 +22,8 @@ Vue.component('view-form', require('./components/ViewForm.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-        buckets: [
-            {id: 1, name: 'wheels'},
-            {id: 2, name: 'brands'},
-            {id: 3, name: 'users'},
-        ]
+        buckets: [],
+        views: [],
     },
 });
 

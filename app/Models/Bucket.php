@@ -22,5 +22,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Bucket extends Model
 {
-
+    protected $fillable = ['name'];
 }

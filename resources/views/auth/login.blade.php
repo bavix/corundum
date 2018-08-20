@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-4 offset-4">
+    <div class="col-md-4 offset-md-4">
         <div class="card">
             <div class="card-body">
                 <div class="card-title">
@@ -45,7 +45,7 @@
 
                     <div class="form-group">
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="remember" value="remember">
+                            <input type="checkbox" class="custom-control-input" id="remember" name="remember">
                             <label class="custom-control-label" for="remember">Remember me</label>
                         </div>
                     </div>

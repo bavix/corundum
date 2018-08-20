@@ -13,5 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('/route', 'DashboardController@routes');
 Route::apiResource('bucket/{id}/image', 'ImageController');
 Route::apiResource('bucket', 'BucketController');
