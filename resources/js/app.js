@@ -15,9 +15,9 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('bucket-menu', require('./components/BucketMenuComponent.vue'));
-Vue.component('view-menu', require('./components/ViewMenuComponent.vue'));
-Vue.component('view-form', require('./components/ViewFormComponent.vue'));
+Vue.component('bucket-menu', require('./components/BucketMenu.vue'));
+Vue.component('view-menu', require('./components/ViewMenu.vue'));
+Vue.component('view-form', require('./components/ViewForm.vue'));
 
 const app = new Vue({
     el: '#app',
