@@ -1,11 +1,19 @@
 
 const axios = require('axios');
+let routes;
 
 const api = {
 
     async route(name) {
-        return axios.get('/api/route')
-            .then(res => '/' + res.data[name])
+        if (routes === undefined) {
+            return axios.get('/api/route')
+                .then(res => {
+                    routes = res.data;
+                    return this.route(name);
+                })
+        }
+
+        return Promise.resolve('/' + routes[name]);
     },
 
     async get(name, data) {
