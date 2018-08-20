@@ -27,7 +27,7 @@ class ImageController extends Controller
     public function index(Request $request)
     {
         $relations = [Image::REL_BUCKET, Image::REL_EAV];
-        $image = Image::whereUserId(1)
+        $image = Image::whereUserId(Auth::id())
             ->where('status', '!=', ImageStatusEnum::DELETED)
             ->orderByDesc('id')
             ->with($relations);
@@ -70,7 +70,7 @@ class ImageController extends Controller
         $collection = new Collection();
         foreach ($files as $file) {
             $model = new Image();
-            $model->user_id = 1;
+            $model->user_id = Auth::id();
             $model->bucket_id = $bucketId;
             $path = Path::physical($model);
             if ($file->move(\dirname($path), \basename($path))) {

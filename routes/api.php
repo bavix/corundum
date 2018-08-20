@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::apiResource('bucket/{id}/image', 'ImageController');
-Route::apiResource('bucket', 'BucketController');
-
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::apiResource('bucket/{id}/image', 'ImageController');
+    Route::apiResource('bucket', 'BucketController');
+});

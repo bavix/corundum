@@ -13,23 +13,10 @@ use Illuminate\Support\Facades\Auth;
 class BucketController extends Controller
 {
 
-    public function getUser(): User
-    {
-        $user = Auth::getUser();
-
-        /** debug */
-        if (!$user) {
-            $user = User::first();
-        }
-        /** /debug */
-
-        return $user;
-    }
-
     public function index(Request $request)
     {
         return BucketResource::collection(
-            $this->getUser()->buckets()->paginate()
+            Auth::user()->buckets()->paginate()
         );
     }
 
@@ -43,7 +30,7 @@ class BucketController extends Controller
     public function store(Request $request, int $bucketId): AnonymousResourceCollection
     {
         $bucket = Bucket::find($bucketId);
-        $this->getUser()->buckets();
+        Auth::user()->buckets();
     }
 
 }
