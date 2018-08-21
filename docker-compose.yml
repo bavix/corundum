@@ -82,6 +82,15 @@ services:
       static:
         ipv4_address: 172.16.241.240
 
+  js_build:
+    image: kkarczmarczyk/node-yarn:8.0-slim
+    volumes:
+    - ./:/workspace
+    command: bash -c "yarn && yarn run dev"
+    networks:
+      static:
+        ipv4_address: 172.16.241.241
+
 volumes:
   dbdata:
 
