@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('bucket-menu', require('./components/BucketMenu.vue'));
+Vue.component('bucket-form', require('./components/BucketForm.vue'));
 Vue.component('view-menu', require('./components/ViewMenu.vue'));
 Vue.component('view-form', require('./components/ViewForm.vue'));
 
