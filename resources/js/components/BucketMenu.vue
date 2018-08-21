@@ -1,5 +1,5 @@
 <template>
-    <table v-show="items.length > 0" class="table table-striped table-bordered">
+    <table v-show="buckets.length > 0" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -21,46 +21,15 @@
 </template>
 
 <script>
-    import api from '../api'
+    import { mapGetters, mapState } from 'vuex'
+    import store from '../store'
 
     export default {
-        props: {
-            items: Array
-        },
+        store,
         computed: {
-            buckets() {
-                return this.items
-            }
-        },
-        methods: {
-            appends(buckets) {
-                for (const bucket of buckets) {
-                    if (!this.exists(bucket.id)) {
-                        this.items.push(bucket);
-                    }
-                }
-            },
-            exists(id) {
-                for (const item of this.items) {
-                    if (item.id === id) {
-                        return true;
-                    }
-                }
-
-                return false;
-            },
-            edit(key) {
-                console.log('edit', this.items[key]);
-            },
-            remove(key) {
-                console.log('remove', this.items[key]);
-            },
-        },
-        async mounted() {
-            await api.get('bucket.index')
-                .then(res => res.data)
-                .then(res => res.data)
-                .then(this.appends);
+            ...mapGetters('bucket', {
+                buckets: 'all'
+            })
         }
     }
 </script>
