@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color whereImageId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $dominant
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color whereDominant($value)
  */
 class Color extends Model
 {

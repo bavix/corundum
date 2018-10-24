@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +11,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/route', 'DashboardController@routes');
-Route::apiResource('bucket/{id}/image', 'ImageController');
+use Illuminate\Support\Facades\Route;
+
 Route::apiResource('bucket', 'BucketController');
+Route::post('bucket/{bucket}/image', 'BucketController@upload')
+    ->name('bucket.upload');
