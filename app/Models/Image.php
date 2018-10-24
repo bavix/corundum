@@ -32,9 +32,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Image extends Fileable
 {
 
-    public const REL_VIEWS   = 'views';
-    public const REL_PALETTE = 'palette';
-
     /**
      * @return HasMany
      */
