@@ -2,20 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use App\Enums\Image\ImageStatusEnum;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
 use Rinvex\Attributes\Traits\Attributable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 abstract class Fileable extends Model
 {
 
     use Attributable;
-
-    public const REL_EAV = 'eav';
-    public const REL_USER = 'user';
-    public const REL_BUCKET = 'bucket';
 
     /**
      * @var array
