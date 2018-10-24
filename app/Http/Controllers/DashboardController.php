@@ -19,22 +19,4 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function routes(): JsonResponse
-    {
-        $routesByName = Route::getRoutes()->getRoutesByName();
-        $routes = [];
-
-        /**
-         * @var \Illuminate\Routing\Route $route
-         */
-        foreach ($routesByName as $name => $route) {
-            $routes[$name] = $route->uri();
-        }
-
-        return response()->json($routes);
-    }
-
 }
