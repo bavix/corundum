@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Image\ImageViewsEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class FileRequest extends FormRequest
+class ViewRequest extends FormRequest
 {
 
     /**
@@ -24,9 +26,14 @@ class FileRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'file' => ['required', 'file']
+        $default = [
+            'name' => ['required', 'string', 'unique:views'],
+            'type' => ['required', Rule::in(ImageViewsEnum::enums())],
+            'width' => ['required', 'integer', 'min:50'],
+            'height' => ['required', 'integer', 'min:50'],
         ];
+
+        return $default;
     }
 
 }

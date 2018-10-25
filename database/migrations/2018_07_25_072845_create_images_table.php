@@ -69,12 +69,22 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('name');
-            $table->integer('bucket_id');
-            $table->integer('user_id');
+            $table->integer('bucket_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->enum('status', ImageStatusEnum::enums());
             $table->timestamps();
 
             $table->unique(['name', 'bucket_id']);
+
+            $table->foreign('bucket_id')
+                ->references('id')->on('buckets')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
 
         foreach ($this->attributes() as $attribute) {

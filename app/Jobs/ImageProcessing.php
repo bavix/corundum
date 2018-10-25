@@ -108,7 +108,7 @@ class ImageProcessing implements ShouldQueue
     /**
      * @return void
      */
-    protected function failed(): void
+    public function failed(): void
     {
         $this->image->status = ImageStatusEnum::PROCESSING;
         $this->image->save();

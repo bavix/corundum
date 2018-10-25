@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -32,9 +33,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Image extends Fileable
 {
 
-    public const REL_VIEWS   = 'views';
-    public const REL_PALETTE = 'palette';
-
     /**
      * @return HasMany
      */
@@ -46,11 +44,20 @@ class Image extends Fileable
     }
 
     /**
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function palette(): HasMany
+    public function colors(): BelongsToMany
     {
-        return $this->hasMany(Color::class);
+        return $this->belongsToMany(Color::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function palette(): BelongsToMany
+    {
+        return $this->colors()
+            ->wherePivot('dominant', 1);
     }
 
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Image\ImageStatusEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -17,11 +16,27 @@ class CreateColorsTable extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('decimal');
+            $table->integer('dec');
+            $table->timestamps();
+        });
+
+        Schema::create('color_image', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('color_id')->unsigned();
+            $table->integer('image_id')->unsigned();
             $table->integer('count');
-            $table->integer('image_id');
             $table->boolean('dominant');
             $table->timestamps();
+
+            $table->foreign('color_id')
+                ->references('id')->on('colors')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('image_id')
+                ->references('id')->on('images')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
@@ -32,6 +47,8 @@ class CreateColorsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('color_image');
         Schema::dropIfExists('colors');
     }
+
 }

@@ -37,8 +37,7 @@ class Path
         $path = static::relative($model, $view);
         $directory = \dirname($path);
 
-        return static::disk($model)
-            ->makeDirectory($directory);
+        return static::disk($model)->makeDirectory($directory);
     }
 
     /**
@@ -93,7 +92,7 @@ class Path
      *
      * @return FilesystemAdapter
      */
-    protected static function disk(Fileable $model): FilesystemAdapter
+    public static function disk(Fileable $model): FilesystemAdapter
     {
         $type = static::$types[\get_class($model)] ?? null;
 
@@ -108,13 +107,12 @@ class Path
      * @param Fileable $model
      * @param null|string $view
      *
-     * @return string
+     * @return bool
      * @throws
      */
-    public static function exists(Fileable $model, ?string $view = null): string
+    public static function exists(Fileable $model, ?string $view = null): bool
     {
-        return static::disk($model)
-            ->exists(static::relative($model, $view));
+        return static::disk($model)->exists(static::relative($model, $view));
     }
 
     /**

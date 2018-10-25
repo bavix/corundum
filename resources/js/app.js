@@ -7,7 +7,8 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue'
+import store from './store'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16,16 +17,15 @@ window.Vue = require('vue');
  */
 
 Vue.component('bucket-menu', require('./components/BucketMenu.vue'));
-Vue.component('bucket-form', require('./components/BucketForm.vue'));
-Vue.component('view-menu', require('./components/ViewMenu.vue'));
-Vue.component('view-form', require('./components/ViewForm.vue'));
+// Vue.component('bucket-form', require('./components/BucketForm.vue'));
+// Vue.component('view-menu', require('./components/ViewMenu.vue'));
+// Vue.component('view-form', require('./components/ViewForm.vue'));
 
 const app = new Vue({
     el: '#app',
-    data: {
-        buckets: [],
-        views: [],
-    },
+    store
 });
+
+app.$store.dispatch('bucket/ACTION_GET_BUCKETS');
 
 window.vm = app;
