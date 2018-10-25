@@ -22,10 +22,20 @@ class CreateBucketsTable extends Migration
 
         Schema::create('bucket_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('bucket_id');
-            $table->integer('user_id');
+            $table->integer('bucket_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->timestamps();
             $table->unique(['bucket_id', 'user_id']);
+
+            $table->foreign('bucket_id')
+                ->references('id')->on('buckets')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
@@ -36,8 +46,8 @@ class CreateBucketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('buckets');
         Schema::dropIfExists('bucket_user');
+        Schema::dropIfExists('buckets');
     }
 
 }

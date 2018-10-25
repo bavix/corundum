@@ -41,7 +41,9 @@ class ImageController extends BaseController
         $bucket = Bucket::whereName($name)
             ->firstOrFail();
 
-        return Image::whereName($uuid)
+        return $this->queryBuilder()
+            ->allowedIncludes('palette', 'views')
+            ->where('name', $uuid)
             ->where('bucket_id', $bucket->id)
             ->where('user_id', $this->getUser()->id)
             ->firstOrFail();

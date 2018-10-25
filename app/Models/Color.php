@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * App\Models\Color
  *
  * @property int $id
- * @property int $decimal
+ * @property int $dec
  * @property int $count
  * @property int $image_id
  * @property \Carbon\Carbon|null $created_at
@@ -32,14 +32,19 @@ class Color extends Model
     /**
      * @var array
      */
-    protected $appends = ['hexadecimal'];
+    protected $fillable = ['dec'];
+
+    /**
+     * @var array
+     */
+    protected $appends = ['hex'];
 
     /**
      * @return string
      */
-    public function getHexadecimalAttribute(): string
+    public function getHexAttribute(): string
     {
-        return \League\ColorExtractor\Color::fromIntToHex($this->decimal);
+        return \League\ColorExtractor\Color::fromIntToHex($this->dec);
     }
 
     /**

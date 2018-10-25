@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use League\ColorExtractor\ColorExtractor;
 use League\ColorExtractor\Palette;
 
@@ -46,25 +47,49 @@ class ImagePalette implements ShouldQueue
             return;
         }
 
+        // get colors
         $palette = $this->palette();
-        $colors = [];
-
         $extractor = new ColorExtractor($palette);
         $representative = $extractor->extract(100);
         $mostUsedColors = $palette->getMostUsedColors(10000);
 
-        foreach ($mostUsedColors as $decimal => $count) {
-            $colors[] = [
-                'decimal' => $decimal,
-                'count' => $count,
+        // find colors
+        $colors = [];
+        $pivot = [];
+
+        $query = Image::query()
+            ->whereIn('dec', \array_keys($mostUsedColors));
+
+        $query->each(function (Color $color) use (&$colors) {
+            $colors[] = $color->dec;
+        });
+
+        // insert unique
+        $diff = \array_diff(\array_keys($mostUsedColors), $colors);
+
+        $inserts = [];
+        foreach ($diff as $dec) {
+            $inserts['dec'] = $dec;
+        }
+
+        if (!empty($inserts)) {
+            Color::insert($inserts);
+        }
+
+        // build $pivot
+        $query = Color::query()->whereIn('dec', \array_keys($mostUsedColors));
+        $query->each(function (Color $color) use ($mostUsedColors, $representative, &$pivot) {
+            $pivot[] = [
+                'color_id' => $color->id,
                 'image_id' => $this->image->id,
-                'dominant' => \in_array($decimal, $representative, true),
+                'count' => $mostUsedColors[$color->dec],
+                'dominant' => \in_array($color->dec, $representative, true),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-        }
+        });
 
-        Color::insert($colors);
+        DB::table('color_image')->insert($pivot);
     }
 
     /**
