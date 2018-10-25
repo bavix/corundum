@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\Image\ImageViewsEnum;
+use App\Http\Rules\ColorRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,6 +32,7 @@ class ViewRequest extends FormRequest
             'type' => ['required', Rule::in(ImageViewsEnum::enums())],
             'width' => ['required', 'integer', 'min:50'],
             'height' => ['required', 'integer', 'min:50'],
+            'color' => ['string', new ColorRule()],
         ];
 
         return $default;

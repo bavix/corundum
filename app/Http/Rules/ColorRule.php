@@ -2,10 +2,10 @@
 
 namespace App\Http\Rules;
 
-use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\Rule;
 use Intervention\Image\ImageManagerStatic;
 
-class ColorRule extends Rule
+class ColorRule implements Rule
 {
 
     /**
