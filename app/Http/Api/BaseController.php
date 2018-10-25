@@ -2,7 +2,9 @@
 
 namespace App\Http\Api;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
 abstract class BaseController extends Controller
@@ -25,6 +27,23 @@ abstract class BaseController extends Controller
     {
         return QueryBuilder::for($this->query())
             ->defaultSort($this->defaultSort);
+    }
+
+    /**
+     * @param Request $request
+     * @throws
+     */
+    public function update(Request $request): void
+    {
+        \abort(405);
+    }
+
+    /**
+     * @return User
+     */
+    protected function getUser(): User
+    {
+        return \auth()->user();
     }
 
 }

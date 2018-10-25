@@ -4,6 +4,7 @@ namespace App\Http\Api;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Http\Request;
 use App\Models\Bucket;
@@ -31,11 +32,12 @@ class BucketController extends BaseController
      */
     public function show(Request $request, string $name): LengthAwarePaginator
     {
-        $bucket = Bucket::whereName($name)->firstOrFail();
+        $bucket = Bucket::whereName($name)
+            ->firstOrFail();
 
         $queryBuilder = QueryBuilder::for(
             Image::query()
-                ->where('user_id', $request->user()->id)
+                ->where('user_id', $this->getUser()->id)
                 ->where('bucket_id', $bucket->id)
         );
 
@@ -44,44 +46,47 @@ class BucketController extends BaseController
 
     /**
      * @param Request $request
-     * @param string $name
+     * @return Bucket|\Illuminate\Database\Eloquent\Model
      */
-    public function upload(Request $request, string $name): void
+    public function store(Request $request)
     {
-        // upload file
-        \abort(405);
+        /**
+         * @var Bucket $bucket
+         */
+        $bucket = Bucket::firstOrCreate([
+            'name' => $request->input('name')
+        ]);
+
+        try {
+            $this->getUser()
+                ->buckets()
+                ->attach($bucket->id);
+        } catch (\Throwable $throwable) {
+            abort(409);
+        }
+
+        return $bucket;
     }
 
     /**
      * @param Request $request
      * @param string $name
-     * @throws
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, string $name): void
+    public function destroy(Request $request, string $name): Response
     {
-        // create bucket
-        \abort(405);
-    }
+        $bucket = Bucket::whereName($name)
+            ->firstOrFail();
 
-    /**
-     * @param Request $request
-     * @param string $name
-     * @throws
-     */
-    public function destroy(Request $request, string $name): void
-    {
-        // delete bucket
-        \abort(405);
-    }
+        $results = $this->getUser()
+            ->buckets()
+            ->detach($bucket->id);
 
-    /**
-     * @param Request $request
-     * @param string $name
-     * @throws
-     */
-    public function update(Request $request, string $name): void
-    {
-        \abort(405);
+        if (!$results) {
+            \abort(422);
+        }
+
+        return response()->noContent();
     }
 
     /**
@@ -93,7 +98,7 @@ class BucketController extends BaseController
          * @var $user User
          */
         $user = \auth()->user();
-        return $user->buckets();
+        return $user->buckets()->getQuery();
     }
 
 }

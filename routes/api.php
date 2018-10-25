@@ -14,5 +14,5 @@
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('bucket', 'BucketController');
-Route::post('bucket/{bucket}/image', 'BucketController@upload')
-    ->name('bucket.upload');
+Route::apiResource('bucket/{bucket}/image', 'ImageController');
+Route::apiResource('bucket/{bucket}/file', 'FileController');
