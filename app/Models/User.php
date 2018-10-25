@@ -64,7 +64,15 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
+     */
+    public function views(): HasMany
+    {
+        return $this->hasMany(View::class);
+    }
+
+    /**
+     * @return HasMany
      */
     public function images(): HasMany
     {

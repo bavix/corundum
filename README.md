@@ -7,6 +7,8 @@
 /{bucket}/{view}/{uuid}.(png|webp)
 ```
 
+![sizes](https://user-images.githubusercontent.com/5111255/47511169-50ef2c80-d882-11e8-8718-1ecabddb8a7d.png)
+
 ##### Хранилище файлов
 
 ```

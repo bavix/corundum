@@ -94,7 +94,7 @@ class ImageQueue implements ShouldQueue
     /**
      * @return void
      */
-    protected function failed(): void
+    public function failed(): void
     {
         dispatch(new ImageFailed($this->image));
     }

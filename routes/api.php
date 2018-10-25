@@ -13,6 +13,18 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('bucket', 'BucketController');
-Route::apiResource('bucket/{bucket}/image', 'ImageController');
-Route::apiResource('bucket/{bucket}/file', 'FileController');
+// bucket
+Route::apiResource('bucket', 'BucketController')
+    ->middleware('auth:api');
+
+// image
+Route::apiResource('bucket/{bucket}/image', 'ImageController')
+    ->middleware('auth:api');
+
+// file
+Route::apiResource('bucket/{bucket}/file', 'FileController')
+    ->middleware('auth:api');
+
+// view
+Route::apiResource('bucket/{bucket}/view', 'ViewController')
+    ->middleware('auth:api');
