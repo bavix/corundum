@@ -43,7 +43,7 @@ class ImagePalette implements ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->image->palette()->count()) {
+        if ($this->image->colors()->count()) {
             return;
         }
 
@@ -55,9 +55,8 @@ class ImagePalette implements ShouldQueue
 
         // find colors
         $colors = [];
-        $pivot = [];
 
-        $query = Image::query()
+        $query = Color::query()
             ->whereIn('dec', \array_keys($mostUsedColors));
 
         $query->each(function (Color $color) use (&$colors) {
@@ -69,7 +68,11 @@ class ImagePalette implements ShouldQueue
 
         $inserts = [];
         foreach ($diff as $dec) {
-            $inserts['dec'] = $dec;
+            $inserts[] = [
+                'dec' => $dec,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
 
         if (!empty($inserts)) {
@@ -77,6 +80,7 @@ class ImagePalette implements ShouldQueue
         }
 
         // build $pivot
+        $pivot = [];
         $query = Color::query()->whereIn('dec', \array_keys($mostUsedColors));
         $query->each(function (Color $color) use ($mostUsedColors, $representative, &$pivot) {
             $pivot[] = [

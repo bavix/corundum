@@ -42,7 +42,7 @@ class ImageController extends BaseController
             ->firstOrFail();
 
         return $this->queryBuilder()
-            ->allowedIncludes('palette', 'views')
+            ->allowedIncludes('palette', 'views', 'eav')
             ->where('name', $uuid)
             ->where('bucket_id', $bucket->id)
             ->where('user_id', $this->getUser()->id)
