@@ -25,8 +25,7 @@ abstract class BaseController extends Controller
      */
     protected function queryBuilder(): QueryBuilder
     {
-        return QueryBuilder::for($this->query())
-            ->defaultSort($this->defaultSort);
+        return QueryBuilder::for($this->query());
     }
 
     /**

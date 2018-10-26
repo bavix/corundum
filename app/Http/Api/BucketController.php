@@ -4,6 +4,7 @@ namespace App\Http\Api;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Http\Request;
@@ -28,20 +29,13 @@ class BucketController extends BaseController
      * @param Request $request
      * @param string $name
      *
-     * @return LengthAwarePaginator
+     * @return Bucket
      */
-    public function show(Request $request, string $name): LengthAwarePaginator
+    public function show(Request $request, string $name): Model
     {
-        $bucket = Bucket::whereName($name)
+        return $this->queryBuilder()
+            ->where(\compact('name'))
             ->firstOrFail();
-
-        $queryBuilder = QueryBuilder::for(
-            Image::query()
-                ->where('user_id', $this->getUser()->id)
-                ->where('bucket_id', $bucket->id)
-        );
-
-        return $queryBuilder->paginate();
     }
 
     /**
@@ -82,10 +76,7 @@ class BucketController extends BaseController
             ->buckets()
             ->detach($bucket->id);
 
-        if (!$results) {
-            \abort(422);
-        }
-
+        \abort_if(!$results, 422);
         return response()->noContent();
     }
 
