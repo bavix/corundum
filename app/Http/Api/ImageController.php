@@ -45,7 +45,6 @@ class ImageController extends BaseController
             ->allowedIncludes('palette', 'views', 'eav')
             ->where('name', $uuid)
             ->where('bucket_id', $bucket->id)
-            ->where('user_id', $this->getUser()->id)
             ->firstOrFail();
     }
 
