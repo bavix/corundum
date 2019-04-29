@@ -57,7 +57,7 @@ class TestCommand extends Command
             $view->quality = 75;
             $view->webp = 1;
             $view->user_id = $userId;
-            $view->bucket_id = $userId;
+            $view->bucket_id = $bucket->id;
             $view->save();
 
             $view = new View();
@@ -68,7 +68,7 @@ class TestCommand extends Command
             $view->quality = 75;
             $view->webp = 1;
             $view->user_id = $userId;
-            $view->bucket_id = $userId;
+            $view->bucket_id = $bucket->id;
             $view->save();
 
             $view = new View();
@@ -79,7 +79,7 @@ class TestCommand extends Command
             $view->quality = 75;
             $view->webp = 1;
             $view->user_id = $userId;
-            $view->bucket_id = $userId;
+            $view->bucket_id = $bucket->id;
             $view->save();
         }
 

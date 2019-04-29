@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\View;
 use App\Observes\ImageObserver;
 use App\Observes\ViewObserver;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Rinvex\Attributes\Models\Attribute;
 
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
+
         try {
             \app('rinvex.attributes.entities')->push(Image::class);
 
