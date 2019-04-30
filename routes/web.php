@@ -33,11 +33,14 @@ Route::get('/{bucket}/{view}/{uuid}.{type}', function (string $bucket, string $v
 
     $path = \App\Corundum\Kit\Path::relative($image, $view);
 
+    $contentType = 'image/webp';
     $type = ".$type";
     if ($type !== '.webp') {
         $type = '';
+        $contentType = 'image/png';
     }
 
+    \header('Content-Type: ' . $contentType);
     \header("X-Accel-Redirect: /stream/$path$type");
     die;
 })->where([
