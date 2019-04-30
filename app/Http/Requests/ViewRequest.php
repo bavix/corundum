@@ -28,7 +28,7 @@ class ViewRequest extends FormRequest
     public function rules(): array
     {
         $default = [
-            'name' => ['required', 'string', 'unique:views'],
+            'name' => ['required', 'string'],
             'type' => ['required', Rule::in(ImageViewsEnum::enums())],
             'width' => ['required', 'integer', 'min:50'],
             'height' => ['required', 'integer', 'min:50'],
