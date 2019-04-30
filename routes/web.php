@@ -23,12 +23,22 @@ Route::get('/dashboard', 'DashboardController@index')
     ->name('dashboard');
 
 Route::get('/{bucket}/{view}/{uuid}.{type}', function (string $bucket, string $view, string $uuid, string $type) {
+
+    $modelBucket = new \App\Models\Bucket();
+    $modelBucket->name = $bucket;
+
+    $image = new \App\Models\Image();
+    $image->name = $uuid;
+    $image->setRelation('bucket', $modelBucket);
+
+    $path = \App\Corundum\Kit\Path::relative($image, $view);
+
     $type = ".$type";
     if ($type !== '.webp') {
         $type = '';
     }
 
-    \header("X-Accel-Redirect: /stream/$bucket/$view/$uuid$type");
+    \header("X-Accel-Redirect: /stream/$path$type");
     die;
 })->where([
     'bucket' => '[a-z0-9]+',
