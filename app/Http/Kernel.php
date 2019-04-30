@@ -46,7 +46,6 @@ class Kernel extends HttpKernel
         'client_credentials' => [
             'guard:api',
             \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
-            'throttle:60,1',
             'bindings',
         ]
     ];
