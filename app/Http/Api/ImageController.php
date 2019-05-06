@@ -55,7 +55,11 @@ class ImageController extends BaseController
      */
     public function store(ImageRequest $request, string $name): Image
     {
-        $bucket = Bucket::whereName($name)->firstOrFail();
+        $data = \explode('.', $name, 2);
+        $bucketName = $data[0];
+        $uuid = $data[1] ?? null;
+        \abort_if($uuid && Image::whereName($uuid)->exists(), 409);
+        $bucket = Bucket::whereName($bucketName)->firstOrFail();
 
         try {
             $this->getUser()
@@ -67,7 +71,7 @@ class ImageController extends BaseController
                 ->attach($bucket->id);
         }
 
-        $image = new Image();
+        $image = new Image(['name' => $uuid]);
         $image->bucket_id = $bucket->id;
         $image->user_id = $this->getUser()->id;
 
