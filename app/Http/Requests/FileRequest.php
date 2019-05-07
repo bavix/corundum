@@ -25,8 +25,19 @@ class FileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'file']
+            'file' => ['required', 'file'],
+            'uuid' => ['uuid']
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function validated(): array
+    {
+        return \array_merge(parent::validated(), [
+            'uuid' => $this->header('Idempotency-Key'),
+        ]);
     }
 
 }

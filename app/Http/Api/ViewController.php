@@ -10,6 +10,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ViewController extends BaseController
 {
@@ -55,16 +56,9 @@ class ViewController extends BaseController
     public function store(ViewRequest $request, string $name): View
     {
         $bucket = Bucket::whereName($name)->firstOrFail();
-
-        try {
-            $this->getUser()
-                ->buckets()
-                ->findOrFail($bucket->id);
-        } catch (\Throwable $throwable) {
-            $this->getUser()
-                ->buckets()
-                ->attach($bucket->id);
-        }
+        $this->getUser()
+            ->buckets()
+            ->findOrFail($bucket->id);
 
         $view = new View();
         $view->bucket_id = $bucket->id;
@@ -94,7 +88,7 @@ class ViewController extends BaseController
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Request $request, string $name, string $viewName)
+    public function destroy(Request $request, string $name, string $viewName): Response
     {
         $bucket = Bucket::whereName($name)
             ->firstOrFail();
@@ -121,11 +115,9 @@ class ViewController extends BaseController
      */
     protected function query(): Builder
     {
-        /**
-         * @var $user User
-         */
-        $user = \auth()->user();
-        return $user->views()->getQuery();
+        return $this->getUser()
+            ->views()
+            ->getQuery();
     }
 
 }

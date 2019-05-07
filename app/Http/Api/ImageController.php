@@ -11,6 +11,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ImageController extends BaseController
 {
@@ -55,21 +56,12 @@ class ImageController extends BaseController
      */
     public function store(ImageRequest $request, string $name): Image
     {
-        $data = \explode('.', $name, 2);
-        $bucketName = $data[0];
-        $uuid = $data[1] ?? null;
+        $uuid = $request->header('Idempotency-Key'); // uuid
         \abort_if($uuid && Image::whereName($uuid)->exists(), 409);
-        $bucket = Bucket::whereName($bucketName)->firstOrFail();
-
-        try {
-            $this->getUser()
-                ->buckets()
-                ->findOrFail($bucket->id);
-        } catch (\Throwable $throwable) {
-            $this->getUser()
-                ->buckets()
-                ->attach($bucket->id);
-        }
+        $bucket = Bucket::whereName($name)->firstOrFail();
+        $this->getUser()
+            ->buckets()
+            ->findOrFail($bucket->id);
 
         $image = new Image(['name' => $uuid]);
         $image->bucket_id = $bucket->id;
@@ -85,7 +77,14 @@ class ImageController extends BaseController
         return $image;
     }
 
-    public function destroy(Request $request, string $name, string $uuid)
+    /**
+     * @param Request $request
+     * @param string $name
+     * @param string $uuid
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy(Request $request, string $name, string $uuid): Response
     {
         $bucket = Bucket::whereName($name)
             ->firstOrFail();
@@ -112,11 +111,9 @@ class ImageController extends BaseController
      */
     protected function query(): Builder
     {
-        /**
-         * @var $user User
-         */
-        $user = \auth()->user();
-        return $user->images()->getQuery();
+        return $this->getUser()
+            ->images()
+            ->getQuery();
     }
 
 }

@@ -30,8 +30,8 @@ class ViewRequest extends FormRequest
         $default = [
             'name' => ['required', 'string'],
             'type' => ['required', Rule::in(ImageViewsEnum::enums())],
-            'width' => ['required', 'integer', 'min:50'],
-            'height' => ['required', 'integer', 'min:50'],
+            'width' => ['required', 'integer', 'min:50', 'max:8000'],
+            'height' => ['required', 'integer', 'min:50', 'max:8000'],
             'color' => ['string', new ColorRule()],
         ];
 

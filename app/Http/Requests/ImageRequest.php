@@ -12,9 +12,9 @@ class ImageRequest extends FileRequest
      */
     public function rules(): array
     {
-        return [
-            'file' => ['required', 'image']
-        ];
+        return \array_merge(parent::rules(), [
+            'file' => ['required', 'image'],
+        ]);
     }
 
 }

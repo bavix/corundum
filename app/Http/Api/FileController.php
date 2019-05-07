@@ -13,11 +13,9 @@ class FileController extends BaseController
      */
     protected function query(): Builder
     {
-        /**
-         * @var $user User
-         */
-        $user = \auth()->user();
-        return $user->files()->getQuery();
+        return $this->getUser()
+            ->files()
+            ->getQuery();
     }
 
 }
