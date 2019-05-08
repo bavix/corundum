@@ -18,6 +18,10 @@
   "require": {
     "php": "^7.2",
     "ext-json": "*",
+    "ext-gmp": "*",
+    "ext-gd": "*",
+    "ext-imagick": "*",
+    "ext-bcmath": "*",
     "doctrine/dbal": "^2.9",
     "fideloper/proxy": "^4.1",
     "intervention/image": "^2.4",
