@@ -11,41 +11,41 @@
 |
 */
 
-Route::view('/', 'welcome');
-
-
-//Route::get('/redirect', function () {
-//
-//
-//    $query = http_build_query([
-//        'client_id'     => 'client-id',
-//        'redirect_uri'  => 'http://larapi.local/auth/callback',
-//        'response_type' => 'code',
-//        'scope'         => '',
-//    ]);
-//
-//    return redirect('http://larapi.local/oauth/authorize?' . $query);
-//
-//});
-//
-//Route::get('/auth/callback', function (Request $request) {
-//
-//    $http = new GuzzleHttp\Client;
-//
-//    $response = $http->post('http://larapi.local/oauth/token', [
-//        'form_params' => [
-//            'grant_type'    => 'authorization_code',
-//            'client_id'     => 'client-id',
-//            'client_secret' => 'client-secret',
-//            'redirect_uri'  => 'http://larapi.local/auth/callback',
-//            'code'          => $request->code,
-//        ],
-//    ]);
-//
-//    return json_decode((string)$response->getBody(), true);
-//
-//});
+use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::resource('/config', 'ConfigController', ['as' => 'ux']);
+Route::view('/', 'welcome')
+    ->name('welcome');
+
+Route::get('/dashboard', 'DashboardController@index')
+    ->middleware('auth')
+    ->name('dashboard');
+
+Route::get('/{bucket}/{view}/{uuid}.{type}', function (string $bucket, string $view, string $uuid, string $type) {
+
+    $modelBucket = new \App\Models\Bucket();
+    $modelBucket->name = $bucket;
+
+    $image = new \App\Models\Image();
+    $image->name = $uuid;
+    $image->setRelation('bucket', $modelBucket);
+
+    $path = \App\Corundum\Kit\Path::relative($image, $view);
+
+    $contentType = 'image/webp';
+    $type = ".$type";
+    if ($type !== '.webp') {
+        $type = '';
+        $contentType = 'image/png';
+    }
+
+    \header('Content-Type: ' . $contentType);
+    \header("X-Accel-Redirect: /stream/$path$type");
+    die;
+})->where([
+    'bucket' => '[a-z0-9]+',
+    'view' => '[a-z0-9]+',
+    'uuid' => '[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}',
+    'type' => '(png|webp)'
+]);

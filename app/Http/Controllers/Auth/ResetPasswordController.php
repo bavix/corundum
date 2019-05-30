@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Bavix\App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class ResetPasswordController extends Controller
 {
-
     /*
     |--------------------------------------------------------------------------
     | Password Reset Controller
@@ -26,15 +25,15 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo;
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
+     *
+     * @return void
      */
     public function __construct()
     {
-        $this->redirectTo = route('ux.config.index');
         $this->middleware('guest');
     }
-
 }

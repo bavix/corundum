@@ -14,26 +14,15 @@ services:
         ipv4_address: 172.16.241.3
 
   nginx:
-    build:
-      context: ./environment/nginx
+    image: nginx:stable
     depends_on:
       - php
     volumes:
       - ./:/var/www/html
+      - ./environment/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       static:
         ipv4_address: 172.16.241.4
-
-  php_build:
-    image: composer
-    volumes:
-      - ./composer.json:/app/composer.json
-      - ./composer.lock:/app/composer.lock
-      - ./vendor:/app/vendor
-    command: composer install --ignore-platform-reqs
-    networks:
-      static:
-        ipv4_address: 172.16.241.240
 
   php:
     depends_on:
@@ -64,11 +53,43 @@ services:
   rabbitmq:
     image: rabbitmq:3.7-management
     environment:
-      - RABBITMQ_DEFAULT_USER=${DB_USERNAME}
-      - RABBITMQ_DEFAULT_PASS=${DB_PASSWORD}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_LOGIN}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     networks:
       static:
         ipv4_address: 172.16.241.7
+
+  supervisor:
+    depends_on:
+    - mysql
+    - rabbitmq
+    build:
+      context: ./environment/supervisor
+    volumes:
+      - ./:/var/www/html
+      - ./storage/supervisor:/var/log/supervisor
+      - ./environment/supervisor/supervisord.conf:/etc/supervisor.d/consumers.ini
+    networks:
+      static:
+        ipv4_address: 172.16.241.8
+
+  php_build:
+    image: composer
+    volumes:
+    - ./:/app
+    command: composer update --ignore-platform-reqs
+    networks:
+      static:
+        ipv4_address: 172.16.241.240
+
+  js_build:
+    image: kkarczmarczyk/node-yarn:8.0-slim
+    volumes:
+    - ./:/workspace
+    command: bash -c "yarn && yarn run dev"
+    networks:
+      static:
+        ipv4_address: 172.16.241.241
 
 volumes:
   dbdata:

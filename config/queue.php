@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_DRIVER', 'sync'),
+    'default' => env('QUEUE_CONNECTION', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,18 +55,6 @@ return [
             'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
             'queue' => 'your-queue-name',
             'region' => 'us-east-1',
-        ],
-
-        'gearman' => [
-            'driver' => 'gearman',
-            'hosts'   => [
-                [
-                    'host' => '127.0.0.1',
-                    'port' => 4730,
-                ]
-            ],
-            'queue'  => 'default',
-            'timeout' => 1000
         ],
 
         'redis' => [

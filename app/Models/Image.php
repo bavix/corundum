@@ -2,152 +2,62 @@
 
 namespace App\Models;
 
-use App\Console\Commands\ServiceCommand;
-use Bavix\Extra\Gearman;
-use Bavix\Helpers\Str;
-use Bavix\SDK\PathBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Image extends Model
+/**
+ * App\Models\Image
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $bucket_id
+ * @property int $user_id
+ * @property string $status
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\Bucket $bucket
+ * @property mixed $entity
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\View[] $views
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image hasAttribute($key, $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereBucketId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Image whereUserId($value)
+ * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Color[] $palette
+ */
+class Image extends Fileable
 {
 
-    public $timestamps = false;
-
     /**
-     * @var bool
+     * @return HasMany
      */
-    protected $checkExists = false;
-
-    /**
-     * @param string $user
-     * @param string $name
-     *
-     * @return Model|null|static
-     */
-    public static function findByName(string $user, string $name)
+    public function views(): HasMany
     {
-        return static::query()
-            ->where('user', $user)
-            ->where('name', $name)
-            ->first();
+        return $this
+            ->hasMany(View::class, 'bucket_id', 'bucket_id')
+            ->where('user_id', $this->user_id);
     }
 
     /**
-     * @param string $user
-     * @param string $ext
-     *
-     * @return string
+     * @return BelongsToMany
      */
-    public static function generateName(string $user, string $ext): string
+    public function colors(): BelongsToMany
     {
-        do
-        {
-            $name = Str::random(6) . '.' . $ext;
-        }
-        while (static::findByName($user, $name));
-
-        return $name;
+        return $this->belongsToMany(Color::class);
     }
 
     /**
-     * @param string $user
-     * @param string $name
-     * @param string $type
-     *
-     * @return string
+     * @return BelongsToMany
      */
-    public static function realPath(string $user, string $name, $type = 'original'): string
+    public function palette(): BelongsToMany
     {
-        $hash = PathBuilder::sharedInstance()
-            ->hash($name);
-
-        if ($type !== 'original')
-        {
-            $type = 'thumbs/' . $type;
-        }
-
-        return Storage::disk(config('gearman.services.image.disk'))
-            ->path('image/' . $user . '/' . $type . '/' . $hash . '/' . $name);
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Model|Config|null
-     */
-    public function thumbnail(string $name)
-    {
-        return Config::query()
-            ->where('name', $name)
-            ->where('user_id', $this->user_id)
-            ->first();
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection|Config[]
-     */
-    public function thumbnails()
-    {
-        return Config::query()
-            ->where('user_id', $this->user_id)
-            ->get();
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getCheckExists(): bool
-    {
-        return $this->checkExists;
-    }
-
-    /**
-     * @param bool $checkExists
-     *
-     * @return $this
-     */
-    public function doRegenerate($checkExists = false): self
-    {
-        $this->checkExists = $checkExists;
-        return $this->doBackground();
-    }
-
-    /**
-     * @return $this
-     */
-    public function doBackground(): self
-    {
-        Gearman::client()
-            ->doBackground(
-                ServiceCommand::PROP_SERVICE,
-                \serialize($this)
-            );
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function doDeleted(): self
-    {
-        Gearman::client()
-            ->doBackground(
-                ServiceCommand::PROP_DELETED,
-                \serialize($this)
-            );
-
-        return $this;
+        return $this->colors()
+            ->wherePivot('dominant', 1);
     }
 
 }

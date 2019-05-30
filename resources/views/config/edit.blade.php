@@ -15,11 +15,9 @@
         <label for="type">Type</label>
         <select class="form-control" name="type" id="type">
             @php($type = old('type', $item->type ?? null))
-            <option name="fit" @if($type === 'fit')selected @endif>fit</option>
-            <option name="none" @if($type === 'none')selected @endif>none</option>
-            <option name="cover" @if($type === 'cover')selected @endif>cover</option>
-            <option name="contain" @if($type === 'contain')selected @endif>contain</option>
-            <option name="resize" @if($type === 'resize')selected @endif>resize</option>
+            @foreach(\App\Enums\Image\ImageViewsEnum::enums() as $enum)
+                <option name="{{ $enum }}" @if($type === $enum)selected @endif>{{ $enum }}</option>
+            @endforeach
         </select>
     </div>
 
