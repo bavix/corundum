@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Image\ImageViewsEnum;
+use App\Enums\Image\ImageFormatsEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -21,6 +22,9 @@ class CreateViewsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('bucket_id')->unsigned();
             $table->string('name');
+
+            $table->enum('format', ImageFormatsEnum::enums())
+                ->default(ImageFormatsEnum::PNG);
 
             $table->enum('type', ImageViewsEnum::enums());
 

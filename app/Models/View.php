@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $user_id
  * @property int $bucket_id
  * @property string $name
+ * @property string $format
  * @property string $type
  * @property int|null $width
  * @property int|null $height

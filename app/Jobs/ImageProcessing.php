@@ -97,7 +97,7 @@ class ImageProcessing implements ShouldQueue
         $adapter = new $this->adapters[$this->view->type]($physical);
         $image = $adapter->apply($this->view->toArray());
 
-        $image->encode(ImageFormatsEnum::PNG, $this->view->quality)
+        $image->encode($this->view->format, $this->view->quality)
             ->save($thumbnail)
             ->destroy();
 

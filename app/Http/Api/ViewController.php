@@ -2,6 +2,7 @@
 
 namespace App\Http\Api;
 
+use App\Enums\Image\ImageFormatsEnum;
 use App\Http\Requests\ViewRequest;
 use App\Models\Bucket;
 use App\Models\Image;
@@ -64,6 +65,7 @@ class ViewController extends BaseController
         $view->bucket_id = $bucket->id;
         $view->user_id = $this->getUser()->id;
         $view->name = $request->input('name');
+        $view->format = $request->input('type', ImageFormatsEnum::PNG);
         $view->type = $request->input('type');
         $view->width = $request->input('width');
         $view->height = $request->input('height');
