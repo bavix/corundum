@@ -52,9 +52,12 @@ class StreamController extends Controller
     protected function contentType(string $type): string
     {
         switch ($type) {
-            case 'webp': return 'image/webp';
-            case 'png': return 'image/png';
-            default: return 'image/jpeg';
+            case 'webp':
+                return 'image/webp';
+            case 'png':
+                return 'image/png';
+            default:
+                return 'image/jpeg';
         }
     }
 

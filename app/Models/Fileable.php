@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
 use App\Enums\Image\ImageStatusEnum;
 use Illuminate\Database\Eloquent\Model;
-use Rinvex\Attributes\Traits\Attributable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
+use Rinvex\Attributes\Traits\Attributable;
 
 abstract class Fileable extends Model
 {

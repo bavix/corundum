@@ -2,15 +2,13 @@
 
 namespace App\Http\Api;
 
+use App\Models\Bucket;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response;
-use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Http\Request;
-use App\Models\Bucket;
-use App\Models\Image;
-use App\Models\User;
+use Illuminate\Http\Response;
 
 class BucketController extends BaseController
 {

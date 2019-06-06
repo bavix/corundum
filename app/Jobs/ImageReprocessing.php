@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Enums\Image\ImageStatusEnum;
 use App\Enums\Queue\QueueEnum;
 use App\Models\Image;
 use Carbon\Carbon;
@@ -31,7 +30,7 @@ class ImageReprocessing implements ShouldQueue
      * ImageProcessing constructor.
      *
      * @param Carbon $time
-     * @param string  $status
+     * @param string $status
      */
     public function __construct(Carbon $time, string $status)
     {

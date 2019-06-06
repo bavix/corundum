@@ -9,7 +9,6 @@ use App\Models\Image;
 use App\Models\View;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
