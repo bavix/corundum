@@ -1,9 +1,22 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Seeder;
 
-class UpdateImagesPropsTable extends Migration
+class ImageAttributeSeeder extends Seeder
 {
+
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        foreach ($this->attributes() as $attribute) {
+            app('rinvex.attributes.attribute')
+                ->create($attribute);
+        }
+    }
 
     /**
      * @return array
@@ -54,29 +67,6 @@ class UpdateImagesPropsTable extends Migration
                 'group' => 'metadata',
             ]
         ];
-    }
-
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        foreach ($this->attributes() as $attribute) {
-            app('rinvex.attributes.attribute')
-                ->create($attribute);
-        }
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        // todo
     }
 
 }
