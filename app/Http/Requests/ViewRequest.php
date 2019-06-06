@@ -35,6 +35,7 @@ class ViewRequest extends FormRequest
             'width' => ['required', 'integer', 'min:50', 'max:8000'],
             'height' => ['required', 'integer', 'min:50', 'max:8000'],
             'color' => ['string', new ColorRule()],
+            'optimize' => ['boolean'],
         ];
     }
 
