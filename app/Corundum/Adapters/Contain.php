@@ -3,6 +3,7 @@
 namespace App\Corundum\Adapters;
 
 use App\Corundum\Adapter;
+use Illuminate\Support\Arr;
 use Intervention\Image\Image;
 
 class Contain extends Adapter
@@ -21,7 +22,7 @@ class Contain extends Adapter
         return $this->handler(
             $image,
             $sizes,
-            \array_get($data, 'color')
+            Arr::get($data, 'color')
         );
     }
 

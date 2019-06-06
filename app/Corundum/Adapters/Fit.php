@@ -3,6 +3,7 @@
 namespace App\Corundum\Adapters;
 
 use App\Corundum\Adapter;
+use Illuminate\Support\Arr;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
 
@@ -18,8 +19,8 @@ class Fit extends Adapter
     {
         $image = $this->image();
 
-        $pWidth = \array_get($data, 'width');
-        $pHeight = \array_get($data, 'height');
+        $pWidth = Arr::get($data, 'width');
+        $pHeight = Arr::get($data, 'height');
 
         $width = $pWidth >= $pHeight ? $pHeight : null;
         $height = $pWidth < $pHeight ? $pWidth : null;

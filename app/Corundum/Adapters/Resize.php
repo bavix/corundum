@@ -3,6 +3,7 @@
 namespace App\Corundum\Adapters;
 
 use App\Corundum\Adapter;
+use Illuminate\Support\Arr;
 use Intervention\Image\Image;
 
 class Resize extends Adapter
@@ -15,8 +16,8 @@ class Resize extends Adapter
     public function apply(array $data): Image
     {
         return $this->image()->resize(
-            \array_get($data, 'width'),
-            \array_get($data, 'height')
+            Arr::get($data, 'width'),
+            Arr::get($data, 'height')
         );
     }
 
