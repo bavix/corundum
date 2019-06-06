@@ -64,7 +64,7 @@ class ViewController extends BaseController
         $view->bucket_id = $bucket->id;
         $view->user_id = $this->getUser()->id;
         $view->name = $request->input('name');
-        $view->format = $request->input('type', ImageFormatsEnum::PNG);
+        $view->format = $request->input('format', ImageFormatsEnum::PNG);
         $view->type = $request->input('type');
         $view->width = $request->input('width');
         $view->height = $request->input('height');
