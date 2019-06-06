@@ -18,8 +18,8 @@ Auth::routes();
 Route::view('/', 'welcome')
     ->name('welcome');
 
-Route::get('/{bucket}/{view}/{uuid}.{type}', 'StreamController@index')
-    ->name('image.stream')
+Route::get('/{bucket}/{view}/{uuid}.{type}', 'StreamController@image')
+    ->name('stream.image')
     ->where([
         'bucket' => '[a-z0-9]+',
         'view' => '[a-z0-9]+',

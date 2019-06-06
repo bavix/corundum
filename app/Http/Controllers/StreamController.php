@@ -16,7 +16,7 @@ class StreamController extends Controller
      * @param string $uuid
      * @param string $type
      */
-    public function index(string $bucket, string $view, string $uuid, string $type): void
+    public function image(string $bucket, string $view, string $uuid, string $type): void
     {
         $modelBucket = new Bucket();
         $modelBucket->name = $bucket;
