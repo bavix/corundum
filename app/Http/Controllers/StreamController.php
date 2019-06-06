@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Corundum\Kit\Path;
+use App\Enums\Image\ImageFormatsEnum;
 use App\Models\Bucket;
 use App\Models\Image;
 
@@ -38,7 +39,7 @@ class StreamController extends Controller
      */
     protected function ext(string $type): string
     {
-        if ($type === 'webp') {
+        if ($type === ImageFormatsEnum::WEBP) {
             return ".$type";
         }
 
@@ -52,9 +53,9 @@ class StreamController extends Controller
     protected function contentType(string $type): string
     {
         switch ($type) {
-            case 'webp':
+            case ImageFormatsEnum::WEBP:
                 return 'image/webp';
-            case 'png':
+            case ImageFormatsEnum::PNG:
                 return 'image/png';
             default:
                 return 'image/jpeg';
