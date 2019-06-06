@@ -50,8 +50,8 @@ class ImagePalette implements ShouldQueue
         // get colors
         $palette = $this->palette();
         $extractor = new ColorExtractor($palette);
-        $representative = $extractor->extract(100);
-        $mostUsedColors = $palette->getMostUsedColors(10000);
+        $representative = $extractor->extract(10);
+        $mostUsedColors = $palette->getMostUsedColors(50);
 
         // find colors
         $colors = [];
