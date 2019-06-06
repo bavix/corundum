@@ -70,8 +70,8 @@ class ViewController extends BaseController
         $view->height = $request->input('height');
         $view->color = $request->input('color');
         $view->quality = $request->input('quality');
-        $view->optimize = $request->input('optimize', 0);
-        $view->webp = $request->input('webp', 0);
+        $view->optimize = (bool)$request->input('optimize', 0);
+        $view->webp = (bool)$request->input('webp', 0);
 
         try {
             \abort_if(!$view->save(), 422);
