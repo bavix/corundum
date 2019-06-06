@@ -40,6 +40,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $webp
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View whereWebp($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\View query()
  */
 class View extends Model
 {
