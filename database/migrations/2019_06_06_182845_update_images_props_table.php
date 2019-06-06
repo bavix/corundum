@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateImagesTable extends Migration
+class UpdateImagesPropsTable extends Migration
 {
 
     /**
