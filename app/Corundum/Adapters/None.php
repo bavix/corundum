@@ -4,6 +4,7 @@ namespace App\Corundum\Adapters;
 
 use App\Corundum\Adapter;
 use App\Corundum\Point;
+use Illuminate\Support\Arr;
 use Intervention\Image\Facades\Image as ImageManager;
 use Intervention\Image\Image;
 
@@ -19,8 +20,8 @@ class None extends Adapter
     {
         $image = $this->image();
 
-        $width = \array_get($data, 'width');
-        $height = \array_get($data, 'height');
+        $width = Arr::get($data, 'width');
+        $height = Arr::get($data, 'height');
 
         $widthFit = $image->width() >= $image->height() ? $width : null;
         $heightFit = $image->width() <= $image->height() ? $height : null;
@@ -35,7 +36,7 @@ class None extends Adapter
             $image->fit($widthFit, $heightFit);
         }
 
-        $color = \array_get($data, 'color');
+        $color = Arr::get($data, 'color');
         $fill = ImageManager::canvas($width, $height, $color);
 
         $image->resizeCanvas(

@@ -43,15 +43,20 @@ class ImageMetadata implements ShouldQueue
     public function handle(): void
     {
         $physical = Path::physical($this->image);
+
+        /**
+         * @var $imageManager \Intervention\Image\ImageManager
+         */
+        $imageManager = ImageManager::configure();
         $image = ImageManager::make($physical);
 
         $hasher = new ImageHash(
             new DifferenceHash(),
-            ImageHash::HEXADECIMAL,
-            ImageManager::configure()
+            $imageManager
         );
 
-        $this->image->fingerprint = $hasher->hash($physical);
+        $hash = $hasher->hash($physical);
+        $this->image->fingerprint = $hash->toInt();
         $this->image->width = $image->width();
         $this->image->height = $image->height();
         $this->image->size = $image->filesize();

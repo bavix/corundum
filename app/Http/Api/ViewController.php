@@ -2,13 +2,13 @@
 
 namespace App\Http\Api;
 
+use App\Enums\Image\ImageFormatsEnum;
 use App\Http\Requests\ViewRequest;
 use App\Models\Bucket;
 use App\Models\Image;
 use App\Models\View;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -64,13 +64,14 @@ class ViewController extends BaseController
         $view->bucket_id = $bucket->id;
         $view->user_id = $this->getUser()->id;
         $view->name = $request->input('name');
+        $view->format = $request->input('format', ImageFormatsEnum::PNG);
         $view->type = $request->input('type');
         $view->width = $request->input('width');
         $view->height = $request->input('height');
         $view->color = $request->input('color');
         $view->quality = $request->input('quality');
-        $view->optimize = $request->input('optimize', 0);
-        $view->webp = $request->input('webp', 0);
+        $view->optimize = (bool)$request->input('optimize', 0);
+        $view->webp = (bool)$request->input('webp', 0);
 
         try {
             \abort_if(!$view->save(), 422);

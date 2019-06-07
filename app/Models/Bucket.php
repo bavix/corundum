@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bucket whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bucket whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bucket newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bucket newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Bucket query()
  */
 class Bucket extends Model
 {

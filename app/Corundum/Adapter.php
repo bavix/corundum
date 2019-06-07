@@ -2,6 +2,7 @@
 
 namespace App\Corundum;
 
+use Illuminate\Support\Arr;
 use Intervention\Image\Facades\Image as ImageManager;
 use Intervention\Image\Image;
 
@@ -37,8 +38,8 @@ abstract class Adapter implements DriverInterface
      */
     protected function received(Image $image, array $config, $minimal = true): array
     {
-        $width = (int)\array_get($config, 'width');
-        $height = (int)\array_get($config, 'height');
+        $width = (int)Arr::get($config, 'width');
+        $height = (int)Arr::get($config, 'height');
 
         $shiftWidth = 0;
         $shiftHeight = 0;
@@ -92,13 +93,13 @@ abstract class Adapter implements DriverInterface
         $color = $color ?: 'rgba(0, 0, 0, 0)';
 
         $image->resize(
-            \array_get($data, 'received.width'),
-            \array_get($data, 'received.height')
+            Arr::get($data, 'received.width'),
+            Arr::get($data, 'received.height')
         );
 
         $image->resizeCanvas(
-            $width = \array_get($data, 'config.width'),
-            $height = \array_get($data, 'config.height'),
+            $width = Arr::get($data, 'config.width'),
+            $height = Arr::get($data, 'config.height'),
             'center',
             false,
             $color
@@ -114,8 +115,8 @@ abstract class Adapter implements DriverInterface
 
         return $fill->fill(
             $image,
-            \array_get($data, 'shifted.width'),
-            \array_get($data, 'shifted.height')
+            Arr::get($data, 'shifted.width'),
+            Arr::get($data, 'shifted.height')
         );
     }
 

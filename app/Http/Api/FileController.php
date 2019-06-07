@@ -3,7 +3,6 @@
 namespace App\Http\Api;
 
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\User;
 
 class FileController extends BaseController
 {

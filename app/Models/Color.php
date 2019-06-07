@@ -25,6 +25,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @mixin \Eloquent
  * @property int $dominant
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color whereDominant($value)
+ * @property-read string $hex
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Color whereDec($value)
  */
 class Color extends Model
 {
