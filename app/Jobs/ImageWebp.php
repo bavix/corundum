@@ -53,10 +53,11 @@ class ImageWebp implements ShouldQueue
             return;
         }
 
+        $format = ImageFormatsEnum::WEBP;
+
         $path = Path::physical($this->image, $this->view->name);
         $image = ImageManager::make($path);
-        $image->encode(ImageFormatsEnum::WEBP, 100)
-            ->save($path . '.' . ImageFormatsEnum::WEBP)
+        $image->save($path . '.' . $format, 100, $format)
             ->destroy();
     }
 

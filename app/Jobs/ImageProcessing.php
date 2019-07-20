@@ -96,14 +96,11 @@ class ImageProcessing implements ShouldQueue
         $adapter = new $this->adapters[$this->view->type]($physical);
         $image = $adapter->apply($this->view->toArray());
 
-        $format = $this->view->format;
-        $filepath = "$thumbnail.$format";
-
-        $image->save($filepath, $this->view->quality)
+        /**
+         * @see https://github.com/Intervention/image/pull/951
+         */
+        $image->save($thumbnail, $this->view->quality, $this->view->format)
             ->destroy();
-
-        \copy($filepath, $thumbnail);
-        \unlink($filepath);
 
         dispatch(new ImageOptimize($this->image, $this->view));
         dispatch(new ImageWebp($this->image, $this->view));
