@@ -32,7 +32,7 @@
     "league/color-extractor": "^0.3",
     "rinvex/laravel-attributes": "^2.0",
     "spatie/laravel-image-optimizer": "^1.4",
-    "spatie/laravel-query-builder": "^1.17",
+    "spatie/laravel-query-builder": "^2.0",
     "vladimir-yuldashev/laravel-queue-rabbitmq": "^8.0"
   },
   "require-dev": {
