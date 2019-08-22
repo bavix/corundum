@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
-    <link href="{{ asset('https://cdn.bavix.ru/bootstrap/next/dist/css/bootstrap.min.css')  }}" rel="stylesheet"/>
+    <link href="{{ asset('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')  }}" rel="stylesheet"/>
 
     <style>
         html, body {height: 100%}
