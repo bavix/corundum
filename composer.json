@@ -21,27 +21,27 @@
     "ext-gmp": "*",
     "ext-gd": "*",
     "ext-imagick": "*",
-    "ext-bcmath": "*",
-    "doctrine/dbal": "^2.9",
-    "fideloper/proxy": "^4.1",
+    "doctrine/dbal": "^2.10",
+    "fideloper/proxy": "^4.3",
     "intervention/image": "^2.5",
-    "jenssegers/imagehash": "^0.6.0",
-    "laravel/framework": "5.8.*",
-    "laravel/passport": "^7.2",
-    "laravel/tinker": "^1.0",
+    "jenssegers/imagehash": "^0.6",
+    "laravel/framework": "^7.1",
+    "laravel/passport": "^8.4",
+    "laravel/tinker": "^2.2",
     "league/color-extractor": "^0.3",
-    "rinvex/laravel-attributes": "^2.0",
-    "spatie/laravel-image-optimizer": "^1.4",
-    "spatie/laravel-query-builder": "^2.0",
-    "vladimir-yuldashev/laravel-queue-rabbitmq": "^8.0"
+    "spatie/laravel-image-optimizer": "^1.6",
+    "spatie/laravel-query-builder": "^2.8"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.6",
-    "filp/whoops": "^2.3",
-    "fzaninotto/faker": "^1.8",
-    "mockery/mockery": "^1.2",
+    "filp/whoops": "^2.5",
+    "fzaninotto/faker": "^1.9",
+    "mockery/mockery": "^1.3",
     "nunomaduro/collision": "^3.0",
-    "phpunit/phpunit": "^8.1"
+    "phpunit/phpunit": "^8.4"
+  },
+  "suggest": {
+    "vladimir-yuldashev/laravel-queue-rabbitmq": "^10.1"
   },
   "autoload": {
     "classmap": [
